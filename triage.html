@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprehensive Triage Framework</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    select, input {
+      padding: 5px;
+      width: 200px;
+    }
+    table {
+      margin-top: 20px;
+      width: 100%;
+      border-collapse: collapse;
+      display: block;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .criticality-1, .timing-1, .businessImpact-1 {
+      background-color: #d4edda; /* light green */
+    }
+    .criticality-2, .timing-2, .businessImpact-2 {
+      background-color: #ffeeba; /* light yellow */
+    }
+    .criticality-3, .timing-3, .businessImpact-3 {
+      background-color: #fff3cd; /* light yellow */
+    }
+    .criticality-4, .timing-4, .businessImpact-4 {
+      background-color: #f5c6cb; /* light red */
+    }
+    .criticality-5, .timing-5, .businessImpact-5 {
+      background-color: #f8d7da; /* light red */
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Comprehensive Triage Framework</h1>
+
+  <div style="display: flex;">
+    <div style="flex-grow: 1;">
+      <button id="toggleViewButton">Show Permutation Table</button>
+      
+      <div id="calculatorView">
+        <label for="categorySelect">Select Category:</label>
+        <select id="categorySelect">
+          <option value="production">Production</option>
+          <option value="feature">Feature</option>
+          <option value="security">Security</option>
+        </select>
+
+        <!-- Production Fields -->
+        <div id="productionFields" class="categoryFields">
+          <label for="showstopper">Showstopper (1-5):</label>
+          <select id="showstopper">
+            <option value="1">1 - Not Critical</option>
+            <option value="2">2 - Low Criticality</option>
+            <option value="3">3 - Moderate Criticality</option>
+            <option value="4">4 - High Criticality</option>
+            <option value="5">5 - Total Stop</option>
+          </select>
+          
+          <label for="frequency">Frequency (1-5):</label>
+          <select id="frequency">
+            <option value="1">1 - Once a Year or Less</option>
+            <option value="2">2 - Every 6 Months</option>
+            <option value="3">3 - Monthly</option>
+            <option value="4">4 - Weekly</option>
+            <option value="5">5 - Daily</option>
+          </select>
+          
+          <label for="timeSpent">Time Spent (1-5):</label>
+          <select id="timeSpent">
+            <option value="1">1 - Less than 1 hour</option>
+            <option value="2">2 - Less than 2 hours</option>
+            <option value="3">3 - Half a day</option>
+            <option value="4">4 - Full day</option>
+            <option value="5">5 - Whole day (all day event)</option>
+          </select>
+
+          <label for="productionBusinessImpact">Business Impact (%):</label>
+          <input type="number" id="productionBusinessImpact" min="0" value="10">
+        </div>
+
+        <!-- Feature Fields -->
+        <div id="featureFields" class="categoryFields" style="display: none;">
+          <label for="dealbreaker">Dealbreaker (1-5):</label>
+          <select id="dealbreaker">
+            <option value="1">1 - Not Critical</option>
+            <option value="2">2 - Low Priority</option>
+            <option value="3">3 - Medium Priority</option>
+            <option value="4">4 - High Priority</option>
+            <option value="5">5 - Must Have</option>
+          </select>
+          
+          <label for="projectTime">Project Completion Time (1 day to 1 year):</label>
+          <select id="projectTime">
+          <option value="1">1 - 1 Year</option>
+          <option value="2">2 - 6 Months</option>
+          <option value="3">3 - 1 Month</option>
+          <option value="4">4 - 1 Week</option>
+          <option value="5">5 - 1 Day</option>
+          </select>
+          
+          <label for="clientTraffic">Expected Client Traffic Increase (%):</label>
+          <input type="number" id="clientTraffic" min="0" value="10">
+        </div>
+
+        <!-- Security Fields -->
+        <div id="securityFields" class="categoryFields" style="display: none;">
+          <label for="companyShutdown">Company Shutdown (1-5):</label>
+          <select id="companyShutdown">
+            <option value="1">1 - No Impact</option>
+            <option value="2">2 - Low Impact</option>
+            <option value="3">3 - Moderate Impact</option>
+            <option value="4">4 - High Impact</option>
+            <option value="5">5 - Total Shutdown</option>
+          </select>
+          
+          <label for="likelihood">Likelihood of Occurrence (1-5):</label>
+          <select id="likelihood">
+            <option value="1">1 - Very Unlikely</option>
+            <option value="2">2 - Unlikely</option>
+            <option value="3">3 - Possible</option>
+            <option value="4">4 - Likely</option>
+            <option value="5">5 - Very Likely</option>
+          </select>
+
+          <label for="securityBusinessImpact">Business Impact (%):</label>
+          <input type="number" id="securityBusinessImpact" min="0" value="10">
+        </div>
+        <div id="calculatedScore"></div>
+        <div id="priorityLevel"></div>
+      </div>
+
+      <div id="permutationTableView" style="display: none;">
+        <h2>Permutation Table</h2>
+        <button id="resetFiltersButton">Reset Filters</button>
+        <table id="permutationTable">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Criticality</th>
+              <th>Timing</th>
+              <th>Business Impact</th>
+              <th>Score</th>
+              <th>Priority Level</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="position: sticky; top: 20px; margin-left: 20px; width: 300px; align-self: flex-start;">
+      <h2>Factors</h2>
+      <div>
+        <h3>Production</h3>
+        <label for="productionCriticalityFactor">Criticality Factor:</label>
+        <input type="range" id="productionCriticalityFactor" min="0" max="10" value="0.5" step="0.01">
+        <span id="productionCriticalityFactorValue">0.5</span>
+        <label for="productionTimingFactor">Timing Factor:</label>
+        <input type="range" id="productionTimingFactor" min="0" max="10" value="0.25" step="0.01">
+        <span id="productionTimingFactorValue">0.25</span>
+        <label for="productionBusinessImpactFactor">Business Impact Factor:</label>
+        <input type="range" id="productionBusinessImpactFactor" min="0" max="10" value="0.25" step="0.01">
+        <span id="productionBusinessImpactFactorValue">0.25</span>
+      </div>
+      <div>
+        <h3>Feature</h3>
+        <label for="featureCriticalityFactor">Criticality Factor:</label>
+        <input type="range" id="featureCriticalityFactor" min="0" max="10" value="0.5" step="0.01">
+        <span id="featureCriticalityFactorValue">0.5</span>
+        <label for="featureTimingFactor">Timing Factor:</label>
+        <input type="range" id="featureTimingFactor" min="0" max="10" value="0.25" step="0.01">
+        <span id="featureTimingFactorValue">0.25</span>
+        <label for="featureBusinessImpactFactor">Business Impact Factor:</label>
+        <input type="range" id="featureBusinessImpactFactor" min="0" max="10" value="1.25" step="0.01">
+        <span id="featureBusinessImpactFactorValue">0.25</span>
+        <label for="featureBusinessImpactCap">Feature Business Impact Limit (%):</label>
+        <input type="number" id="featureBusinessImpactCap" min="0" max="100" value="20">
+      </div>
+      <div>
+        <h3>Security</h3>
+        <label for="securityCriticalityFactor">Criticality Factor:</label>
+        <input type="range" id="securityCriticalityFactor" min="0" max="10" value="0.5" step="0.01">
+        <span id="securityCriticalityFactorValue">0.5</span>
+        <label for="securityTimingFactor">Timing Factor:</label>
+        <input type="range" id="securityTimingFactor" min="0" max="10" value="0.25" step="0.01">
+        <span id="securityTimingFactorValue">0.25</span>
+        <label for="securityBusinessImpactFactor">Business Impact Factor:</label>
+        <input type="range" id="securityBusinessImpactFactor" min="0" max="10" value="0.25" step="0.01">
+        <span id="securityBusinessImpactFactorValue">0.25</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const categorySelect = document.getElementById('categorySelect');
+    const productionFields = document.getElementById('productionFields');
+    const featureFields = document.getElementById('featureFields');
+    const securityFields = document.getElementById('securityFields');
+    const tableBody = document.getElementById('tableBody');
+    const toggleViewButton = document.getElementById('toggleViewButton');
+    const calculatorView = document.getElementById('calculatorView');
+    const permutationTableView = document.getElementById('permutationTableView');
+    const resetFiltersButton = document.getElementById('resetFiltersButton');
+
+    const productionCriticalityFactor = document.getElementById('productionCriticalityFactor');
+    const productionTimingFactor = document.getElementById('productionTimingFactor');
+    const productionBusinessImpactFactor = document.getElementById('productionBusinessImpactFactor');
+    const featureCriticalityFactor = document.getElementById('featureCriticalityFactor');
+    const featureTimingFactor = document.getElementById('featureTimingFactor');
+    const featureBusinessImpactFactor = document.getElementById('featureBusinessImpactFactor');
+    const featureBusinessImpactCap = document.getElementById('featureBusinessImpactCap');
+    const securityCriticalityFactor = document.getElementById('securityCriticalityFactor');
+    const securityTimingFactor = document.getElementById('securityTimingFactor');
+    const securityBusinessImpactFactor = document.getElementById('securityBusinessImpactFactor');
+
+    const productionCriticalityFactorValue = document.getElementById('productionCriticalityFactorValue');
+    const productionTimingFactorValue = document.getElementById('productionTimingFactorValue');
+    const productionBusinessImpactFactorValue = document.getElementById('productionBusinessImpactFactorValue');
+    const featureCriticalityFactorValue = document.getElementById('featureCriticalityFactorValue');
+    const featureTimingFactorValue = document.getElementById('featureTimingFactorValue');
+    const featureBusinessImpactFactorValue = document.getElementById('featureBusinessImpactFactorValue');
+    const securityCriticalityFactorValue = document.getElementById('securityCriticalityFactorValue');
+    const securityTimingFactorValue = document.getElementById('securityTimingFactorValue');
+    const securityBusinessImpactFactorValue = document.getElementById('securityBusinessImpactFactorValue');
+
+    let filteredValues = {
+      "Production": {
+        criticality: [],
+        timing: [],
+        businessImpact: []
+      },
+      "Feature": {
+        criticality: [],
+        timing: [],
+        businessImpact: []
+      },
+      "Security": {
+        criticality: [],
+        timing: [],
+        businessImpact: []
+      },
+    };
+
+    function updateFactorValues() {
+      productionCriticalityFactorValue.innerText = productionCriticalityFactor.value;
+      productionTimingFactorValue.innerText = productionTimingFactor.value;
+      productionBusinessImpactFactorValue.innerText = productionBusinessImpactFactor.value;
+      featureCriticalityFactorValue.innerText = featureCriticalityFactor.value;
+      featureTimingFactorValue.innerText = featureTimingFactor.value;
+      featureBusinessImpactFactorValue.innerText = featureBusinessImpactFactor.value;
+      securityCriticalityFactorValue.innerText = securityCriticalityFactor.value;
+      securityTimingFactorValue.innerText = securityTimingFactor.value;
+      securityBusinessImpactFactorValue.innerText = securityBusinessImpactFactor.value;
+    }
+
+    categorySelect.addEventListener('change', function() {
+      const selectedCategory = categorySelect.value;
+      productionFields.style.display = (selectedCategory === 'production') ? 'block' : 'none';
+      featureFields.style.display = (selectedCategory === 'feature') ? 'block' : 'none';
+      securityFields.style.display = (selectedCategory === 'security') ? 'block' : 'none';
+      displayPermutationTable(); // Recalculate and display table when category changes
+    });
+
+    const inputs = document.querySelectorAll('select, input');
+    inputs.forEach(input => {
+      input.addEventListener('change', displayPermutationTable); // Recalculate and display table when input changes
+    });
+
+    toggleViewButton.addEventListener('click', function() {
+      const isCalculatorVisible = calculatorView.style.display !== 'none';
+      calculatorView.style.display = isCalculatorVisible ? 'none' : 'block';
+      permutationTableView.style.display = isCalculatorVisible ? 'block' : 'none';
+      toggleViewButton.innerText = isCalculatorVisible ? 'Show Calculator' : 'Show Permutation Table';
+    });
+
+    resetFiltersButton.addEventListener('click', function() {
+      filteredValues = {
+      "Production": {
+        criticality: [],
+        timing: [],
+        businessImpact: []
+      },
+      "Feature": {
+        criticality: [],
+        timing: [],
+        businessImpact: []
+      },
+      "Security": {
+        criticality: [],
+        timing: [],
+        businessImpact: []
+      },
+    };
+      displayPermutationTable();
+    });
+
+    const permutations = [];
+
+    function displayPermutationTable() {
+      permutations.length = 0;
+      // Generate permutations for each category
+      generateProductionPermutations(permutations);
+      generateFeaturePermutations(permutations);
+      generateSecurityPermutations(permutations);
+
+      // Sort permutations by score in descending order
+      permutations.sort((a, b) => b.score - a.score);
+
+      // Scale scores to be between 1 and 5
+      const maxScore = permutations.length > 0 ? permutations[0].score : 1;
+      const scaleFactor = maxScore > 5 ? 5 / maxScore : 1;
+
+      // Clear the table
+      tableBody.innerHTML = '';
+
+      // Append rows
+      permutations.forEach(p => {
+        if (!filteredValues[p.category].criticality.includes(p.criticalityValue) &&
+            !filteredValues[p.category].timing.includes(p.timingValue) &&
+            !filteredValues[p.category].businessImpact.includes(p.businessImpactValue)) {
+          const scaledScore = p.score * scaleFactor;
+          const priorityLevel = calculatePriorityLevel(scaledScore);
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${p.category}</td>
+            <td class="criticality-${p.criticalityValue}">${p.criticality} <button onclick="filterValue('${p.category}', 'criticality', ${p.criticalityValue})">-</button></td>
+            <td class="timing-${p.timingValue}">${p.timing} <button onclick="filterValue('${p.category}', 'timing', ${p.timingValue})">-</button></td>
+            <td class="businessImpact-${p.businessImpactValue}">${p.businessImpact}% <button onclick="filterValue('${p.category}', 'businessImpact', ${p.businessImpactValue})">-</button></td>
+            <td>${scaledScore.toFixed(2)}</td>
+            <td>${priorityLevel}</td>
+          `;
+          tableBody.appendChild(row);
+        }
+      });
+    }
+
+    function filterValue(category, type, value) {
+      filteredValues[category][type].push(value);
+      displayPermutationTable();
+    }
+
+    function generateProductionPermutations(permutations) {
+      const showstopperDescriptions = ['Not Critical', 'Low Criticality', 'Moderate Criticality', 'High Criticality', 'Total Stop'];
+      const frequencyDescriptions = ['Once a Year or Less', 'Every 6 Months', 'Monthly', 'Weekly', 'Daily'];
+      const timeSpentDescriptions = ['Less than 1 hour', 'Less than 2 hours', 'Half a day', 'Full day', 'Whole day (all day event)'];
+      const businessImpactValues = [20, 40, 60, 80, 100];
+
+      for (let showstopper = 1; showstopper <= 5; showstopper++) {
+        for (let frequency = 1; frequency <= 5; frequency++) {
+          for (let timeSpent = 1; timeSpent <= 5; timeSpent++) {
+            for (const businessImpact of businessImpactValues) {
+              const score = (showstopper * parseFloat(productionCriticalityFactor.value)) + 
+                            (frequency / 2 * parseFloat(productionTimingFactor.value)) + 
+                            (timeSpent / 2 * parseFloat(productionTimingFactor.value)) + 
+                            (businessImpact / 20 * parseFloat(productionBusinessImpactFactor.value));
+              permutations.push({
+                category: 'Production',
+                criticality: `${showstopperDescriptions[showstopper-1]}`,
+                timing: `${frequencyDescriptions[frequency-1]} | ${timeSpentDescriptions[timeSpent-1]}`,
+                criticalityValue: Math.ceil(showstopper),
+                timingValue: Math.ceil((frequency + timeSpent) / 2),
+                businessImpact: businessImpact,
+                businessImpactValue: Math.ceil(businessImpact / 20),
+                score: score
+              });
+            }
+          }
+        }
+      }
+    }
+
+    function generateFeaturePermutations(permutations) {
+      const dealbreakerDescriptions = ['Not Critical', 'Low Priority', 'Medium Priority', 'High Priority', 'Must Have'];
+      const projectTimeDescriptions = ['1 Year', '6 Months', '1 Month', '1 Week', '1 Day'];
+      const businessImpactValues = [20, 40, 60, 80, 100];
+
+      const businessImpactCap = parseInt(featureBusinessImpactCap.value);
+
+      for (let dealbreaker = 1; dealbreaker <= 5; dealbreaker++) {
+        for (let projectTime = 1; projectTime <= 5; projectTime++) {
+          for (const businessImpact of businessImpactValues) {
+            if (businessImpact <= businessImpactCap) {
+              const score = (dealbreaker * parseFloat(featureCriticalityFactor.value)) + 
+                            (projectTime * parseFloat(featureTimingFactor.value)) + 
+                            (businessImpact / 20 * parseFloat(featureBusinessImpactFactor.value));
+              permutations.push({
+                category: 'Feature',
+                criticality: `${dealbreakerDescriptions[dealbreaker-1]}`,
+                timing: `${projectTimeDescriptions[projectTime-1]}`,
+                criticalityValue: Math.ceil(dealbreaker),
+                timingValue: Math.ceil(projectTime),
+                businessImpact: businessImpact,
+                businessImpactValue: Math.ceil(businessImpact / 20),
+                score: score
+              });
+            }
+          }
+        }
+      }
+    }
+
+    function generateSecurityPermutations(permutations) {
+      const companyShutdownDescriptions = ['No Impact', 'Low Impact', 'Moderate Impact', 'High Impact', 'Total Shutdown'];
+      const likelihoodDescriptions = ['Very Unlikely', 'Unlikely', 'Possible', 'Likely', 'Very Likely'];
+      const businessImpactValues = [20, 40, 60, 80, 100];
+
+      for (let companyShutdown = 1; companyShutdown <= 5; companyShutdown++) {
+        for (let likelihood = 1; likelihood <= 5; likelihood++) {
+          for (const businessImpact of businessImpactValues) {
+            const score = (companyShutdown * parseFloat(securityCriticalityFactor.value)) + 
+                          (likelihood * parseFloat(securityTimingFactor.value)) + 
+                          (businessImpact / 20 * parseFloat(securityBusinessImpactFactor.value));
+            permutations.push({
+              category: 'Security',
+              criticality: `${companyShutdownDescriptions[companyShutdown-1]}`,
+              timing: `${likelihoodDescriptions[likelihood-1]}`,
+                criticalityValue: Math.ceil(companyShutdown),
+                timingValue: Math.ceil(likelihood),
+              businessImpact: businessImpact,
+              businessImpactValue: Math.ceil(businessImpact / 20),
+              score: score
+            });
+          }
+        }
+      }
+    }
+
+    function calculateScore() {
+      const selectedCategory = categorySelect.value;
+      let score = 0;
+
+      if (selectedCategory === 'production') {
+        const showstopper = parseInt(document.getElementById('showstopper').value);
+        const frequency = parseInt(document.getElementById('frequency').value);
+        const timeSpent = parseInt(document.getElementById('timeSpent').value);
+        const businessImpact = parseInt(document.getElementById('productionBusinessImpact').value);
+        score = (showstopper * parseFloat(productionCriticalityFactor.value)) + 
+                (frequency / 2 * parseFloat(productionTimingFactor.value)) + 
+                (timeSpent / 2 * parseFloat(productionTimingFactor.value)) + 
+                (businessImpact / 20 * parseFloat(productionBusinessImpactFactor.value));
+      } else if (selectedCategory === 'feature') {
+        const dealbreaker = parseInt(document.getElementById('dealbreaker').value);
+        const projectTime = parseInt(document.getElementById('projectTime').value);
+        const clientTraffic = parseInt(document.getElementById('clientTraffic').value);
+        const businessImpactCap = parseInt(featureBusinessImpactCap.value);
+        const cappedClientTraffic = Math.min(clientTraffic, businessImpactCap);
+        score = (dealbreaker * parseFloat(featureCriticalityFactor.value)) + 
+                (projectTime * parseFloat(featureTimingFactor.value)) + 
+                (cappedClientTraffic / 20 * parseFloat(featureBusinessImpactFactor.value));
+      } else if (selectedCategory === 'security') {
+        const companyShutdown = parseInt(document.getElementById('companyShutdown').value);
+        const likelihood = parseInt(document.getElementById('likelihood').value);
+        const businessImpact = parseInt(document.getElementById('securityBusinessImpact').value);
+        score = (companyShutdown * parseFloat(securityCriticalityFactor.value)) + 
+                (likelihood * parseFloat(securityTimingFactor.value)) + 
+                (businessImpact / 20 * parseFloat(securityBusinessImpactFactor.value));
+      }
+
+      // Scale scores to be between 1 and 5
+      const maxScore = permutations.length > 0 ? permutations[0].score : 1;
+      const scaleFactor = maxScore > 5 ? 5 / maxScore : 1;
+        score *= scaleFactor;
+      const priorityLevel = calculatePriorityLevel(score);
+      document.getElementById('calculatedScore').innerText = `Score: ${score.toFixed(2)}`;
+      document.getElementById('priorityLevel').innerText = `Priority Level: ${priorityLevel}`;
+    }
+
+    function calculatePriorityLevel(score) {
+      if (score >= 4) {
+        return 'High';
+      } else if (score >= 2.5) {
+        return 'Medium';
+      } else {
+        return 'Low';
+      }
+    }
+
+    categorySelect.addEventListener('change', calculateScore);
+    inputs.forEach(input => {
+      input.addEventListener('change', calculateScore);
+    });
+
+    // Update factor values on slider change
+    const sliders = document.querySelectorAll('input[type="range"]');
+    sliders.forEach(slider => {
+      slider.addEventListener('input', () => {
+        updateFactorValues();
+        displayPermutationTable();
+        calculateScore();
+      });
+    });
+
+    // Initial call to populate the table and calculate the score
+    displayPermutationTable();
+    calculateScore();
+    updateFactorValues();
+  </script>
+
+</body>
+</html>
