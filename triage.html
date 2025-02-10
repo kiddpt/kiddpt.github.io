@@ -1377,6 +1377,7 @@
         dataEngineeringBusinessScaleFactor.value = 0.25;
         updateFactorValues();
         displayPermutationTable();
+        renderEntriesTable();
         calculateScore();
       }
     });
@@ -1932,6 +1933,7 @@
         populateDescriptionFields();
         populateDropdowns();
         displayPermutationTable();
+        renderEntriesTable();
         calculateScore();
         checkStateDifference();
       }
@@ -2462,27 +2464,34 @@
       renderEntriesTable();
     }
 
-    copyTableButton.addEventListener('click', function() {
+    function copyTableToClipboard() {
       const table = document.getElementById('entriesTable');
       const rows = table.querySelectorAll('tbody tr');
       let clipboardText = '';
       rows.forEach(row => {
-      const cells = row.querySelectorAll('td');
-      const rowText = Array.from(cells).slice(0, -1).map(cell => cell.innerText).join('\t'); // Exclude the last cell (Actions)
-      clipboardText += rowText + '\n';
+        const cells = row.querySelectorAll('td');
+        const rowText = Array.from(cells).slice(0, -1).map(cell => cell.innerText).join('\t'); // Exclude the last cell (Actions)
+        clipboardText += rowText + '\n';
       });
       navigator.clipboard.writeText(clipboardText).then(() => {
-      copyTableButton.innerText = 'Copied!';
-      copyTableButton.style.backgroundColor = '#4cae4c';
-      copyTableButton.disabled = true;
-      setTimeout(() => {
-        copyTableButton.innerText = 'Copy Table';
-        copyTableButton.style.backgroundColor = '#5cb85c';
-        copyTableButton.disabled = false;
-      }, 2000);
+        copyTableButton.innerText = 'Copied!';
+        copyTableButton.style.backgroundColor = '#4cae4c';
+        copyTableButton.disabled = true;
+        setTimeout(() => {
+          copyTableButton.innerText = 'Copy Table';
+          copyTableButton.disabled = false;
+        }, 2000);
       }).catch(err => {
-      console.error('Failed to copy text: ', err);
+        console.error('Failed to copy text: ', err);
       });
+    }
+
+    copyTableButton.addEventListener('click', copyTableToClipboard);
+
+    document.addEventListener('copy', function(event) {
+      if (document.activeElement === document.body) {
+        copyTableToClipboard();
+      }
     });
 
     function updateEntryScores() {
@@ -2571,6 +2580,48 @@
       }
       return closest;
     }
+
+    document.addEventListener('paste', function(event) {
+      if (document.activeElement === document.body) {
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('Text');
+
+        if (pastedData) {
+          
+          const rows = pastedData.trim().split('\n');
+          const newEntries = rows.map(row => {
+            const cells = row.split('\t');
+            if (cells.length !== 7) {
+              return;
+            }
+            return {
+              id: generateUniqueId(),
+              description: cells[0],
+              category: cells[1],
+              criticality: cells[2],
+              timing: cells[3],
+              businessScale: cells[4],
+              score: cells[5],
+              priorityLevel: cells[6]
+            };
+          }).filter(entry => entry);
+
+          if (newEntries.length) {
+            entries = newEntries;
+            renderEntriesTable();
+            saveEntriesToLocalStorage();
+            copyTableButton.innerText = 'Pasted!';
+            copyTableButton.disabled = true;
+            setTimeout(() => {
+              copyTableButton.innerText = 'Copy Table';
+              copyTableButton.disabled = false;
+            }, 2000);
+          } else {
+            alert('Invalid data format. Please make sure you are pasting the correct number of columns.');
+          }
+        }
+      }
+    });
 
   </script>
 
