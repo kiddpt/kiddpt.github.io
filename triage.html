@@ -8,115 +8,541 @@
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2, h3 {
+      color: #0056b3;
     }
     label {
       display: block;
       margin: 10px 0 5px;
+      font-weight: bold;
     }
-    select, input {
-      padding: 5px;
-      width: 200px;
+    select, input[type="number"], input[type="text"], input[type="range"], button, textarea {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #0056b3;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #004494;
     }
     table {
       margin-top: 20px;
       width: 100%;
       border-collapse: collapse;
-      display: block;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     table, th, td {
       border: 1px solid #ddd;
     }
     th, td {
-      padding: 8px;
+      padding: 12px;
       text-align: left;
     }
     th {
       background-color: #f2f2f2;
     }
-    .criticality-1, .timing-1, .businessImpact-1 {
+    .pill {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      color: white;
+      font-weight: bold;
+    }
+    .criticality-0, .timing-0, .businessScale-0 {
+      background-color: #f0f0f0; /* very light gray */
+      color: #333;
+    }
+    .criticality-1, .timing-1, .businessScale-1 {
       background-color: #d4edda; /* light green */
+      color: #155724;
     }
-    .criticality-2, .timing-2, .businessImpact-2 {
-      background-color: #ffeeba; /* light yellow */
-    }
-    .criticality-3, .timing-3, .businessImpact-3 {
+    .criticality-2, .timing-2, .businessScale-2 {
       background-color: #fff3cd; /* light yellow */
+      color: #856404;
     }
-    .criticality-4, .timing-4, .businessImpact-4 {
+    .criticality-3, .timing-3, .businessScale-3 {
+      background-color: #ffeeba; /* light orange */
+      color: #856404;
+    }
+    .criticality-4, .timing-4, .businessScale-4 {
+      background-color: #f8d7da; /* light pink */
+      color: #721c24;
+    }
+    .criticality-5, .timing-5, .businessScale-5 {
       background-color: #f5c6cb; /* light red */
+      color: #721c24;
     }
-    .criticality-5, .timing-5, .businessImpact-5 {
-      background-color: #f8d7da; /* light red */
+    .flex-container {
+      display: flex;
+      gap: 20px;
+    }
+    .flex-item-1 {
+      flex: 3;
+      min-width: 900px;
+    }
+    .flex-item-2 {
+      flex: 1;
+      min-width: 700px;
+    }
+    .sticky-sidebar {
+      position: sticky;
+      top: 20px;
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: fit-content;
+      overflow-y: auto;
+    }
+    .table-button {
+      padding: 5px;
+      width: auto;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .table-button:hover {
+      background-color: #c9302c;
+    }
+    textarea {
+      resize: auto;
+    }
+    .parameter-pair {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .parameter-pair input[type="number"] {
+      width: 60px;
+      margin-right: 10px;
+    }
+    .parameter-pair input[type="text"] {
+      width: 2600px;
+      margin-right: 10px;
+    }
+    .parameter-pair button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    .tabs, .third-tabs {
+      display: flex;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .tab, .third-tab {
+      padding: 10px;
+      background-color: #f2f2f2;
+      border: 1px solid #ddd;
+      border-radius: 4px 4px 0 0;
+      margin-right: 5px;
+    }
+    .tab.active {
+      background-color: #fff;
+      border-bottom: none;
+    }
+    .tab-content, .third-tab-content {
+      display: none;
+      border: 1px solid #ddd;
+      border-radius: 0 4px 4px 4px;
+      padding: 20px;
+      background-color: #fff;
+    }
+    .tab-content.active, .third-tab-content.active {
+      display: block;
+    }
+    .nested-tabs {
+      display: flex;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .nested-tab {
+      padding: 10px;
+      background-color: #f2f2f2;
+      border: 1px solid #ddd;
+      border-radius: 4px 4px 0 0;
+      margin-right: 5px;
+    }
+    .nested-tab.active {
+      background-color: #fff;
+      border-bottom: none;
+    }
+    .nested-tab-content {
+      display: none;
+      border: 1px solid #ddd;
+      border-radius: 0 4px 4px 4px;
+      padding: 20px;
+      background-color: #fff;
+    }
+    .nested-tab-content.active {
+      display: block;
+    }
+    .add-description-button {
+      padding: 5px 10px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .export-import-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .factor-group {
+      margin-bottom: 20px;
+    }
+    .priority-level {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+    }
+    .priority-high {
+      background-color: #d9534f; /* red */
+    }
+    .priority-medium {
+      background-color: #f0ad4e; /* orange */
+    }
+    .priority-low {
+    background-color: #5cb85c; /* green */
+    }
+    .add-parameter-button {
+      padding: 5px 10px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .reset-parameters-button, #resetFactorsButton {
+      margin-top: 10px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .reset-parameters-button:hover {
+      background-color: #c9302c;
+    }
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
+      color: #1e90ff; /* blue */
+    }
+    body.dark-mode select, body.dark-mode input[type="number"], body.dark-mode input[type="text"], body.dark-mode input[type="range"], body.dark-mode button, body.dark-mode textarea {
+      background-color: #333;
+      color: #e0e0e0;
+      border: 1px solid #444;
+    }
+    body.dark-mode button {
+      background-color: #1e90ff; /* blue */
+      color: #121212;
+    }
+    body.dark-mode button:hover {
+      background-color: #1c86ee; /* darker blue */
+    }
+    body.dark-mode table {
+      background-color: #333;
+      color: #e0e0e0;
+    }
+    body.dark-mode table, body.dark-mode th, body.dark-mode td {
+      border: 1px solid #444;
+    }
+    body.dark-mode th {
+      background-color: #444;
+    }
+    body.dark-mode .pill {
+      color: #121212;
+    }
+    body.dark-mode .criticality-0, body.dark-mode .timing-0, body.dark-mode .businessScale-0 {
+      background-color: #444;
+    }
+    body.dark-mode .criticality-1, body.dark-mode .timing-1, body.dark-mode .businessScale-1 {
+      background-color: #388e3c;
+    }
+    body.dark-mode .criticality-2, body.dark-mode .timing-2, body.dark-mode .businessScale-2 {
+      background-color: #fbc02d;
+    }
+    body.dark-mode .criticality-3, body.dark-mode .timing-3, body.dark-mode .businessScale-3 {
+      background-color: #ffa000;
+    }
+    body.dark-mode .criticality-4, body.dark-mode .timing-4, body.dark-mode .businessScale-4 {
+      background-color: #d32f2f;
+    }
+    body.dark-mode .criticality-5, body.dark-mode .timing-5, body.dark-mode .businessScale-5 {
+      background-color: #c62828;
+    }
+    body.dark-mode .sticky-sidebar {
+      background-color: #333;
+      border: 1px solid #444;
+    }
+    body.dark-mode .table-button {
+      background-color: #d32f2f;
+      color: #e0e0e0;
+    }
+    body.dark-mode .table-button:hover {
+      background-color: #b71c1c;
+    }
+    body.dark-mode .tab {
+      background-color: #444;
+      color: #e0e0e0;
+    }
+    body.dark-mode .tab.active {
+      background-color: #333;
+    }
+    body.dark-mode .nested-tab {
+      background-color: #444;
+      color: #e0e0e0;
+    }
+    body.dark-mode .nested-tab.active {
+      background-color: #333;
+    }
+    body.dark-mode .third-tab {
+      background-color: #444;
+      color: #e0e0e0;
+    }
+    body.dark-mode .third-tab.active {
+      background-color: #333;
+    }
+    body.dark-mode .tab-content, body.dark-mode .nested-tab-content, body.dark-mode .third-tab-content {
+      background-color: #333;
+      border: 1px solid #444;
+    }
+    body.dark-mode .priority-high {
+      background-color: #d32f2f;
+    }
+    body.dark-mode .priority-medium {
+      background-color: #fbc02d;
+    }
+    body.dark-mode .priority-low {
+      background-color: #388e3c;
+    }
+    .third-tab {
+      padding: 10px;
+      background-color: #f2f2f2;
+      border: 1px solid #ddd;
+      border-radius: 4px 4px 0 0;
+      margin-right: 5px;
+    }
+    .third-tab.active {
+      background-color: #fff;
+      border-bottom: none;
+    }
+    .third-tab-content {
+      display: none;
+      border: 1px solid #ddd;
+      border-radius: 0 4px 4px 4px;
+      padding: 20px;
+      background-color: #fff;
+    }
+    .third-tab-content.active {
+      display: block;
+    }
+    .save-state-button {
+      margin-top: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .save-state-button:hover {
+      background-color: #4cae4c;
+    }
+    .save-state-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .reset-to-saved-state-button {
+      margin-top: 10px;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .reset-to-saved-state-button:hover {
+      background-color: #c9302c;
+    }
+    .reset-to-saved-state-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .save-state-button {
+      margin-top: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .save-state-button:hover {
+      background-color: #4cae4c;
+    }
+    .save-state-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    body.dark-mode .reset-to-saved-state-button {
+      background-color: #d9534f;
+      color: #e0e0e0;
+    }
+    body.dark-mode .reset-to-saved-state-button:hover {
+      background-color: #c9302c;
+    }
+    body.dark-mode .reset-to-saved-state-button:disabled {
+      background-color: #444;
+      cursor: not-allowed;
+    }
+    body.dark-mode .save-state-button {
+      background-color: #5cb85c;
+      color: #e0e0e0;
+    }
+    body.dark-mode .save-state-button:hover {
+      background-color: #4cae4c;
+    }
+    body.dark-mode .save-state-button:disabled {
+      background-color: #444;
+      cursor: not-allowed;
+    }
+    .reset-to-saved-state-button:hover {
+      background-color: #c9302c;
+    }
+    .reset-to-saved-state-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .chart-container {
+      display: flex;
+      justify-content: space-around;
+    }
+    .chart-container canvas {
+      width: 200px !important;
+      height: 200px !important;
+    }
+    .chart-title {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .security {
+      background-color: #e06666; /* Security */
+    }
+    .clientExperience {
+      background-color: #6d9eeb; /* Client Experience */
+    }
+    .productDelivery {
+      background-color: #8e7cc3; /* Product Delivery */
+    }
+    .performanceReliability {
+      background-color: #93c47d; /* Performance & Reliability */
+    }
+    .dataEngineering {
+      background-color: #f6b26b; /* Data Engineering */
+    }
+    .costOptimization {
+      background-color: #cc4125; /* Cost Optimization */
+    }
+    .description-container {
+      margin-top: 20px;
+    }
+    .copy-button {
+      margin-top: 10px;
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .copy-button:hover {
+      background-color: #4cae4c;
+    }
+    .edit-button, .delete-button {
+      padding: 5px;
+      width: auto;
+      background-color: #f0ad4e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .edit-button:hover {
+      background-color: #ec971f;
+    }
+    .delete-button {
+      background-color: #d9534f;
+    }
+    .delete-button:hover {
+      background-color: #c9302c;
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
   <h1>Comprehensive Triage Framework</h1>
 
-  <div style="display: flex;">
-    <div style="flex-grow: 1;">
+  <div class="flex-container">
+    <div class="flex-item-1">
       <button id="toggleViewButton">Show Permutation Table</button>
+      <button id="toggleDarkModeButton">Toggle Dark Mode</button>
       
       <div id="calculatorView">
         <label for="categorySelect">Select Category:</label>
         <select id="categorySelect">
-          <option value="production">Production</option>
-          <option value="feature">Feature</option>
+          <option value="clientExperience">Client Experience</option>
+          <option value="productDelivery">Product Delivery</option>
           <option value="security">Security</option>
+          <option value="costOptimization">Cost Optimization</option>
+          <option value="performanceReliability">Performance & Reliability</option>
+          <option value="dataEngineering">Data Engineering</option>
         </select>
 
-        <!-- Production Fields -->
-        <div id="productionFields" class="categoryFields">
-          <label for="showstopper">Showstopper (1-5):</label>
+        <!-- Client Experience Fields -->
+        <div id="clientExperienceFields" class="categoryFields">
+          <label for="showstopper">Showstopper (0-5):</label>
           <select id="showstopper">
-            <option value="1">1 - Not Critical</option>
-            <option value="2">2 - Low Criticality</option>
-            <option value="3">3 - Moderate Criticality</option>
-            <option value="4">4 - High Criticality</option>
-            <option value="5">5 - Total Stop</option>
+            <!-- Options will be populated by JavaScript -->
           </select>
           
-          <label for="frequency">Frequency (1-5):</label>
+          <label for="frequency">Frequency (0-5):</label>
           <select id="frequency">
-            <option value="1">1 - Once a Year or Less</option>
-            <option value="2">2 - Every 6 Months</option>
-            <option value="3">3 - Monthly</option>
-            <option value="4">4 - Weekly</option>
-            <option value="5">5 - Daily</option>
+            <!-- Options will be populated by JavaScript -->
           </select>
           
-          <label for="timeSpent">Time Spent (1-5):</label>
+          <label for="timeSpent">Time Spent (0-5):</label>
           <select id="timeSpent">
-            <option value="1">1 - Less than 1 hour</option>
-            <option value="2">2 - Less than 2 hours</option>
-            <option value="3">3 - Half a day</option>
-            <option value="4">4 - Full day</option>
-            <option value="5">5 - Whole day (all day event)</option>
+            <!-- Options will be populated by JavaScript -->
           </select>
 
-          <label for="productionBusinessImpact">Business Impact (%):</label>
-          <input type="number" id="productionBusinessImpact" min="0" value="10">
+          <label for="clientExperienceBusinessScale">Business Scale (%):</label>
+          <input type="number" id="clientExperienceBusinessScale" min="0" value="10">
         </div>
 
-        <!-- Feature Fields -->
-        <div id="featureFields" class="categoryFields" style="display: none;">
-          <label for="dealbreaker">Dealbreaker (1-5):</label>
+        <!-- Product Delivery Fields -->
+        <div id="productDeliveryFields" class="categoryFields" style="display: none;">
+          <label for="dealbreaker">Dealbreaker (0-5):</label>
           <select id="dealbreaker">
-            <option value="1">1 - Not Critical</option>
-            <option value="2">2 - Low Priority</option>
-            <option value="3">3 - Medium Priority</option>
-            <option value="4">4 - High Priority</option>
-            <option value="5">5 - Must Have</option>
+            <!-- Options will be populated by JavaScript -->
           </select>
           
-          <label for="projectTime">Project Completion Time (1 day to 1 year):</label>
+          <label for="projectTime">Project Completion Time (0-5):</label>
           <select id="projectTime">
-          <option value="1">1 - 1 Year</option>
-          <option value="2">2 - 6 Months</option>
-          <option value="3">3 - 1 Month</option>
-          <option value="4">4 - 1 Week</option>
-          <option value="5">5 - 1 Day</option>
+            <!-- Options will be populated by JavaScript -->
           </select>
           
           <label for="clientTraffic">Expected Client Traffic Increase (%):</label>
@@ -125,44 +551,114 @@
 
         <!-- Security Fields -->
         <div id="securityFields" class="categoryFields" style="display: none;">
-          <label for="companyShutdown">Company Shutdown (1-5):</label>
+          <label for="companyShutdown">Company Shutdown (0-5):</label>
           <select id="companyShutdown">
-            <option value="1">1 - No Impact</option>
-            <option value="2">2 - Low Impact</option>
-            <option value="3">3 - Moderate Impact</option>
-            <option value="4">4 - High Impact</option>
-            <option value="5">5 - Total Shutdown</option>
+            <!-- Options will be populated by JavaScript -->
           </select>
           
-          <label for="likelihood">Likelihood of Occurrence (1-5):</label>
+          <label for="likelihood">Likelihood of Occurrence (0-5):</label>
           <select id="likelihood">
-            <option value="1">1 - Very Unlikely</option>
-            <option value="2">2 - Unlikely</option>
-            <option value="3">3 - Possible</option>
-            <option value="4">4 - Likely</option>
-            <option value="5">5 - Very Likely</option>
+            <!-- Options will be populated by JavaScript -->
           </select>
 
-          <label for="securityBusinessImpact">Business Impact (%):</label>
-          <input type="number" id="securityBusinessImpact" min="0" value="10">
+          <label for="securityBusinessScale">Business Scale (%):</label>
+          <input type="number" id="securityBusinessScale" min="0" value="10">
         </div>
+
+        <!-- Cost Optimization Fields -->
+        <div id="costOptimizationFields" class="categoryFields" style="display: none;">
+          <label for="implementationTime">Implementation Time (0-5):</label>
+          <select id="implementationTime">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+
+          <label for="costOptimizationBusinessScale">Business Scale ($):</label>
+          <input type="number" id="costOptimizationBusinessScale" min="0" value="2000">
+        </div>
+
+        <!-- Performance & Reliability Fields -->
+        <div id="performanceReliabilityFields" class="categoryFields" style="display: none;">
+          <label for="severity">Severity (0-5):</label>
+          <select id="severity">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+          
+          <label for="developmentTime">Development Time (0-5):</label>
+          <select id="developmentTime">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+
+          <label for="performanceReliabilityBusinessScale">Business Scale (%):</label>
+          <input type="number" id="performanceReliabilityBusinessScale" min="0" value="10">
+        </div>
+
+        <!-- Data Engineering Fields -->
+        <div id="dataEngineeringFields" class="categoryFields" style="display: none;">
+          <label for="dataEngineeringSeverity">Severity (0-5):</label>
+          <select id="dataEngineeringSeverity">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+          
+          <label for="dataEngineeringDevelopmentTime">Development Time (0-5):</label>
+          <select id="dataEngineeringDevelopmentTime">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+
+          <label for="dataEngineeringBusinessScale">Business Scale (%):</label>
+          <input type="number" id="dataEngineeringBusinessScale" min="0" value="10">
+        </div>
+
         <div id="calculatedScore"></div>
         <div id="priorityLevel"></div>
+        <div class="description-container">
+          <label for="projectDescription">Project Description:</label>
+          <textarea id="projectDescription" rows="4"></textarea>
+        </div>
+        <button id="saveEntryButton">Save Entry</button>
+        <table id="entriesTable">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Criticality</th>
+              <th>Timing</th>
+              <th>Business Scale</th>
+              <th>Score</th>
+              <th>Priority Level</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button id="copyTableButton" class="copy-button">Copy Table</button>
       </div>
 
       <div id="permutationTableView" style="display: none;">
         <h2>Permutation Table</h2>
         <button id="resetFiltersButton">Reset Filters</button>
+        <div class="chart-container">
+          <div>
+            <canvas id="lowPriorityChart" width="400" height="200"></canvas>
+            <div class="chart-title">Low Priority</div>
+          </div>
+          <div>
+            <canvas id="mediumPriorityChart" width="400" height="200"></canvas>
+            <div class="chart-title">Medium Priority</div>
+          </div>
+          <div>
+            <canvas id="highPriorityChart" width="400" height="200"></canvas>
+            <div class="chart-title">High Priority</div>
+          </div>
+        </div>
         <table id="permutationTable">
           <thead>
             <tr>
-              <th>Category</th>
-              <th>Criticality</th>
-              <th>Timing</th>
-              <th>Business Impact</th>
-              <th>Score</th>
-              <th>Priority Level</th>
-              <th>Actions</th>
+              <th style="width: 50px;">Category</th>
+              <th style="width: 150px;">Criticality</th>
+              <th style="width: 150px;">Timing</th>
+              <th style="width: 30px;">Business Scale</th>
+              <th style="width: 30px;">Score</th>
+              <th style="width: 30px;">Priority Level</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -170,116 +666,553 @@
       </div>
     </div>
 
-    <div style="position: sticky; top: 20px; margin-left: 20px; width: 300px; align-self: flex-start;">
-      <h2>Factors</h2>
-      <div>
-        <h3>Production</h3>
-        <label for="productionCriticalityFactor">Criticality Factor:</label>
-        <input type="range" id="productionCriticalityFactor" min="0" max="10" value="0.5" step="0.01">
-        <span id="productionCriticalityFactorValue">0.5</span>
-        <label for="productionTimingFactor">Timing Factor:</label>
-        <input type="range" id="productionTimingFactor" min="0" max="10" value="0.25" step="0.01">
-        <span id="productionTimingFactorValue">0.25</span>
-        <label for="productionBusinessImpactFactor">Business Impact Factor:</label>
-        <input type="range" id="productionBusinessImpactFactor" min="0" max="10" value="0.25" step="0.01">
-        <span id="productionBusinessImpactFactorValue">0.25</span>
+    <div class="flex-item-2 sticky-sidebar">
+        <div class="export-import-buttons">
+            <button id="exportStateButton">Export State</button>
+            <input type="file" id="importStateInput" style="display: none;">
+            <button id="importStateButton">Import State</button>
+        </div>
+        <button id="saveStateButton" class="save-state-button" disabled>Save State</button>
+        <button id="resetStateButton" class="reset-to-saved-state-button" disabled>Reset to Saved State</button>
+      <div class="tabs">
+        <div class="tab active" data-tab="factors">Factors</div>
+        <div class="tab" data-tab="parameters">Parameters</div>
       </div>
-      <div>
-        <h3>Feature</h3>
-        <label for="featureCriticalityFactor">Criticality Factor:</label>
-        <input type="range" id="featureCriticalityFactor" min="0" max="10" value="0.5" step="0.01">
-        <span id="featureCriticalityFactorValue">0.5</span>
-        <label for="featureTimingFactor">Timing Factor:</label>
-        <input type="range" id="featureTimingFactor" min="0" max="10" value="0.25" step="0.01">
-        <span id="featureTimingFactorValue">0.25</span>
-        <label for="featureBusinessImpactFactor">Business Impact Factor:</label>
-        <input type="range" id="featureBusinessImpactFactor" min="0" max="10" value="1.25" step="0.01">
-        <span id="featureBusinessImpactFactorValue">0.25</span>
-        <label for="featureBusinessImpactCap">Feature Business Impact Limit (%):</label>
-        <input type="number" id="featureBusinessImpactCap" min="0" max="100" value="20">
+      <div id="factors" class="tab-content active">
+        <div class="nested-tabs">
+          <div class="nested-tab active" data-tab="clientExperienceFactors">Client Experience</div>
+          <div class="nested-tab" data-tab="productDeliveryFactors">Product Delivery</div>
+          <div class="nested-tab" data-tab="securityFactors">Security</div>
+          <div class="nested-tab" data-tab="costOptimizationFactors">Cost Optimization</div>
+          <div class="nested-tab" data-tab="performanceReliabilityFactors">Performance & Reliability</div>
+          <div class="nested-tab" data-tab="dataEngineeringFactors">Data Engineering</div>
+        </div>
+        <div id="clientExperienceFactors" class="nested-tab-content active">
+          <h2>Client Experience Factors</h2>
+          <div class="factor-group">
+            <label for="clientExperienceCriticalityFactor">Criticality Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="clientExperienceCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
+              <input type="range" id="clientExperienceCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="clientExperienceTimingFactor">Timing Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="clientExperienceTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+              <input type="range" id="clientExperienceTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="clientExperienceBusinessScaleFactor">Business Scale Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="clientExperienceBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+              <input type="range" id="clientExperienceBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+          </div>
+        </div>
+        <div id="productDeliveryFactors" class="nested-tab-content">
+          <h2>Product Delivery Factors</h2>
+          <div class="factor-group">
+            <label for="productDeliveryCriticalityFactor">Criticality Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="productDeliveryCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
+              <input type="range" id="productDeliveryCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="productDeliveryTimingFactor">Timing Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="productDeliveryTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+              <input type="range" id="productDeliveryTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="productDeliveryBusinessScaleFactor">Business Scale Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="productDeliveryBusinessScaleFactorValue" min="0" max="10" value="1.25" step="0.01" style="width: 150px;">
+              <input type="range" id="productDeliveryBusinessScaleFactor" min="0" max="10" value="1.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="productDeliveryBusinessScaleLimit">Product Delivery Business Scale Limit (%):</label>
+            <input type="number" id="productDeliveryBusinessScaleLimit" min="0" max="100" value="20" style="width: 150px;">
+          </div>
+        </div>
+        <div id="securityFactors" class="nested-tab-content">
+          <h2>Security Factors</h2>
+          <div class="factor-group">
+            <label for="securityCriticalityFactor">Criticality Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="securityCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
+              <input type="range" id="securityCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="securityTimingFactor">Timing Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="securityTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+              <input type="range" id="securityTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="securityBusinessScaleFactor">Business Scale Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="securityBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+              <input type="range" id="securityBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+          </div>
+        </div>
+        <div id="costOptimizationFactors" class="nested-tab-content">
+          <h2>Cost Optimization Factors</h2>
+          <div class="factor-group">
+            <label for="costOptimizationTimingFactor">Timing Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="costOptimizationTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+              <input type="range" id="costOptimizationTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="costOptimizationBusinessScaleFactor">Business Scale Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="costOptimizationBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+              <input type="range" id="costOptimizationBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="costOptimizationBusinessScaleLimit">Cost Optimization Business Scale Limit ($):</label>
+            <input type="number" id="costOptimizationBusinessScaleLimit" min="0" max="10000" value="2000" style="width: 150px;">
+          </div>
+        </div>
+        <div id="performanceReliabilityFactors" class="nested-tab-content">
+          <h2>Performance & Reliability Factors</h2>
+          <div class="factor-group">
+            <label for="performanceReliabilitySeverityFactor">Severity Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="performanceReliabilitySeverityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 60px;">
+              <input type="range" id="performanceReliabilitySeverityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="performanceReliabilityTimingFactor">Timing Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="performanceReliabilityTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+              <input type="range" id="performanceReliabilityTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="performanceReliabilityBusinessScaleFactor">Business Scale Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="performanceReliabilityBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+              <input type="range" id="performanceReliabilityBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+          </div>
+        </div>
+        <div id="dataEngineeringFactors" class="nested-tab-content">
+          <h2>Data Engineering Factors</h2>
+          <div class="factor-group">
+            <label for="dataEngineeringSeverityFactor">Severity Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="dataEngineeringSeverityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 60px;">
+              <input type="range" id="dataEngineeringSeverityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="dataEngineeringTimingFactor">Timing Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="dataEngineeringTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+              <input type="range" id="dataEngineeringTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+            <label for="dataEngineeringBusinessScaleFactor">Business Scale Factor:</label>
+            <div style="display: flex; align-items: center;">
+              <input type="number" id="dataEngineeringBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+              <input type="range" id="dataEngineeringBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+            </div>
+          </div>
+        </div>
+        <button id="resetFactorsButton">Reset Factors to Default</button>
       </div>
-      <div>
-        <h3>Security</h3>
-        <label for="securityCriticalityFactor">Criticality Factor:</label>
-        <input type="range" id="securityCriticalityFactor" min="0" max="10" value="0.5" step="0.01">
-        <span id="securityCriticalityFactorValue">0.5</span>
-        <label for="securityTimingFactor">Timing Factor:</label>
-        <input type="range" id="securityTimingFactor" min="0" max="10" value="0.25" step="0.01">
-        <span id="securityTimingFactorValue">0.25</span>
-        <label for="securityBusinessImpactFactor">Business Impact Factor:</label>
-        <input type="range" id="securityBusinessImpactFactor" min="0" max="10" value="0.25" step="0.01">
-        <span id="securityBusinessImpactFactorValue">0.25</span>
+      <div id="parameters" class="tab-content">
+        <div class="nested-tabs">
+          <div class="nested-tab active" data-tab="clientExperienceParameters">Client Experience</div>
+          <div class="nested-tab" data-tab="productDeliveryParameters">Product Delivery</div>
+          <div class="nested-tab" data-tab="securityParameters">Security</div>
+          <div class="nested-tab" data-tab="costOptimizationParameters">Cost Optimization</div>
+          <div class="nested-tab" data-tab="performanceReliabilityParameters">Performance & Reliability</div>
+          <div class="nested-tab" data-tab="dataEngineeringParameters">Data Engineering</div>
+        </div>
+        <div id="clientExperienceParameters" class="nested-tab-content active">
+          <div class="third-tabs">
+            <div class="third-tab active" data-tab="showstopperParametersContainer">Showstopper</div>
+            <div class="third-tab" data-tab="frequencyParametersContainer">Frequency</div>
+            <div class="third-tab" data-tab="timeSpentParametersContainer">Time Spent</div>
+          </div>
+          <div id="showstopperParametersContainer" class="third-tab-content active">
+            <h3>Showstopper Parameters:</h3>
+            <div id="showstopperParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('showstopper')">Add</button>
+          </div>
+          <div id="frequencyParametersContainer" class="third-tab-content">
+            <h3>Frequency Parameters:</h3>
+            <div id="frequencyParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('frequency')">Add</button>
+          </div>
+          <div id="timeSpentParametersContainer" class="third-tab-content">
+            <h3>Time Spent Parameters:</h3>
+            <div id="timeSpentParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('timeSpent')">Add</button>
+          </div>
+        </div>
+        <div id="productDeliveryParameters" class="nested-tab-content">
+          <div class="third-tabs">
+            <div class="third-tab active" data-tab="dealbreakerParametersContainer">Dealbreaker</div>
+            <div class="third-tab" data-tab="projectTimeParametersContainer">Project Time</div>
+          </div>
+          <div id="dealbreakerParametersContainer" class="third-tab-content active">
+            <h3>Dealbreaker Parameters:</h3>
+            <div id="dealbreakerParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('dealbreaker')">Add</button>
+          </div>
+          <div id="projectTimeParametersContainer" class="third-tab-content">
+            <h3>Project Time Parameters:</h3>
+            <div id="projectTimeParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('projectTime')">Add</button>
+          </div>
+        </div>
+        <div id="securityParameters" class="nested-tab-content">
+          <div class="third-tabs">
+            <div class="third-tab active" data-tab="companyShutdownParametersContainer">Company Shutdown</div>
+            <div class="third-tab" data-tab="likelihoodParametersContainer">Likelihood</div>
+          </div>
+          <div id="companyShutdownParametersContainer" class="third-tab-content active">
+            <h3>Company Shutdown Parameters:</h3>
+            <div id="companyShutdownParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('companyShutdown')">Add</button>
+          </div>
+          <div id="likelihoodParametersContainer" class="third-tab-content">
+            <h3>Likelihood Parameters:</h3>
+            <div id="likelihoodParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('likelihood')">Add</button>
+          </div>
+        </div>
+        <div id="costOptimizationParameters" class="nested-tab-content">
+          <div class="third-tabs">
+            <div class="third-tab" data-tab="implementationTimeParametersContainer">Implementation Time</div>
+          </div>
+          <div id="costReductionParametersContainer" class="third-tab-content active">
+            <h3>Cost Reduction Parameters:</h3>
+            <div id="costReductionParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('costReduction')">Add</button>
+          </div>
+          <div id="implementationTimeParametersContainer" class="third-tab-content">
+            <h3>Implementation Time Parameters:</h3>
+            <div id="implementationTimeParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('implementationTime')">Add</button>
+          </div>
+        </div>
+        <div id="performanceReliabilityParameters" class="nested-tab-content">
+          <div class="third-tabs">
+            <div class="third-tab active" data-tab="severityParametersContainer">Severity</div>
+            <div class="third-tab" data-tab="developmentTimeParametersContainer">Development Time</div>
+          </div>
+          <div id="severityParametersContainer" class="third-tab-content active">
+            <h3>Severity Parameters:</h3>
+            <div id="severityParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('severity')">Add</button>
+          </div>
+          <div id="developmentTimeParametersContainer" class="third-tab-content">
+            <h3>Development Time Parameters:</h3>
+            <div id="developmentTimeParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('developmentTime')">Add</button>
+          </div>
+        </div>
+        <div id="dataEngineeringParameters" class="nested-tab-content">
+          <div class="third-tabs">
+            <div class="third-tab active" data-tab="dataEngineeringSeverityParametersContainer">Severity</div>
+            <div class="third-tab" data-tab="dataEngineeringDevelopmentTimeParametersContainer">Development Time</div>
+          </div>
+          <div id="dataEngineeringSeverityParametersContainer" class="third-tab-content active">
+            <h3>Severity Parameters:</h3>
+            <div id="dataEngineeringSeverityParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('dataEngineeringSeverity')">Add</button>
+          </div>
+          <div id="dataEngineeringDevelopmentTimeParametersContainer" class="third-tab-content">
+            <h3>Development Time Parameters:</h3>
+            <div id="dataEngineeringDevelopmentTimeParameters"></div>
+            <button class="add-parameter-button" onclick="addParameterPair('dataEngineeringDevelopmentTime')">Add</button>
+          </div>
+        </div>
+        <!-- <button id="saveParametersButton">Save Parameters</button> -->
+        <button id="resetParametersButton" class="reset-parameters-button">Reset Parameters to Default</button>
       </div>
     </div>
   </div>
 
   <script>
     const categorySelect = document.getElementById('categorySelect');
-    const productionFields = document.getElementById('productionFields');
-    const featureFields = document.getElementById('featureFields');
+    const clientExperienceFields = document.getElementById('clientExperienceFields');
+    const productDeliveryFields = document.getElementById('productDeliveryFields');
     const securityFields = document.getElementById('securityFields');
+    const costOptimizationFields = document.getElementById('costOptimizationFields');
+    const performanceReliabilityFields = document.getElementById('performanceReliabilityFields');
+    const dataEngineeringFields = document.getElementById('dataEngineeringFields');
     const tableBody = document.getElementById('tableBody');
     const toggleViewButton = document.getElementById('toggleViewButton');
     const calculatorView = document.getElementById('calculatorView');
     const permutationTableView = document.getElementById('permutationTableView');
     const resetFiltersButton = document.getElementById('resetFiltersButton');
+    const resetFactorsButton = document.getElementById('resetFactorsButton');
+    const saveParametersButton = document.getElementById('saveParametersButton');
+    const resetParametersButton = document.getElementById('resetParametersButton');
+    const saveStateButton = document.getElementById('saveStateButton');
+    const resetStateButton = document.getElementById('resetStateButton');
 
-    const productionCriticalityFactor = document.getElementById('productionCriticalityFactor');
-    const productionTimingFactor = document.getElementById('productionTimingFactor');
-    const productionBusinessImpactFactor = document.getElementById('productionBusinessImpactFactor');
-    const featureCriticalityFactor = document.getElementById('featureCriticalityFactor');
-    const featureTimingFactor = document.getElementById('featureTimingFactor');
-    const featureBusinessImpactFactor = document.getElementById('featureBusinessImpactFactor');
-    const featureBusinessImpactCap = document.getElementById('featureBusinessImpactCap');
+    const clientExperienceCriticalityFactor = document.getElementById('clientExperienceCriticalityFactor');
+    const clientExperienceTimingFactor = document.getElementById('clientExperienceTimingFactor');
+    const clientExperienceBusinessScaleFactor = document.getElementById('clientExperienceBusinessScaleFactor');
+    const productDeliveryCriticalityFactor = document.getElementById('productDeliveryCriticalityFactor');
+    const productDeliveryTimingFactor = document.getElementById('productDeliveryTimingFactor');
+    const productDeliveryBusinessScaleFactor = document.getElementById('productDeliveryBusinessScaleFactor');
+    const productDeliveryBusinessScaleLimit = document.getElementById('productDeliveryBusinessScaleLimit');
     const securityCriticalityFactor = document.getElementById('securityCriticalityFactor');
     const securityTimingFactor = document.getElementById('securityTimingFactor');
-    const securityBusinessImpactFactor = document.getElementById('securityBusinessImpactFactor');
+    const securityBusinessScaleFactor = document.getElementById('securityBusinessScaleFactor');
+    const costOptimizationTimingFactor = document.getElementById('costOptimizationTimingFactor');
+    const costOptimizationBusinessScaleFactor = document.getElementById('costOptimizationBusinessScaleFactor');
+    const costOptimizationBusinessScaleLimit = document.getElementById('costOptimizationBusinessScaleLimit');
+    const performanceReliabilitySeverityFactor = document.getElementById('performanceReliabilitySeverityFactor');
+    const performanceReliabilityTimingFactor = document.getElementById('performanceReliabilityTimingFactor');
+    const performanceReliabilityBusinessScaleFactor = document.getElementById('performanceReliabilityBusinessScaleFactor');
+    const dataEngineeringSeverityFactor = document.getElementById('dataEngineeringSeverityFactor');
+    const dataEngineeringTimingFactor = document.getElementById('dataEngineeringTimingFactor');
+    const dataEngineeringBusinessScaleFactor = document.getElementById('dataEngineeringBusinessScaleFactor');
 
-    const productionCriticalityFactorValue = document.getElementById('productionCriticalityFactorValue');
-    const productionTimingFactorValue = document.getElementById('productionTimingFactorValue');
-    const productionBusinessImpactFactorValue = document.getElementById('productionBusinessImpactFactorValue');
-    const featureCriticalityFactorValue = document.getElementById('featureCriticalityFactorValue');
-    const featureTimingFactorValue = document.getElementById('featureTimingFactorValue');
-    const featureBusinessImpactFactorValue = document.getElementById('featureBusinessImpactFactorValue');
+    const clientExperienceCriticalityFactorValue = document.getElementById('clientExperienceCriticalityFactorValue');
+    const clientExperienceTimingFactorValue = document.getElementById('clientExperienceTimingFactorValue');
+    const clientExperienceBusinessScaleFactorValue = document.getElementById('clientExperienceBusinessScaleFactorValue');
+    const productDeliveryCriticalityFactorValue = document.getElementById('productDeliveryCriticalityFactorValue');
+    const productDeliveryTimingFactorValue = document.getElementById('productDeliveryTimingFactorValue');
+    const productDeliveryBusinessScaleFactorValue = document.getElementById('productDeliveryBusinessScaleFactorValue');
     const securityCriticalityFactorValue = document.getElementById('securityCriticalityFactorValue');
     const securityTimingFactorValue = document.getElementById('securityTimingFactorValue');
-    const securityBusinessImpactFactorValue = document.getElementById('securityBusinessImpactFactorValue');
+    const securityBusinessScaleFactorValue = document.getElementById('securityBusinessScaleFactorValue');
+    const costOptimizationTimingFactorValue = document.getElementById('costOptimizationTimingFactorValue');
+    const costOptimizationBusinessScaleFactorValue = document.getElementById('costOptimizationBusinessScaleFactorValue');
+    const performanceReliabilitySeverityFactorValue = document.getElementById('performanceReliabilitySeverityFactorValue');
+    const performanceReliabilityTimingFactorValue = document.getElementById('performanceReliabilityTimingFactorValue');
+    const performanceReliabilityBusinessScaleFactorValue = document.getElementById('performanceReliabilityBusinessScaleFactorValue');
+    const dataEngineeringSeverityFactorValue = document.getElementById('dataEngineeringSeverityFactorValue');
+    const dataEngineeringTimingFactorValue = document.getElementById('dataEngineeringTimingFactorValue');
+    const dataEngineeringBusinessScaleFactorValue = document.getElementById('dataEngineeringBusinessScaleFactorValue');
+
+    const showstopperParameters = document.getElementById('showstopperParameters');
+    const frequencyParameters = document.getElementById('frequencyParameters');
+    const timeSpentParameters = document.getElementById('timeSpentParameters');
+    const dealbreakerParameters = document.getElementById('dealbreakerParameters');
+    const projectTimeParameters = document.getElementById('projectTimeParameters');
+    const companyShutdownParameters = document.getElementById('companyShutdownParameters');
+    const likelihoodParameters = document.getElementById('likelihoodParameters');
+    const costReductionParameters = document.getElementById('costReductionParameters');
+    const implementationTimeParameters = document.getElementById('implementationTimeParameters');
+    const severityParameters = document.getElementById('severityParameters');
+    const developmentTimeParameters = document.getElementById('developmentTimeParameters');
+    const dataEngineeringSeverityParameters = document.getElementById('dataEngineeringSeverityParameters');
+    const dataEngineeringDevelopmentTimeParameters = document.getElementById('dataEngineeringDevelopmentTimeParameters');
+
+    const toggleDarkModeButton = document.getElementById('toggleDarkModeButton');
+
+    const saveEntryButton = document.getElementById('saveEntryButton');
+    const entriesTableBody = document.getElementById('entriesTable').querySelector('tbody');
+    const copyTableButton = document.getElementById('copyTableButton');
+    let editingRow = null;
+
+    toggleDarkModeButton.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      saveDarkModeState();
+    });
+
+    function saveDarkModeState() {
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      localStorage.setItem('darkMode', isDarkMode);
+    }
+
+    function loadDarkModeState() {
+      const isDarkMode = JSON.parse(localStorage.getItem('darkMode'));
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+      }
+    }
+
+    // Initial call to load dark mode state
+    loadDarkModeState();
+
+    let parameters = {
+      showstopper: ['No Impact', 'Not Critical', 'Low Criticality', 'Moderate Criticality', 'High Criticality', 'Total Stop'],
+      frequency: ['Once in 5 Years', 'Once a Year or Less', 'Every 6 Months', 'Monthly', 'Weekly', 'Daily'],
+      timeSpent: ['No Time Spent', 'Less than 1 hour', 'Less than 2 hours', 'Half a day', 'Full day', 'Overtime'],
+      dealbreaker: ['No Impact', 'Not Critical', 'Low Priority', 'Medium Priority', 'High Priority', 'Must Have'],
+      projectTime: ['No Time', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
+      companyShutdown: ['No Impact', 'No Impact', 'Low Impact', 'Moderate Impact', 'High Impact', 'Total Shutdown'],
+      likelihood: ['Never', 'Very Unlikely', 'Unlikely', 'Possible', 'Likely', 'Very Likely'],
+      // costReduction: ['No Reduction', 'Minimal Reduction', 'Low Reduction', 'Moderate Reduction', 'High Reduction', 'Maximum Reduction'],
+      implementationTime: ['Immediate', '1 Week', '1 Month', '3 Months', '6 Months', '1 Year'],
+      severity: ['No Degradation', 'Minimal Degradation', 'Low Degradation', 'Moderate Degradation', 'High Degradation', 'Total Downtime'],
+      developmentTime: ['Immediate', '1 Week', '1 Month', '3 Months', '6 Months', '1 Year'],
+      dataEngineeringSeverity: ['Slow Query', 'Incorrect Calculation', 'Data Loss', 'Data Corruption', 'System Crash', 'Total Data Loss'],
+      dataEngineeringDevelopmentTime: ['Immediate', '1 Week', '1 Month', '3 Months', '6 Months', '1 Year']
+    };
+
+    let valueMappers = {
+      showstopper: [0, 1, 2, 3, 4, 5],
+      frequency: [0, 1, 2, 3, 4, 5],
+      timeSpent: [0, 1, 2, 3, 4, 5],
+      dealbreaker: [0, 1, 2, 3, 4, 5],
+      projectTime: [0, 1, 2, 3, 4, 5],
+      companyShutdown: [0, 1, 2, 3, 4, 5],
+      likelihood: [0, 1, 2, 3, 4, 5],
+      costReduction: [0, 1, 2, 3, 4, 5],
+      implementationTime: [0, 1, 2, 3, 4, 5],
+      severity: [0, 1, 2, 3, 4, 5],
+      developmentTime: [0, 1, 2, 3, 4, 5],
+      dataEngineeringSeverity: [0, 1, 2, 3, 4, 5],
+      dataEngineeringDevelopmentTime: [0, 1, 2, 3, 4, 5]
+    };
 
     let filteredValues = {
-      "Production": {
+      "Client Experience": {
         criticality: [],
         timing: [],
-        businessImpact: []
+        businessScale: []
       },
-      "Feature": {
+      "Product Delivery": {
         criticality: [],
         timing: [],
-        businessImpact: []
+        businessScale: []
       },
       "Security": {
         criticality: [],
         timing: [],
-        businessImpact: []
+        businessScale: []
       },
+      "Cost Optimization": {
+        criticality: [],
+        timing: [],
+        businessScale: []
+      },
+      "Performance & Reliability": {
+        criticality: [],
+        timing: [],
+        businessScale: []
+      },
+      "Data Engineering": {
+        criticality: [],
+        timing: [],
+        businessScale: []
+      }
     };
 
     function updateFactorValues() {
-      productionCriticalityFactorValue.innerText = productionCriticalityFactor.value;
-      productionTimingFactorValue.innerText = productionTimingFactor.value;
-      productionBusinessImpactFactorValue.innerText = productionBusinessImpactFactor.value;
-      featureCriticalityFactorValue.innerText = featureCriticalityFactor.value;
-      featureTimingFactorValue.innerText = featureTimingFactor.value;
-      featureBusinessImpactFactorValue.innerText = featureBusinessImpactFactor.value;
-      securityCriticalityFactorValue.innerText = securityCriticalityFactor.value;
-      securityTimingFactorValue.innerText = securityTimingFactor.value;
-      securityBusinessImpactFactorValue.innerText = securityBusinessImpactFactor.value;
+      clientExperienceCriticalityFactorValue.value = clientExperienceCriticalityFactor.value;
+      clientExperienceTimingFactorValue.value = clientExperienceTimingFactor.value;
+      clientExperienceBusinessScaleFactorValue.value = clientExperienceBusinessScaleFactor.value;
+      productDeliveryCriticalityFactorValue.value = productDeliveryCriticalityFactor.value;
+      productDeliveryTimingFactorValue.value = productDeliveryTimingFactor.value;
+      productDeliveryBusinessScaleFactorValue.value = productDeliveryBusinessScaleFactor.value;
+      securityCriticalityFactorValue.value = securityCriticalityFactor.value;
+      securityTimingFactorValue.value = securityTimingFactor.value;
+      securityBusinessScaleFactorValue.value = securityBusinessScaleFactor.value;
+      costOptimizationTimingFactorValue.value = costOptimizationTimingFactor.value;
+      costOptimizationBusinessScaleFactorValue.value = costOptimizationBusinessScaleFactor.value;
+      performanceReliabilitySeverityFactorValue.value = performanceReliabilitySeverityFactor.value;
+      performanceReliabilityTimingFactorValue.value = performanceReliabilityTimingFactor.value;
+      performanceReliabilityBusinessScaleFactorValue.value = performanceReliabilityBusinessScaleFactor.value;
+      dataEngineeringSeverityFactorValue.value = dataEngineeringSeverityFactor.value;
+      dataEngineeringTimingFactorValue.value = dataEngineeringTimingFactor.value;
+      dataEngineeringBusinessScaleFactorValue.value = dataEngineeringBusinessScaleFactor.value;
+      checkStateDifference();
+    }
+
+    function syncFactorValues() {
+      clientExperienceCriticalityFactor.value = clientExperienceCriticalityFactorValue.value;
+      clientExperienceTimingFactor.value = clientExperienceTimingFactorValue.value;
+      clientExperienceBusinessScaleFactor.value = clientExperienceBusinessScaleFactorValue.value;
+      productDeliveryCriticalityFactor.value = productDeliveryCriticalityFactorValue.value;
+      productDeliveryTimingFactor.value = productDeliveryTimingFactorValue.value;
+      productDeliveryBusinessScaleFactor.value = productDeliveryBusinessScaleFactorValue.value;
+      securityCriticalityFactor.value = securityCriticalityFactorValue.value;
+      securityTimingFactor.value = securityTimingFactorValue.value;
+      securityBusinessScaleFactor.value = securityBusinessScaleFactorValue.value;
+      costOptimizationTimingFactor.value = costOptimizationTimingFactorValue.value;
+      costOptimizationBusinessScaleFactor.value = costOptimizationBusinessScaleFactorValue.value;
+      performanceReliabilitySeverityFactor.value = performanceReliabilitySeverityFactorValue.value;
+      performanceReliabilityTimingFactor.value = performanceReliabilityTimingFactorValue.value;
+      performanceReliabilityBusinessScaleFactor.value = performanceReliabilityBusinessScaleFactorValue.value;
+      dataEngineeringSeverityFactor.value = dataEngineeringSeverityFactorValue.value;
+      dataEngineeringTimingFactor.value = dataEngineeringTimingFactorValue.value;
+      dataEngineeringBusinessScaleFactor.value = dataEngineeringBusinessScaleFactorValue.value;
+      checkStateDifference();
+    }
+
+    function populateDropdowns() {
+      const showstopperSelect = document.getElementById('showstopper');
+      const frequencySelect = document.getElementById('frequency');
+      const timeSpentSelect = document.getElementById('timeSpent');
+      const dealbreakerSelect = document.getElementById('dealbreaker');
+      const projectTimeSelect = document.getElementById('projectTime');
+      const companyShutdownSelect = document.getElementById('companyShutdown');
+      const likelihoodSelect = document.getElementById('likelihood');
+      const implementationTimeSelect = document.getElementById('implementationTime');
+      const severitySelect = document.getElementById('severity');
+      const developmentTimeSelect = document.getElementById('developmentTime');
+      const dataEngineeringSeveritySelect = document.getElementById('dataEngineeringSeverity');
+      const dataEngineeringDevelopmentTimeSelect = document.getElementById('dataEngineeringDevelopmentTime');
+
+      showstopperSelect.innerHTML = '';
+      frequencySelect.innerHTML = '';
+      timeSpentSelect.innerHTML = '';
+      dealbreakerSelect.innerHTML = '';
+      projectTimeSelect.innerHTML = '';
+      companyShutdownSelect.innerHTML = '';
+      likelihoodSelect.innerHTML = '';
+      implementationTimeSelect.innerHTML = '';
+      severitySelect.innerHTML = '';
+      developmentTimeSelect.innerHTML = '';
+      dataEngineeringSeveritySelect.innerHTML = '';
+      dataEngineeringDevelopmentTimeSelect.innerHTML = '';
+
+      parameters.showstopper.forEach((desc, index) => {
+        showstopperSelect.options.add(new Option(`${valueMappers.showstopper[index]} - ${desc}`, valueMappers.showstopper[index]));
+      });
+
+      parameters.frequency.forEach((desc, index) => {
+        frequencySelect.options.add(new Option(`${valueMappers.frequency[index]} - ${desc}`, valueMappers.frequency[index]));
+      });
+
+      parameters.timeSpent.forEach((desc, index) => {
+        timeSpentSelect.options.add(new Option(`${valueMappers.timeSpent[index]} - ${desc}`, valueMappers.timeSpent[index]));
+      });
+
+      parameters.dealbreaker.forEach((desc, index) => {
+        dealbreakerSelect.options.add(new Option(`${valueMappers.dealbreaker[index]} - ${desc}`, valueMappers.dealbreaker[index]));
+      });
+
+      parameters.projectTime.forEach((desc, index) => {
+        projectTimeSelect.options.add(new Option(`${valueMappers.projectTime[index]} - ${desc}`, valueMappers.projectTime[index]));
+      });
+
+      parameters.companyShutdown.forEach((desc, index) => {
+        companyShutdownSelect.options.add(new Option(`${valueMappers.companyShutdown[index]} - ${desc}`, valueMappers.companyShutdown[index]));
+      });
+
+      parameters.likelihood.forEach((desc, index) => {
+        likelihoodSelect.options.add(new Option(`${valueMappers.likelihood[index]} - ${desc}`, valueMappers.likelihood[index]));
+      });
+
+      parameters.implementationTime.forEach((desc, index) => {
+        implementationTimeSelect.options.add(new Option(`${valueMappers.implementationTime[index]} - ${desc}`, valueMappers.implementationTime[index]));
+      });
+
+      parameters.severity.forEach((desc, index) => {
+        severitySelect.options.add(new Option(`${valueMappers.severity[index]} - ${desc}`, valueMappers.severity[index]));
+      });
+
+      parameters.developmentTime.forEach((desc, index) => {
+        developmentTimeSelect.options.add(new Option(`${valueMappers.developmentTime[index]} - ${desc}`, valueMappers.developmentTime[index]));
+      });
+
+      parameters.dataEngineeringSeverity.forEach((desc, index) => {
+        dataEngineeringSeveritySelect.options.add(new Option(`${valueMappers.dataEngineeringSeverity[index]} - ${desc}`, valueMappers.dataEngineeringSeverity[index]));
+      });
+
+      parameters.dataEngineeringDevelopmentTime.forEach((desc, index) => {
+        dataEngineeringDevelopmentTimeSelect.options.add(new Option(`${valueMappers.dataEngineeringDevelopmentTime[index]} - ${desc}`, valueMappers.dataEngineeringDevelopmentTime[index]));
+      });
     }
 
     categorySelect.addEventListener('change', function() {
       const selectedCategory = categorySelect.value;
-      productionFields.style.display = (selectedCategory === 'production') ? 'block' : 'none';
-      featureFields.style.display = (selectedCategory === 'feature') ? 'block' : 'none';
+      clientExperienceFields.style.display = (selectedCategory === 'clientExperience') ? 'block' : 'none';
+      productDeliveryFields.style.display = (selectedCategory === 'productDelivery') ? 'block' : 'none';
       securityFields.style.display = (selectedCategory === 'security') ? 'block' : 'none';
+      costOptimizationFields.style.display = (selectedCategory === 'costOptimization') ? 'block' : 'none';
+      performanceReliabilityFields.style.display = (selectedCategory === 'performanceReliability') ? 'block' : 'none';
+      dataEngineeringFields.style.display = (selectedCategory === 'dataEngineering') ? 'block' : 'none';
       displayPermutationTable(); // Recalculate and display table when category changes
     });
 
@@ -293,37 +1226,144 @@
       calculatorView.style.display = isCalculatorVisible ? 'none' : 'block';
       permutationTableView.style.display = isCalculatorVisible ? 'block' : 'none';
       toggleViewButton.innerText = isCalculatorVisible ? 'Show Calculator' : 'Show Permutation Table';
+      updateURL(isCalculatorVisible ? 'permutations' : 'calculator');
     });
+
+    function updateURL(view, tab, nestedTab, thirdTab) {
+      const url = new URL(window.location);
+      if (view) {
+        url.searchParams.set('view', view);
+      }
+      if (tab) {
+        url.searchParams.set('tab', tab);
+      }
+      if (nestedTab) {
+        url.searchParams.set('nestedTab', nestedTab);
+      }
+      if (thirdTab) {
+        url.searchParams.set('thirdTab', thirdTab);
+      }
+      window.history.pushState({}, '', url);
+    }
+
+    function loadViewFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const view = urlParams.get('view');
+      const tab = urlParams.get('tab');
+      const nestedTab = urlParams.get('nestedTab');
+      const thirdTab = urlParams.get('thirdTab');
+
+      if (view === 'permutations') {
+        calculatorView.style.display = 'none';
+        permutationTableView.style.display = 'block';
+        toggleViewButton.innerText = 'Show Calculator';
+      } else {
+        calculatorView.style.display = 'block';
+        permutationTableView.style.display = 'none';
+        toggleViewButton.innerText = 'Show Permutation Table';
+      }
+
+      if (tab) {
+        document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.querySelector(`.tabs .tab[data-tab="${tab}"]`).classList.add('active');
+        document.getElementById(tab).classList.add('active');
+      }
+
+      if (nestedTab) {
+        document.querySelectorAll('.nested-tabs .nested-tab').forEach(nt => nt.classList.remove('active'));
+        document.querySelectorAll('.nested-tab-content').forEach(ntc => ntc.classList.remove('active'));
+        document.querySelector(`.nested-tabs .nested-tab[data-tab="${nestedTab}"]`).classList.add('active');
+        document.getElementById(nestedTab).classList.add('active');
+      }
+
+      if (thirdTab) {
+        document.querySelectorAll('.third-tabs .third-tab').forEach(tt => tt.classList.remove('active'));
+        document.querySelectorAll('.third-tab-content').forEach(ttc => ttc.classList.remove('active'));
+        document.querySelector(`.third-tabs .third-tab[data-tab="${thirdTab}"]`).classList.add('active');
+        document.getElementById(thirdTab).classList.add('active');
+      }
+    }
+
+    // Initial call to load view from URL
+    loadViewFromURL();
 
     resetFiltersButton.addEventListener('click', function() {
       filteredValues = {
-      "Production": {
+      "Client Experience": {
         criticality: [],
         timing: [],
-        businessImpact: []
+        businessScale: []
       },
-      "Feature": {
+      "Product Delivery": {
         criticality: [],
         timing: [],
-        businessImpact: []
+        businessScale: []
       },
       "Security": {
         criticality: [],
         timing: [],
-        businessImpact: []
+        businessScale: []
       },
+      "Cost Optimization": {
+        criticality: [],
+        timing: [],
+        businessScale: []
+      },
+      "Performance & Reliability": {
+        criticality: [],
+        timing: [],
+        businessScale: []
+      },
+      "Data Engineering": {
+        criticality: [],
+        timing: [],
+        businessScale: []
+      }
     };
       displayPermutationTable();
     });
 
+    resetFactorsButton.addEventListener('click', function() {
+      if (confirm('Are you sure you want to reset factors to default?')) {
+        clientExperienceCriticalityFactor.value = 0.5;
+        clientExperienceTimingFactor.value = 0.25;
+        clientExperienceBusinessScaleFactor.value = 0.25;
+        productDeliveryCriticalityFactor.value = 0.5;
+        productDeliveryTimingFactor.value = 0.25;
+        productDeliveryBusinessScaleFactor.value = 1.25;
+        productDeliveryBusinessScaleLimit.value = 20;
+        securityCriticalityFactor.value = 0.5;
+        securityTimingFactor.value = 0.25;
+        securityBusinessScaleFactor.value = 0.25;
+        costOptimizationTimingFactor.value = 0.5;
+        costOptimizationBusinessScaleFactor.value = 0.5;
+        costOptimizationBusinessScaleLimit.value = 2000;
+        performanceReliabilitySeverityFactor.value = 0.5;
+        performanceReliabilityTimingFactor.value = 0.25;
+        performanceReliabilityBusinessScaleFactor.value = 0.25;
+        dataEngineeringSeverityFactor.value = 0.5;
+        dataEngineeringTimingFactor.value = 0.25;
+        dataEngineeringBusinessScaleFactor.value = 0.25;
+        updateFactorValues();
+        displayPermutationTable();
+        calculateScore();
+      }
+    });
+
     const permutations = [];
+
+    let lowPriorityChart, mediumPriorityChart, highPriorityChart;
 
     function displayPermutationTable() {
       permutations.length = 0;
       // Generate permutations for each category
-      generateProductionPermutations(permutations);
-      generateFeaturePermutations(permutations);
+      generateClientExperiencePermutations(permutations);
+      generateProductDeliveryPermutations(permutations);
       generateSecurityPermutations(permutations);
+      generateCostOptimizationPermutations(permutations);
+      generatePerformanceReliabilityPermutations(permutations);
+      generateDataEngineeringPermutations(permutations);
 
       // Sort permutations by score in descending order
       permutations.sort((a, b) => b.score - a.score);
@@ -335,25 +1375,164 @@
       // Clear the table
       tableBody.innerHTML = '';
 
+      // Initialize priority counts
+      const priorityCounts = {
+        low: { "Client Experience": 0, "Product Delivery": 0, "Security": 0, "Cost Optimization": 0, "Performance & Reliability": 0, "Data Engineering": 0 },
+        medium: { "Client Experience": 0, "Product Delivery": 0, "Security": 0, "Cost Optimization": 0, "Performance & Reliability": 0, "Data Engineering": 0 },
+        high: { "Client Experience": 0, "Product Delivery": 0, "Security": 0, "Cost Optimization": 0, "Performance & Reliability": 0, "Data Engineering": 0 }
+      };
+
+      // Initialize total counts for each category
+      const totalCounts = {
+        "Client Experience": 0,
+        "Product Delivery": 0,
+        "Security": 0,
+        "Cost Optimization": 0,
+        "Performance & Reliability": 0,
+        "Data Engineering": 0
+      };
+
       // Append rows
       permutations.forEach(p => {
         if (!filteredValues[p.category].criticality.includes(p.criticalityValue) &&
             !filteredValues[p.category].timing.includes(p.timingValue) &&
-            !filteredValues[p.category].businessImpact.includes(p.businessImpactValue)) {
+            !filteredValues[p.category].businessScale.includes(p.businessScaleValue)) {
           const scaledScore = p.score * scaleFactor;
           const priorityLevel = calculatePriorityLevel(scaledScore);
           const row = document.createElement('tr');
           row.innerHTML = `
-            <td>${p.category}</td>
-            <td class="criticality-${p.criticalityValue}">${p.criticality} <button onclick="filterValue('${p.category}', 'criticality', ${p.criticalityValue})">-</button></td>
-            <td class="timing-${p.timingValue}">${p.timing} <button onclick="filterValue('${p.category}', 'timing', ${p.timingValue})">-</button></td>
-            <td class="businessImpact-${p.businessImpactValue}">${p.businessImpact}% <button onclick="filterValue('${p.category}', 'businessImpact', ${p.businessImpactValue})">-</button></td>
+            <td class="${p.category.charAt(0).toLowerCase() + p.category.slice(1).replace(/[\s&]+/g, '')}">${p.category}</td>
+            <td>
+              <button class="table-button" onclick="filterValue('${p.category}', 'criticality', ${p.criticalityValue})">x</button><span class="pill criticality-${p.criticalityValue}" style="display: inline-block; margin-left: 5px;">${p.criticality}</span>
+            </td>
+            <td>
+              <button class="table-button" onclick="filterValue('${p.category}', 'timing', ${p.timingValue})">x</button><span class="pill timing-${p.timingValue}" style="display: inline-block; margin-left: 5px;">${p.timing}</span>
+            </td>
+            <td>
+                <button class="table-button" onclick="filterValue('${p.category}', 'businessScale', ${p.businessScaleValue})">x</button><span class="pill businessScale-${p.businessScaleValue}" style="display: inline-block; margin-left: 5px;">${p.category === 'Cost Optimization' ? '$' + p.businessScale.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : p.businessScale + '%'}</span>
+            </td>
             <td>${scaledScore.toFixed(2)}</td>
             <td>${priorityLevel}</td>
           `;
           tableBody.appendChild(row);
+
+          // Update priority counts
+          if (priorityLevel.includes('High')) {
+            priorityCounts.high[p.category]++;
+          } else if (priorityLevel.includes('Medium')) {
+            priorityCounts.medium[p.category]++;
+          } else {
+            priorityCounts.low[p.category]++;
+          }
+
+          // Update total counts
+          totalCounts[p.category]++;
         }
       });
+
+      // Update the charts
+      updatePriorityDistributionCharts(priorityCounts, totalCounts);
+    }
+
+    function updatePriorityDistributionCharts(priorityCounts, totalCounts) {
+      const lowPriorityData = {
+        labels: ['Client Experience', 'Product Delivery', 'Security', 'Cost Optimization', 'Performance & Reliability', 'Data Engineering'],
+        datasets: [{
+          data: [
+            (priorityCounts.low['Client Experience'] / totalCounts['Client Experience']) * 100,
+            (priorityCounts.low['Product Delivery'] / totalCounts['Product Delivery']) * 100,
+            (priorityCounts.low['Security'] / totalCounts['Security']) * 100,
+            (priorityCounts.low['Cost Optimization'] / totalCounts['Cost Optimization']) * 100,
+            (priorityCounts.low['Performance & Reliability'] / totalCounts['Performance & Reliability']) * 100,
+            (priorityCounts.low['Data Engineering'] / totalCounts['Data Engineering']) * 100
+          ],
+          backgroundColor: ['#6d9eeb', '#8e7cc3', '#e06666', '#cc4125', '#93c47d', '#f6b26b'],
+          borderColor: ['#6d9eeb', '#8e7cc3', '#e06666', '#cc4125', '#93c47d', '#f6b26b'],
+          borderWidth: 1
+        }]
+      };
+
+      const mediumPriorityData = {
+        labels: ['Client Experience', 'Product Delivery', 'Security', 'Cost Optimization', 'Performance & Reliability', 'Data Engineering'],
+        datasets: [{
+          data: [
+            (priorityCounts.medium['Client Experience'] / totalCounts['Client Experience']) * 100,
+            (priorityCounts.medium['Product Delivery'] / totalCounts['Product Delivery']) * 100,
+            (priorityCounts.medium['Security'] / totalCounts['Security']) * 100,
+            (priorityCounts.medium['Cost Optimization'] / totalCounts['Cost Optimization']) * 100,
+            (priorityCounts.medium['Performance & Reliability'] / totalCounts['Performance & Reliability']) * 100,
+            (priorityCounts.medium['Data Engineering'] / totalCounts['Data Engineering']) * 100
+          ],
+          backgroundColor: ['#6d9eeb', '#8e7cc3', '#e06666', '#cc4125', '#93c47d', '#f6b26b'],
+          borderColor: ['#6d9eeb', '#8e7cc3', '#e06666', '#cc4125', '#93c47d', '#f6b26b'],
+          borderWidth: 1
+        }]
+      };
+
+      const highPriorityData = {
+        labels: ['Client Experience', 'Product Delivery', 'Security', 'Cost Optimization', 'Performance & Reliability', 'Data Engineering'],
+        datasets: [{
+          data: [
+            (priorityCounts.high['Client Experience'] / totalCounts['Client Experience']) * 100,
+            (priorityCounts.high['Product Delivery'] / totalCounts['Product Delivery']) * 100,
+            (priorityCounts.high['Security'] / totalCounts['Security']) * 100,
+            (priorityCounts.high['Cost Optimization'] / totalCounts['Cost Optimization']) * 100,
+            (priorityCounts.high['Performance & Reliability'] / totalCounts['Performance & Reliability']) * 100,
+            (priorityCounts.high['Data Engineering'] / totalCounts['Data Engineering']) * 100
+          ],
+          backgroundColor: ['#6d9eeb', '#8e7cc3', '#e06666', '#cc4125', '#93c47d', '#f6b26b'],
+          borderColor: ['#6d9eeb', '#8e7cc3', '#e06666', '#cc4125', '#93c47d', '#f6b26b'],
+          borderWidth: 1
+        }]
+      };
+
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: false,
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const label = context.label || '';
+                return `${label}`;
+              }
+            }
+          }
+        }
+      };
+
+      if (lowPriorityChart) {
+        lowPriorityChart.data = lowPriorityData;
+        lowPriorityChart.update();
+      } else {
+        lowPriorityChart = new Chart(document.getElementById('lowPriorityChart').getContext('2d'), {
+          type: 'pie',
+          data: lowPriorityData,
+          options: options
+        });
+      }
+
+      if (mediumPriorityChart) {
+        mediumPriorityChart.data = mediumPriorityData;
+        mediumPriorityChart.update();
+      } else {
+        mediumPriorityChart = new Chart(document.getElementById('mediumPriorityChart').getContext('2d'), {
+          type: 'pie',
+          data: mediumPriorityData,
+          options: options
+        });
+      }
+
+      if (highPriorityChart) {
+        highPriorityChart.data = highPriorityData;
+        highPriorityChart.update();
+      } else {
+        highPriorityChart = new Chart(document.getElementById('highPriorityChart').getContext('2d'), {
+          type: 'pie',
+          data: highPriorityData,
+          options: options
+        });
+      }
     }
 
     function filterValue(category, type, value) {
@@ -361,58 +1540,69 @@
       displayPermutationTable();
     }
 
-    function generateProductionPermutations(permutations) {
-      const showstopperDescriptions = ['Not Critical', 'Low Criticality', 'Moderate Criticality', 'High Criticality', 'Total Stop'];
-      const frequencyDescriptions = ['Once a Year or Less', 'Every 6 Months', 'Monthly', 'Weekly', 'Daily'];
-      const timeSpentDescriptions = ['Less than 1 hour', 'Less than 2 hours', 'Half a day', 'Full day', 'Whole day (all day event)'];
-      const businessImpactValues = [20, 40, 60, 80, 100];
+    function generateClientExperiencePermutations(permutations) {
+    const minShowstopper = Math.min(...valueMappers.showstopper);
+    const maxShowstopper = Math.max(...valueMappers.showstopper);
+    const minFrequency = Math.min(...valueMappers.frequency);
+    const maxFrequency = Math.max(...valueMappers.frequency);
+    const minTimeSpent = Math.min(...valueMappers.timeSpent);
+    const maxTimeSpent = Math.max(...valueMappers.timeSpent);
+    const businessScaleValues = [0, 20, 40, 60, 80, 100];
 
-      for (let showstopper = 1; showstopper <= 5; showstopper++) {
-        for (let frequency = 1; frequency <= 5; frequency++) {
-          for (let timeSpent = 1; timeSpent <= 5; timeSpent++) {
-            for (const businessImpact of businessImpactValues) {
-              const score = (showstopper * parseFloat(productionCriticalityFactor.value)) + 
-                            (frequency / 2 * parseFloat(productionTimingFactor.value)) + 
-                            (timeSpent / 2 * parseFloat(productionTimingFactor.value)) + 
-                            (businessImpact / 20 * parseFloat(productionBusinessImpactFactor.value));
-              permutations.push({
-                category: 'Production',
-                criticality: `${showstopperDescriptions[showstopper-1]}`,
-                timing: `${frequencyDescriptions[frequency-1]} | ${timeSpentDescriptions[timeSpent-1]}`,
-                criticalityValue: Math.ceil(showstopper),
-                timingValue: Math.ceil((frequency + timeSpent) / 2),
-                businessImpact: businessImpact,
-                businessImpactValue: Math.ceil(businessImpact / 20),
-                score: score
-              });
-            }
+    for (let showstopper = 0; showstopper <= 5; showstopper++) {
+      for (let frequency = 0; frequency <= 5; frequency++) {
+        for (let timeSpent = 0; timeSpent <= 5; timeSpent++) {
+          for (const businessScale of businessScaleValues) {
+            const criticalityValue = Math.round(((valueMappers.showstopper[showstopper] - minShowstopper) / (maxShowstopper - minShowstopper)) * 5);
+            const timingValue = Math.round((((valueMappers.frequency[frequency] - minFrequency) / (maxFrequency - minFrequency)) + ((valueMappers.timeSpent[timeSpent] - minTimeSpent) / (maxTimeSpent - minTimeSpent))) / 2 * 5);
+            const score = (valueMappers.showstopper[showstopper] * parseFloat(clientExperienceCriticalityFactor.value)) + 
+                          (valueMappers.frequency[frequency] / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+                          (valueMappers.timeSpent[timeSpent] / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+                          (businessScale / 20 * parseFloat(clientExperienceBusinessScaleFactor.value));
+            permutations.push({
+              category: 'Client Experience',
+              criticality: `${parameters.showstopper[showstopper]}`,
+              timing: `${parameters.frequency[frequency]} | ${parameters.timeSpent[timeSpent]}`,
+              criticalityValue: criticalityValue,
+              timingValue: timingValue,
+              businessScale: businessScale,
+              businessScaleValue: Math.ceil(businessScale / 20),
+              score: score
+            });
           }
         }
       }
     }
+    }
+    function generateProductDeliveryPermutations(permutations) {
+      const productDeliveryBusinessScaleLimitValue = parseInt(productDeliveryBusinessScaleLimit.value);
+      const businessScaleValues = [];
+      for (let i = 0; i <= 5; i++) {
+        businessScaleValues.push((productDeliveryBusinessScaleLimitValue / 5) * i);
+      }
 
-    function generateFeaturePermutations(permutations) {
-      const dealbreakerDescriptions = ['Not Critical', 'Low Priority', 'Medium Priority', 'High Priority', 'Must Have'];
-      const projectTimeDescriptions = ['1 Year', '6 Months', '1 Month', '1 Week', '1 Day'];
-      const businessImpactValues = [20, 40, 60, 80, 100];
+      const minDealbreaker = Math.min(...valueMappers.dealbreaker);
+      const maxDealbreaker = Math.max(...valueMappers.dealbreaker);
+      const minProjectTime = Math.min(...valueMappers.projectTime);
+      const maxProjectTime = Math.max(...valueMappers.projectTime);
 
-      const businessImpactCap = parseInt(featureBusinessImpactCap.value);
-
-      for (let dealbreaker = 1; dealbreaker <= 5; dealbreaker++) {
-        for (let projectTime = 1; projectTime <= 5; projectTime++) {
-          for (const businessImpact of businessImpactValues) {
-            if (businessImpact <= businessImpactCap) {
-              const score = (dealbreaker * parseFloat(featureCriticalityFactor.value)) + 
-                            (projectTime * parseFloat(featureTimingFactor.value)) + 
-                            (businessImpact / 20 * parseFloat(featureBusinessImpactFactor.value));
+      for (let dealbreaker = 0; dealbreaker <= 5; dealbreaker++) {
+        for (let projectTime = 0; projectTime <= 5; projectTime++) {
+          for (const businessScale of businessScaleValues) {
+            if (businessScale <= productDeliveryBusinessScaleLimitValue) {
+              const criticalityValue = Math.round(((valueMappers.dealbreaker[dealbreaker] - minDealbreaker) / (maxDealbreaker - minDealbreaker)) * 5);
+              const timingValue = Math.round(((valueMappers.projectTime[projectTime] - minProjectTime) / (maxProjectTime - minProjectTime)) * 5);
+              const score = (valueMappers.dealbreaker[dealbreaker] * parseFloat(productDeliveryCriticalityFactor.value)) + 
+                            (valueMappers.projectTime[projectTime] * parseFloat(productDeliveryTimingFactor.value)) + 
+                            (businessScale / 20 * parseFloat(productDeliveryBusinessScaleFactor.value));
               permutations.push({
-                category: 'Feature',
-                criticality: `${dealbreakerDescriptions[dealbreaker-1]}`,
-                timing: `${projectTimeDescriptions[projectTime-1]}`,
-                criticalityValue: Math.ceil(dealbreaker),
-                timingValue: Math.ceil(projectTime),
-                businessImpact: businessImpact,
-                businessImpactValue: Math.ceil(businessImpact / 20),
+                category: 'Product Delivery',
+                criticality: `${parameters.dealbreaker[dealbreaker]}`,
+                timing: `${parameters.projectTime[projectTime]}`,
+                criticalityValue: criticalityValue,
+                timingValue: timingValue,
+                businessScale: businessScale,
+                businessScaleValue: Math.ceil((businessScale / productDeliveryBusinessScaleLimitValue) * 5),
                 score: score
               });
             }
@@ -422,24 +1612,122 @@
     }
 
     function generateSecurityPermutations(permutations) {
-      const companyShutdownDescriptions = ['No Impact', 'Low Impact', 'Moderate Impact', 'High Impact', 'Total Shutdown'];
-      const likelihoodDescriptions = ['Very Unlikely', 'Unlikely', 'Possible', 'Likely', 'Very Likely'];
-      const businessImpactValues = [20, 40, 60, 80, 100];
+      const businessScaleValues = [0, 20, 40, 60, 80, 100];
 
-      for (let companyShutdown = 1; companyShutdown <= 5; companyShutdown++) {
-        for (let likelihood = 1; likelihood <= 5; likelihood++) {
-          for (const businessImpact of businessImpactValues) {
-            const score = (companyShutdown * parseFloat(securityCriticalityFactor.value)) + 
-                          (likelihood * parseFloat(securityTimingFactor.value)) + 
-                          (businessImpact / 20 * parseFloat(securityBusinessImpactFactor.value));
+      const minCompanyShutdown = Math.min(...valueMappers.companyShutdown);
+      const maxCompanyShutdown = Math.max(...valueMappers.companyShutdown);
+      const minLikelihood = Math.min(...valueMappers.likelihood);
+      const maxLikelihood = Math.max(...valueMappers.likelihood);
+
+      for (let companyShutdown = 0; companyShutdown <= 5; companyShutdown++) {
+        for (let likelihood = 0; likelihood <= 5; likelihood++) {
+          for (const businessScale of businessScaleValues) {
+            const criticalityValue = Math.round(((valueMappers.companyShutdown[companyShutdown] - minCompanyShutdown) / (maxCompanyShutdown - minCompanyShutdown)) * 5);
+            const timingValue = Math.round(((valueMappers.likelihood[likelihood] - minLikelihood) / (maxLikelihood - minLikelihood)) * 5);
+            const score = (valueMappers.companyShutdown[companyShutdown] * parseFloat(securityCriticalityFactor.value)) + 
+                          (valueMappers.likelihood[likelihood] * parseFloat(securityTimingFactor.value)) + 
+                          (businessScale / 20 * parseFloat(securityBusinessScaleFactor.value));
             permutations.push({
               category: 'Security',
-              criticality: `${companyShutdownDescriptions[companyShutdown-1]}`,
-              timing: `${likelihoodDescriptions[likelihood-1]}`,
-                criticalityValue: Math.ceil(companyShutdown),
-                timingValue: Math.ceil(likelihood),
-              businessImpact: businessImpact,
-              businessImpactValue: Math.ceil(businessImpact / 20),
+              criticality: `${parameters.companyShutdown[companyShutdown]}`,
+              timing: `${parameters.likelihood[likelihood]}`,
+              criticalityValue: criticalityValue,
+              timingValue: timingValue,
+              businessScale: businessScale,
+              businessScaleValue: Math.ceil(businessScale / 20),
+              score: score
+            });
+          }
+        }
+      }
+    }
+    function generateCostOptimizationPermutations(permutations) {
+      const costOptimizationBusinessScaleLimitValue = parseInt(costOptimizationBusinessScaleLimit.value);
+      const businessScaleValues = [];
+      for (let i = 0; i <= 5; i++) {
+        businessScaleValues.push((costOptimizationBusinessScaleLimitValue / 5) * i);
+      }
+
+      const minImplementationTime = Math.min(...valueMappers.implementationTime);
+      const maxImplementationTime = Math.max(...valueMappers.implementationTime);
+
+      for (let implementationTime = 0; implementationTime <= 5; implementationTime++) {
+      for (const businessScale of businessScaleValues) {
+        if (businessScale <= costOptimizationBusinessScaleLimitValue) {
+        const timingValue = Math.round(((valueMappers.implementationTime[implementationTime] - minImplementationTime) / (maxImplementationTime - minImplementationTime)) * 5);
+        const scaledBusinessScale = (businessScale / costOptimizationBusinessScaleLimitValue) * 5;
+        const score = (valueMappers.implementationTime[implementationTime] * parseFloat(costOptimizationTimingFactor.value)) + 
+                (scaledBusinessScale * parseFloat(costOptimizationBusinessScaleFactor.value));
+        permutations.push({
+          category: 'Cost Optimization',
+          criticality: '',
+          timing: `${parameters.implementationTime[implementationTime]}`,
+          criticalityValue: 0, // Assuming costReduction is not used for permutations
+          timingValue: timingValue,
+          businessScale: businessScale,
+          businessScaleValue: Math.ceil(scaledBusinessScale),
+          score: score
+        });
+        }
+      }
+      }
+    }
+
+    function generatePerformanceReliabilityPermutations(permutations) {
+      const businessScaleValues = [0, 20, 40, 60, 80, 100];
+
+      const minSeverity = Math.min(...valueMappers.severity);
+      const maxSeverity = Math.max(...valueMappers.severity);
+      const minDevelopmentTime = Math.min(...valueMappers.developmentTime);
+      const maxDevelopmentTime = Math.max(...valueMappers.developmentTime);
+
+      for (let severity = 0; severity <= 5; severity++) {
+        for (let developmentTime = 0; developmentTime <= 5; developmentTime++) {
+          for (const businessScale of businessScaleValues) {
+            const severityValue = Math.round(((valueMappers.severity[severity] - minSeverity) / (maxSeverity - minSeverity)) * 5);
+            const timingValue = Math.round(((valueMappers.developmentTime[developmentTime] - minDevelopmentTime) / (maxDevelopmentTime - minDevelopmentTime)) * 5);
+            const score = (valueMappers.severity[severity] * parseFloat(performanceReliabilitySeverityFactor.value)) + 
+                          (valueMappers.developmentTime[developmentTime] * parseFloat(performanceReliabilityTimingFactor.value)) + 
+                          (businessScale / 20 * parseFloat(performanceReliabilityBusinessScaleFactor.value));
+            permutations.push({
+              category: 'Performance & Reliability',
+              criticality: `${parameters.severity[severity]}`,
+              timing: `${parameters.developmentTime[developmentTime]}`,
+              criticalityValue: severityValue,
+              timingValue: timingValue,
+              businessScale: businessScale,
+              businessScaleValue: Math.ceil(businessScale / 20),
+              score: score
+            });
+          }
+        }
+      }
+    }
+
+    function generateDataEngineeringPermutations(permutations) {
+      const businessScaleValues = [0, 20, 40, 60, 80, 100];
+
+      const minSeverity = Math.min(...valueMappers.dataEngineeringSeverity);
+      const maxSeverity = Math.max(...valueMappers.dataEngineeringSeverity);
+      const minDevelopmentTime = Math.min(...valueMappers.dataEngineeringDevelopmentTime);
+      const maxDevelopmentTime = Math.max(...valueMappers.dataEngineeringDevelopmentTime);
+
+      for (let severity = 0; severity <= 5; severity++) {
+        for (let developmentTime = 0; developmentTime <= 5; developmentTime++) {
+          for (const businessScale of businessScaleValues) {
+            const severityValue = Math.round(((valueMappers.dataEngineeringSeverity[severity] - minSeverity) / (maxSeverity - minSeverity)) * 5);
+            const timingValue = Math.round(((valueMappers.dataEngineeringDevelopmentTime[developmentTime] - minDevelopmentTime) / (maxDevelopmentTime - minDevelopmentTime)) * 5);
+            const score = (valueMappers.dataEngineeringSeverity[severity] * parseFloat(dataEngineeringSeverityFactor.value)) + 
+                          (valueMappers.dataEngineeringDevelopmentTime[developmentTime] * parseFloat(dataEngineeringTimingFactor.value)) + 
+                          (businessScale / 20 * parseFloat(dataEngineeringBusinessScaleFactor.value));
+            permutations.push({
+              category: 'Data Engineering',
+              criticality: `${parameters.dataEngineeringSeverity[severity]}`,
+              timing: `${parameters.dataEngineeringDevelopmentTime[developmentTime]}`,
+              criticalityValue: severityValue,
+              timingValue: timingValue,
+              businessScale: businessScale,
+              businessScaleValue: Math.ceil(businessScale / 20),
               score: score
             });
           }
@@ -451,31 +1739,52 @@
       const selectedCategory = categorySelect.value;
       let score = 0;
 
-      if (selectedCategory === 'production') {
-        const showstopper = parseInt(document.getElementById('showstopper').value);
-        const frequency = parseInt(document.getElementById('frequency').value);
-        const timeSpent = parseInt(document.getElementById('timeSpent').value);
-        const businessImpact = parseInt(document.getElementById('productionBusinessImpact').value);
-        score = (showstopper * parseFloat(productionCriticalityFactor.value)) + 
-                (frequency / 2 * parseFloat(productionTimingFactor.value)) + 
-                (timeSpent / 2 * parseFloat(productionTimingFactor.value)) + 
-                (businessImpact / 20 * parseFloat(productionBusinessImpactFactor.value));
-      } else if (selectedCategory === 'feature') {
-        const dealbreaker = parseInt(document.getElementById('dealbreaker').value);
-        const projectTime = parseInt(document.getElementById('projectTime').value);
-        const clientTraffic = parseInt(document.getElementById('clientTraffic').value);
-        const businessImpactCap = parseInt(featureBusinessImpactCap.value);
-        const cappedClientTraffic = Math.min(clientTraffic, businessImpactCap);
-        score = (dealbreaker * parseFloat(featureCriticalityFactor.value)) + 
-                (projectTime * parseFloat(featureTimingFactor.value)) + 
-                (cappedClientTraffic / 20 * parseFloat(featureBusinessImpactFactor.value));
+      if (selectedCategory === 'clientExperience') {
+        const showstopper = parseInt(document.getElementById('showstopper').value) || 0;
+        const frequency = parseInt(document.getElementById('frequency').value) || 0;
+        const timeSpent = parseInt(document.getElementById('timeSpent').value) || 0;
+        const businessScale = parseInt(document.getElementById('clientExperienceBusinessScale').value) || 0;
+        score = (valueMappers.showstopper[showstopper] * parseFloat(clientExperienceCriticalityFactor.value)) + 
+                (valueMappers.frequency[frequency] / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+                (valueMappers.timeSpent[timeSpent] / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+                (businessScale / 20 * parseFloat(clientExperienceBusinessScaleFactor.value));
+      } else if (selectedCategory === 'productDelivery') {
+        const dealbreaker = parseInt(document.getElementById('dealbreaker').value) || 0;
+        const projectTime = parseInt(document.getElementById('projectTime').value) || 0;
+        const clientTraffic = parseInt(document.getElementById('clientTraffic').value) || 0;
+        const productDeliveryBusinessScaleLimitValue = parseInt(productDeliveryBusinessScaleLimit.value) || 0;
+        const cappedClientTraffic = Math.min(clientTraffic, productDeliveryBusinessScaleLimitValue);
+        score = (valueMappers.dealbreaker[dealbreaker] * parseFloat(productDeliveryCriticalityFactor.value)) + 
+                (valueMappers.projectTime[projectTime] * parseFloat(productDeliveryTimingFactor.value)) + 
+                (cappedClientTraffic / 20 * parseFloat(productDeliveryBusinessScaleFactor.value));
       } else if (selectedCategory === 'security') {
-        const companyShutdown = parseInt(document.getElementById('companyShutdown').value);
-        const likelihood = parseInt(document.getElementById('likelihood').value);
-        const businessImpact = parseInt(document.getElementById('securityBusinessImpact').value);
-        score = (companyShutdown * parseFloat(securityCriticalityFactor.value)) + 
-                (likelihood * parseFloat(securityTimingFactor.value)) + 
-                (businessImpact / 20 * parseFloat(securityBusinessImpactFactor.value));
+        const companyShutdown = parseInt(document.getElementById('companyShutdown').value) || 0;
+        const likelihood = parseInt(document.getElementById('likelihood').value) || 0;
+        const businessScale = parseInt(document.getElementById('securityBusinessScale').value) || 0;
+        score = (valueMappers.companyShutdown[companyShutdown] * parseFloat(securityCriticalityFactor.value)) + 
+                (valueMappers.likelihood[likelihood] * parseFloat(securityTimingFactor.value)) + 
+                (businessScale / 20 * parseFloat(securityBusinessScaleFactor.value));
+      } else if (selectedCategory === 'costOptimization') {
+        const implementationTime = parseInt(document.getElementById('implementationTime').value) || 0;
+        const businessScale = parseInt(document.getElementById('costOptimizationBusinessScale').value) || 0;
+        const costOptimizationBusinessScaleLimitValue = parseInt(costOptimizationBusinessScaleLimit.value) || 0;
+        const cappedBusinessScale = Math.min(businessScale, costOptimizationBusinessScaleLimitValue);
+        score = (valueMappers.implementationTime[implementationTime] * parseFloat(costOptimizationTimingFactor.value)) + 
+                (cappedBusinessScale / costOptimizationBusinessScaleLimitValue * 5 * parseFloat(costOptimizationBusinessScaleFactor.value));
+      } else if (selectedCategory === 'performanceReliability') {
+        const severity = parseInt(document.getElementById('severity').value) || 0;
+        const developmentTime = parseInt(document.getElementById('developmentTime').value) || 0;
+        const businessScale = parseInt(document.getElementById('performanceReliabilityBusinessScale').value) || 0;
+        score = (valueMappers.severity[severity] * parseFloat(performanceReliabilitySeverityFactor.value)) + 
+                (valueMappers.developmentTime[developmentTime] * parseFloat(performanceReliabilityTimingFactor.value)) + 
+                (businessScale / 20 * parseFloat(performanceReliabilityBusinessScaleFactor.value));
+      } else if (selectedCategory === 'dataEngineering') {
+        const severity = parseInt(document.getElementById('dataEngineeringSeverity').value) || 0;
+        const developmentTime = parseInt(document.getElementById('dataEngineeringDevelopmentTime').value) || 0;
+        const businessScale = parseInt(document.getElementById('dataEngineeringBusinessScale').value) || 0;
+        score = (valueMappers.dataEngineeringSeverity[severity] * parseFloat(dataEngineeringSeverityFactor.value)) + 
+                (valueMappers.dataEngineeringDevelopmentTime[developmentTime] * parseFloat(dataEngineeringTimingFactor.value)) + 
+                (businessScale / 20 * parseFloat(dataEngineeringBusinessScaleFactor.value));
       }
 
       // Scale scores to be between 1 and 5
@@ -484,16 +1793,16 @@
         score *= scaleFactor;
       const priorityLevel = calculatePriorityLevel(score);
       document.getElementById('calculatedScore').innerText = `Score: ${score.toFixed(2)}`;
-      document.getElementById('priorityLevel').innerText = `Priority Level: ${priorityLevel}`;
+      document.getElementById('priorityLevel').innerHTML = `Priority Level: ${priorityLevel}`;
     }
 
     function calculatePriorityLevel(score) {
       if (score >= 4) {
-        return 'High';
+        return '<span class="priority-level priority-high">High</span>';
       } else if (score >= 2.5) {
-        return 'Medium';
+        return '<span class="priority-level priority-medium">Medium</span>';
       } else {
-        return 'Low';
+        return '<span class="priority-level priority-low">Low</span>';
       }
     }
 
@@ -505,17 +1814,531 @@
     // Update factor values on slider change
     const sliders = document.querySelectorAll('input[type="range"]');
     sliders.forEach(slider => {
-      slider.addEventListener('input', () => {
+      slider.addEventListener('input', debounce(() => {
         updateFactorValues();
         displayPermutationTable();
+        sortEntriesTable();
         calculateScore();
-      });
+      }, 300));
     });
 
+    // Sync factor values on number input change
+    const numberInputs = document.querySelectorAll('input[type="number"]');
+    numberInputs.forEach(input => {
+      input.addEventListener('input', debounce(() => {
+        syncFactorValues();
+        displayPermutationTable();
+        sortEntriesTable();
+        calculateScore();
+      }, 300));
+    });
+
+    // Save parameters
+    function saveParameters() {
+      Object.keys(parameters).forEach(type => {
+        const container = document.getElementById(`${type}Parameters`);
+        const pairs = container.querySelectorAll('.parameter-pair');
+        parameters[type] = [];
+        valueMappers[type] = [];
+        pairs.forEach(pair => {
+          const value = parseFloat(pair.querySelector('input[type="number"]').value);
+          const desc = pair.querySelector('input[type="text"]').value;
+          if (!isNaN(value) && desc.trim() !== '') {
+            valueMappers[type].push(value);
+            parameters[type].push(desc);
+          }
+        });
+      });
+      populateDropdowns();
+      displayPermutationTable();
+      sortEntriesTable();
+      calculateScore();
+      checkStateDifference();
+    }
+
+    resetParametersButton.addEventListener('click', function() {
+      if (confirm('Are you sure you want to reset parameters to default?')) {
+        parameters = {
+          showstopper: ['No Impact', 'Not Critical', 'Low Criticality', 'Moderate Criticality', 'High Criticality', 'Total Stop'],
+          frequency: ['Once in 5 Years', 'Once a Year or Less', 'Every 6 Months', 'Monthly', 'Weekly', 'Daily'],
+          timeSpent: ['No Time Spent', 'Less than 1 hour', 'Less than 2 hours', 'Half a day', 'Full day', 'Overtime'],
+          dealbreaker: ['No Impact', 'Not Critical', 'Low Priority', 'Medium Priority', 'High Priority', 'Must Have'],
+          projectTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
+          companyShutdown: ['No Impact', 'No Impact', 'Low Impact', 'Moderate Impact', 'High Impact', 'Total Shutdown'],
+          likelihood: ['Never', 'Very Unlikely', 'Unlikely', 'Possible', 'Likely', 'Very Likely'],
+          // costReduction: ['No Reduction', 'Minimal Reduction', 'Low Reduction', 'Moderate Reduction', 'High Reduction', 'Maximum Reduction'],
+          implementationTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
+          severity: ['No Degradation', 'Minimal Degradation', 'Low Degradation', 'Moderate Degradation', 'High Degradation', 'Total Downtime'],
+          developmentTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
+          dataEngineeringSeverity: ['Minor Change', 'Slow Query', 'Incorrect Calculation', 'Data Loss', 'Data Corruption', 'Total Data Loss'],
+          dataEngineeringDevelopmentTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day']
+        };
+
+        valueMappers = {
+          showstopper: [0, 1, 2, 3, 4, 5],
+          frequency: [0, 1, 2, 3, 4, 5],
+          timeSpent: [0, 1, 2, 3, 4, 5],
+          dealbreaker: [0, 1, 2, 3, 4, 5],
+          projectTime: [0, 1, 2, 3, 4, 5],
+          companyShutdown: [0, 1, 2, 3, 4, 5],
+          likelihood: [0, 1, 2, 3, 4, 5],
+          costReduction: [0, 1, 2, 3, 4, 5],
+          implementationTime: [0, 1, 2, 3, 4, 5],
+          severity: [0, 1, 2, 3, 4, 5],
+          developmentTime: [0, 1, 2, 3, 4, 5],
+          dataEngineeringSeverity: [0, 1, 2, 3, 4, 5],
+          dataEngineeringDevelopmentTime: [0, 1, 2, 3, 4, 5]
+        };
+
+        populateDescriptionFields();
+        populateDropdowns();
+        displayPermutationTable();
+        calculateScore();
+        checkStateDifference();
+      }
+    });
+
+    function addDescriptionPair(type) {
+      const container = document.getElementById(`${type}Parameters`);
+      const pairDiv = document.createElement('div');
+      pairDiv.className = 'parameter-pair';
+      pairDiv.innerHTML = `
+        <input type="number" step="0.01" value="0">
+        <input type="text" value="">
+        <button onclick="removeDescriptionPair(this)">Remove</button>
+      `;
+      container.appendChild(pairDiv);
+    }
+
+    function addParameterPair(type) {
+      const container = document.getElementById(`${type}Parameters`);
+      const pairDiv = document.createElement('div');
+      pairDiv.className = 'parameter-pair';
+      pairDiv.innerHTML = `
+        <input type="number" step="0.01" value="0">
+        <input type="text" value="">
+        <button onclick="removeParameterPair(this)">Remove</button>
+      `;
+      container.appendChild(pairDiv);
+      pairDiv.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', debounce(saveParameters, 300));
+      });
+    }
+
+    function removeDescriptionPair(button) {
+      button.parentElement.remove();
+    }
+
+    function removeParameterPair(button) {
+      button.parentElement.remove();
+      saveParameters();
+    }
+
+    function populateDescriptionFields() {
+      Object.keys(parameters).forEach(type => {
+        const container = document.getElementById(`${type}Parameters`);
+        container.innerHTML = '';
+        parameters[type].forEach((desc, index) => {
+          const pairDiv = document.createElement('div');
+          pairDiv.className = 'parameter-pair';
+          pairDiv.innerHTML = `
+            <input type="number" step="0.01" value="${valueMappers[type][index]}">
+            <input type="text" value="${desc}">
+            <button onclick="removeParameterPair(this)">Remove</button>
+          `;
+          container.appendChild(pairDiv);
+          pairDiv.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', debounce(saveParameters, 300));
+          });
+        });
+      });
+    }
+
+    function populateParameterFields() {
+      Object.keys(parameters).forEach(type => {
+        const container = document.getElementById(`${type}Parameters`);
+        container.innerHTML = '';
+        parameters[type].forEach((desc, index) => {
+          const pairDiv = document.createElement('div');
+          pairDiv.className = 'parameter-pair';
+          pairDiv.innerHTML = `
+            <input type="number" step="0.01" value="${valueMappers[type][index]}">
+            <input type="text" value="${desc}">
+            <button onclick="removeParameterPair(this)">Remove</button>
+          `;
+          container.appendChild(pairDiv);
+          pairDiv.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', debounce(saveParameters, 300));
+          });
+        });
+      });
+    }
+
     // Initial call to populate the table and calculate the score
+    loadState();
+    populateDescriptionFields();
+    populateParameterFields();
+    populateDropdowns();
     displayPermutationTable();
     calculateScore();
     updateFactorValues();
+    // Initial call to load entries from local storage
+    loadEntriesFromLocalStorage();
+
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func.apply(this, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    function getCurrentState() {
+      return JSON.stringify({
+        category: categorySelect.value,
+        clientExperienceCriticalityFactor: clientExperienceCriticalityFactor.value,
+        clientExperienceTimingFactor: clientExperienceTimingFactor.value,
+        clientExperienceBusinessScaleFactor: clientExperienceBusinessScaleFactor.value,
+        productDeliveryCriticalityFactor: productDeliveryCriticalityFactor.value,
+        productDeliveryTimingFactor: productDeliveryTimingFactor.value,
+        productDeliveryBusinessScaleFactor: productDeliveryBusinessScaleFactor.value,
+        productDeliveryBusinessScaleLimit: productDeliveryBusinessScaleLimit.value,
+        securityCriticalityFactor: securityCriticalityFactor.value,
+        securityTimingFactor: securityTimingFactor.value,
+        securityBusinessScaleFactor: securityBusinessScaleFactor.value,
+        costOptimizationTimingFactor: costOptimizationTimingFactor.value,
+        costOptimizationBusinessScaleFactor: costOptimizationBusinessScaleFactor.value,
+        costOptimizationBusinessScaleLimit: costOptimizationBusinessScaleLimit.value,
+        performanceReliabilitySeverityFactor: performanceReliabilitySeverityFactor.value,
+        performanceReliabilityTimingFactor: performanceReliabilityTimingFactor.value,
+        performanceReliabilityBusinessScaleFactor: performanceReliabilityBusinessScaleFactor.value,
+        dataEngineeringSeverityFactor: dataEngineeringSeverityFactor.value,
+        dataEngineeringTimingFactor: dataEngineeringTimingFactor.value,
+        dataEngineeringBusinessScaleFactor: dataEngineeringBusinessScaleFactor.value,
+        parameters: parameters,
+        valueMappers: valueMappers
+      });
+    }
+
+    function saveState() {
+      const state = getCurrentState();
+      localStorage.setItem('triageState', state);
+      checkStateDifference();
+    }
+
+    function loadState() {
+      const state = JSON.parse(localStorage.getItem('triageState'));
+      if (state) {
+        categorySelect.value = state.category;
+        clientExperienceCriticalityFactor.value = state.clientExperienceCriticalityFactor;
+        clientExperienceTimingFactor.value = state.clientExperienceTimingFactor;
+        clientExperienceBusinessScaleFactor.value = state.clientExperienceBusinessScaleFactor;
+        productDeliveryCriticalityFactor.value = state.productDeliveryCriticalityFactor;
+        productDeliveryTimingFactor.value = state.productDeliveryTimingFactor;
+        productDeliveryBusinessScaleFactor.value = state.productDeliveryBusinessScaleFactor;
+        productDeliveryBusinessScaleLimit.value = state.productDeliveryBusinessScaleLimit;
+        securityCriticalityFactor.value = state.securityCriticalityFactor;
+        securityTimingFactor.value = state.securityTimingFactor;
+        securityBusinessScaleFactor.value = state.securityBusinessScaleFactor;
+        costOptimizationTimingFactor.value = state.costOptimizationTimingFactor;
+        costOptimizationBusinessScaleFactor.value = state.costOptimizationBusinessScaleFactor;
+        costOptimizationBusinessScaleLimit.value = state.costOptimizationBusinessScaleLimit;
+        performanceReliabilitySeverityFactor.value = state.performanceReliabilitySeverityFactor;
+        performanceReliabilityTimingFactor.value = state.performanceReliabilityTimingFactor;
+        performanceReliabilityBusinessScaleFactor.value = state.performanceReliabilityBusinessScaleFactor;
+        dataEngineeringSeverityFactor.value = state.dataEngineeringSeverityFactor;
+        dataEngineeringTimingFactor.value = state.dataEngineeringTimingFactor;
+        dataEngineeringBusinessScaleFactor.value = state.dataEngineeringBusinessScaleFactor;
+        parameters = state.parameters || parameters;
+        valueMappers = state.valueMappers || valueMappers;
+        populateDescriptionFields();
+        populateParameterFields();
+        updateFactorValues();
+        displayPermutationTable();
+        calculateScore();
+        const selectedCategory = categorySelect.value;
+        clientExperienceFields.style.display = (selectedCategory === 'clientExperience') ? 'block' : 'none';
+        productDeliveryFields.style.display = (selectedCategory === 'productDelivery') ? 'block' : 'none';
+        securityFields.style.display = (selectedCategory === 'security') ? 'block' : 'none';
+        costOptimizationFields.style.display = (selectedCategory === 'costOptimization') ? 'block' : 'none';
+        performanceReliabilityFields.style.display = (selectedCategory === 'performanceReliability') ? 'block' : 'none';
+        dataEngineeringFields.style.display = (selectedCategory === 'dataEngineering') ? 'block' : 'none';
+      }
+    }
+
+  document.querySelectorAll('.tabs .tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const parent = this.closest('.tabs').parentElement;
+      const tabContents = parent.querySelectorAll('.tab-content');
+      parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tabContents.forEach(tc => tc.classList.remove('active'));
+      this.classList.add('active');
+      const activeTabContent = document.getElementById(this.dataset.tab);
+      activeTabContent.classList.add('active');
+    // Activate the first nested tab and its content
+    const firstNestedTab = activeTabContent.querySelector('.nested-tabs .nested-tab');
+    if (firstNestedTab) {
+      activeTabContent.querySelectorAll('.nested-tab').forEach(nt => nt.classList.remove('active'));
+      activeTabContent.querySelectorAll('.nested-tab-content').forEach(ntc => ntc.classList.remove('active'));
+      firstNestedTab.classList.add('active');
+      document.getElementById(firstNestedTab.dataset.tab).classList.add('active');
+
+      // Activate the first third tab and its content
+      const firstThirdTab = document.querySelector(`#${firstNestedTab.dataset.tab} .third-tabs .third-tab`);
+      if (firstThirdTab) {
+        document.querySelectorAll(`#${firstNestedTab.dataset.tab} .third-tab`).forEach(tt => tt.classList.remove('active'));
+        document.querySelectorAll(`#${firstNestedTab.dataset.tab} .third-tab-content`).forEach(ttc => ttc.classList.remove('active'));
+        firstThirdTab.classList.add('active');
+        document.getElementById(firstThirdTab.dataset.tab).classList.add('active');
+      }
+    }
+
+      updateURL(null, this.dataset.tab);
+    });
+  });
+
+  document.querySelectorAll('.nested-tabs .nested-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const parent = this.closest('.nested-tabs').parentElement;
+      const tabContents = parent.querySelectorAll('.nested-tab-content');
+      parent.querySelectorAll('.nested-tab').forEach(t => t.classList.remove('active'));
+      tabContents.forEach(tc => tc.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById(this.dataset.tab).classList.add('active');
+    // Activate the first third tab and its content
+    const firstThirdTab = parent.querySelector('.third-tabs .third-tab');
+    if (firstThirdTab) {
+      parent.querySelectorAll('.third-tab').forEach(tt => tt.classList.remove('active'));
+      parent.querySelectorAll('.third-tab-content').forEach(ttc => ttc.classList.remove('active'));
+      firstThirdTab.classList.add('active');
+      document.getElementById(firstThirdTab.dataset.tab).classList.add('active');
+    }
+
+      const currentTab = new URL(window.location).searchParams.get('tab');
+      updateURL(null, currentTab, this.dataset.tab);
+    });
+  });
+
+  document.querySelectorAll('.third-tabs .third-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      const parent = this.closest('.third-tabs').parentElement;
+      const tabContents = parent.querySelectorAll('.third-tab-content');
+      parent.querySelectorAll('.third-tab').forEach(t => t.classList.remove('active'));
+      tabContents.forEach(ttc => ttc.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById(this.dataset.tab).classList.add('active');
+      const currentTab = new URL(window.location).searchParams.get('tab');
+      const currentNestedTab = new URL(window.location).searchParams.get('nestedTab');
+      updateURL(null, currentTab, currentNestedTab, this.dataset.tab);
+    });
+  });
+
+    document.getElementById('exportStateButton').addEventListener('click', function() {
+      const state = localStorage.getItem('triageState');
+      const blob = new Blob([state], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'triageState.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('importStateButton').addEventListener('click', function() {
+      document.getElementById('importStateInput').click();
+    });
+
+    document.getElementById('importStateInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const state = JSON.parse(e.target.result);
+          localStorage.setItem('triageState', JSON.stringify(state));
+          loadState();
+          populateDropdowns();
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    saveStateButton.addEventListener('click', function() {
+      if (confirm('Are you sure you want to save the current state?')) {
+        saveState();
+        checkStateDifference();
+      }
+    });
+
+    resetStateButton.addEventListener('click', function() {
+      if (confirm('Are you sure you want to reset to the saved state?')) {
+        loadState();
+        checkStateDifference();
+      }
+    });
+
+    window.addEventListener('beforeunload', function(event) {
+      const currentState = getCurrentState();
+      const savedState = localStorage.getItem('triageState');
+      if (currentState !== savedState) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    });
+
+    function checkStateDifference() {
+      const currentState = getCurrentState();
+      const savedState = localStorage.getItem('triageState');
+      saveStateButton.disabled = (currentState === savedState);
+      resetStateButton.disabled = (currentState === savedState);
+    }
+
+    // Initial call to check state difference
+    checkStateDifference();
+    saveEntryButton.addEventListener('click', function() {
+      const description = document.getElementById('projectDescription').value;
+      const category = categorySelect.options[categorySelect.selectedIndex].text;
+      const criticality = document.querySelector(`#${categorySelect.value}Fields select`).options[document.querySelector(`#${categorySelect.value}Fields select`).selectedIndex].text;
+      let timing;
+      if (categorySelect.value === 'clientExperience') {
+        timing = `${document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].selectedIndex].text} | ${document.querySelectorAll(`#${categorySelect.value}Fields select`)[2].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[2].selectedIndex].text}`;
+      } else {
+        timing = document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].selectedIndex].text;
+      }
+      const businessScale = document.querySelector(`#${categorySelect.value}Fields input[type="number"]`).value;
+      const score = document.getElementById('calculatedScore').innerText.split(': ')[1];
+      const priorityLevel = document.getElementById('priorityLevel').innerText.split(': ')[1];
+
+      if (editingRow) {
+      editingRow.innerHTML = `
+        <td>${description}</td>
+        <td>${category}</td>
+        <td>${criticality}</td>
+        <td>${timing}</td>
+        <td>${businessScale}</td>
+        <td>${score}</td>
+        <td>${priorityLevel}</td>
+        <td>
+        <button class="edit-button" onclick="editEntry(this)">Edit</button>
+        <button class="delete-button" onclick="deleteEntry(this)">Delete</button>
+        </td>
+      `;
+      editingRow = null;
+      } else {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${description}</td>
+        <td>${category}</td>
+        <td>${criticality}</td>
+        <td>${timing}</td>
+        <td>${businessScale}</td>
+        <td>${score}</td>
+        <td>${priorityLevel}</td>
+        <td>
+        <button class="edit-button" onclick="editEntry(this)">Edit</button>
+        <button class="delete-button" onclick="deleteEntry(this)">Delete</button>
+        </td>
+      `;
+      entriesTableBody.appendChild(row);
+      }
+      sortEntriesTable();
+      saveEntriesToLocalStorage();
+    });
+
+    function editEntry(button) {
+      const row = button.parentElement.parentElement;
+      const cells = row.querySelectorAll('td');
+      document.getElementById('projectDescription').value = cells[0].innerText;
+      categorySelect.value = cells[1].innerText.toLowerCase().replace(/[\s&]+/g, '');
+      // Update the fields based on the selected category
+      categorySelect.dispatchEvent(new Event('change'));
+      editingRow = row;
+    }
+
+    function deleteEntry(button) {
+      if (confirm('Are you sure you want to delete this entry?')) {
+        button.parentElement.parentElement.remove();
+        saveEntriesToLocalStorage();
+      }
+    }
+
+    function sortEntriesTable() {
+      const rows = Array.from(entriesTableBody.querySelectorAll('tr'));
+      rows.sort((a, b) => {
+        const scoreA = parseFloat(a.cells[5].innerText);
+        const scoreB = parseFloat(b.cells[5].innerText);
+        return scoreB - scoreA;
+      });
+      entriesTableBody.innerHTML = '';
+      rows.forEach(row => entriesTableBody.appendChild(row));
+    }
+
+    function saveEntriesToLocalStorage() {
+      const entries = [];
+      entriesTableBody.querySelectorAll('tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const entry = {
+          description: cells[0].innerText,
+          category: cells[1].innerText,
+          criticality: cells[2].innerText,
+          timing: cells[3].innerText,
+          businessScale: cells[4].innerText,
+          score: cells[5].innerText,
+          priorityLevel: cells[6].innerText
+        };
+        entries.push(entry);
+      });
+      localStorage.setItem('triageEntries', JSON.stringify(entries));
+    }
+
+    function loadEntriesFromLocalStorage() {
+      const entries = JSON.parse(localStorage.getItem('triageEntries')) || [];
+      entries.forEach(entry => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${entry.description}</td>
+          <td>${entry.category}</td>
+          <td>${entry.criticality}</td>
+          <td>${entry.timing}</td>
+          <td>${entry.businessScale}</td>
+          <td>${entry.score}</td>
+          <td>${entry.priorityLevel}</td>
+          <td>
+            <button class="edit-button" onclick="editEntry(this)">Edit</button>
+            <button class="delete-button" onclick="deleteEntry(this)">Delete</button>
+          </td>
+        `;
+        entriesTableBody.appendChild(row);
+      });
+      sortEntriesTable();
+    }
+
+    copyTableButton.addEventListener('click', function() {
+      const table = document.getElementById('entriesTable');
+      const rows = table.querySelectorAll('tbody tr');
+      let clipboardText = '';
+      rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+      const rowText = Array.from(cells).slice(0, -1).map(cell => cell.innerText).join('\t'); // Exclude the last cell (Actions)
+      clipboardText += rowText + '\n';
+      });
+      navigator.clipboard.writeText(clipboardText).then(() => {
+      copyTableButton.innerText = 'Copied!';
+      copyTableButton.style.backgroundColor = '#4cae4c';
+      copyTableButton.disabled = true;
+      setTimeout(() => {
+        copyTableButton.innerText = 'Copy Table';
+        copyTableButton.style.backgroundColor = '#5cb85c';
+        copyTableButton.disabled = false;
+      }, 2000);
+      }).catch(err => {
+      console.error('Failed to copy text: ', err);
+      });
+    });
+
   </script>
 
 </body>
