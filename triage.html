@@ -636,6 +636,7 @@
       <div id="permutationTableView" style="display: none;">
         <h2>Permutation Table</h2>
         <button id="resetFiltersButton">Reset Filters</button>
+        <div id="permutationCount"></div> <!-- New element to display the count -->
         <div class="chart-container">
           <div>
             <canvas id="lowPriorityChart" width="400" height="200"></canvas>
@@ -1352,6 +1353,7 @@
     });
 
     const permutations = [];
+    let entries = [];
 
     let lowPriorityChart, mediumPriorityChart, highPriorityChart;
 
@@ -1432,6 +1434,9 @@
 
       // Update the charts
       updatePriorityDistributionCharts(priorityCounts, totalCounts);
+
+      // Update the permutation count
+      document.getElementById('permutationCount').innerText = `Total Permutations: ${permutations.length}`;
     }
 
     function updatePriorityDistributionCharts(priorityCounts, totalCounts) {
@@ -1817,7 +1822,7 @@
       slider.addEventListener('input', debounce(() => {
         updateFactorValues();
         displayPermutationTable();
-        sortEntriesTable();
+        updateEntryScores();
         calculateScore();
       }, 300));
     });
@@ -1828,7 +1833,7 @@
       input.addEventListener('input', debounce(() => {
         syncFactorValues();
         displayPermutationTable();
-        sortEntriesTable();
+        updateEntryScores();
         calculateScore();
       }, 300));
     });
@@ -1851,9 +1856,14 @@
       });
       populateDropdowns();
       displayPermutationTable();
-      sortEntriesTable();
+      updateEntryScores();
       calculateScore();
       checkStateDifference();
+    }
+
+    function sortEntriesTable() {
+      entries = entries.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+      renderEntriesTable();
     }
 
     resetParametersButton.addEventListener('click', function() {
@@ -2198,6 +2208,7 @@
 
     // Initial call to check state difference
     checkStateDifference();
+
     saveEntryButton.addEventListener('click', function() {
       const description = document.getElementById('projectDescription').value;
       const category = categorySelect.options[categorySelect.selectedIndex].text;
@@ -2212,91 +2223,36 @@
       const score = document.getElementById('calculatedScore').innerText.split(': ')[1];
       const priorityLevel = document.getElementById('priorityLevel').innerText.split(': ')[1];
 
-      if (editingRow) {
-      editingRow.innerHTML = `
-        <td>${description}</td>
-        <td>${category}</td>
-        <td>${criticality}</td>
-        <td>${timing}</td>
-        <td>${businessScale}</td>
-        <td>${score}</td>
-        <td>${priorityLevel}</td>
-        <td>
-        <button class="edit-button" onclick="editEntry(this)">Edit</button>
-        <button class="delete-button" onclick="deleteEntry(this)">Delete</button>
-        </td>
-      `;
-      editingRow = null;
+      if (editingRow !== null) {
+        entries[editingRow] = {
+          description,
+          category,
+          criticality,
+          timing,
+          businessScale,
+          score,
+          priorityLevel
+        };
+        editingRow = null;
       } else {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${description}</td>
-        <td>${category}</td>
-        <td>${criticality}</td>
-        <td>${timing}</td>
-        <td>${businessScale}</td>
-        <td>${score}</td>
-        <td>${priorityLevel}</td>
-        <td>
-        <button class="edit-button" onclick="editEntry(this)">Edit</button>
-        <button class="delete-button" onclick="deleteEntry(this)">Delete</button>
-        </td>
-      `;
-      entriesTableBody.appendChild(row);
+        entries.push({
+          description,
+          category,
+          criticality,
+          timing,
+          businessScale,
+          score,
+          priorityLevel
+        });
       }
-      sortEntriesTable();
+
+      renderEntriesTable();
       saveEntriesToLocalStorage();
     });
 
-    function editEntry(button) {
-      const row = button.parentElement.parentElement;
-      const cells = row.querySelectorAll('td');
-      document.getElementById('projectDescription').value = cells[0].innerText;
-      categorySelect.value = cells[1].innerText.toLowerCase().replace(/[\s&]+/g, '');
-      // Update the fields based on the selected category
-      categorySelect.dispatchEvent(new Event('change'));
-      editingRow = row;
-    }
-
-    function deleteEntry(button) {
-      if (confirm('Are you sure you want to delete this entry?')) {
-        button.parentElement.parentElement.remove();
-        saveEntriesToLocalStorage();
-      }
-    }
-
-    function sortEntriesTable() {
-      const rows = Array.from(entriesTableBody.querySelectorAll('tr'));
-      rows.sort((a, b) => {
-        const scoreA = parseFloat(a.cells[5].innerText);
-        const scoreB = parseFloat(b.cells[5].innerText);
-        return scoreB - scoreA;
-      });
+    function renderEntriesTable() {
       entriesTableBody.innerHTML = '';
-      rows.forEach(row => entriesTableBody.appendChild(row));
-    }
-
-    function saveEntriesToLocalStorage() {
-      const entries = [];
-      entriesTableBody.querySelectorAll('tr').forEach(row => {
-        const cells = row.querySelectorAll('td');
-        const entry = {
-          description: cells[0].innerText,
-          category: cells[1].innerText,
-          criticality: cells[2].innerText,
-          timing: cells[3].innerText,
-          businessScale: cells[4].innerText,
-          score: cells[5].innerText,
-          priorityLevel: cells[6].innerText
-        };
-        entries.push(entry);
-      });
-      localStorage.setItem('triageEntries', JSON.stringify(entries));
-    }
-
-    function loadEntriesFromLocalStorage() {
-      const entries = JSON.parse(localStorage.getItem('triageEntries')) || [];
-      entries.forEach(entry => {
+      entries.forEach((entry, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${entry.description}</td>
@@ -2307,13 +2263,38 @@
           <td>${entry.score}</td>
           <td>${entry.priorityLevel}</td>
           <td>
-            <button class="edit-button" onclick="editEntry(this)">Edit</button>
-            <button class="delete-button" onclick="deleteEntry(this)">Delete</button>
+            <button class="edit-button" onclick="editEntry(${index})">Edit</button>
+            <button class="delete-button" onclick="deleteEntry(${index})">Delete</button>
           </td>
         `;
         entriesTableBody.appendChild(row);
       });
-      sortEntriesTable();
+    }
+
+    function editEntry(index) {
+      const entry = entries[index];
+      document.getElementById('projectDescription').value = entry.description;
+      categorySelect.value = entry.category.charAt(0).toLowerCase() + entry.category.slice(1).replace(/[\s&]+/g, '');
+      categorySelect.dispatchEvent(new Event('change'));
+      editingRow = index;
+    }
+
+    function deleteEntry(index) {
+      if (confirm('Are you sure you want to delete this entry?')) {
+        entries.splice(index, 1);
+        renderEntriesTable();
+        saveEntriesToLocalStorage();
+      }
+    }
+
+    function saveEntriesToLocalStorage() {
+      localStorage.setItem('triageEntries', JSON.stringify(entries));
+    }
+
+    function loadEntriesFromLocalStorage() {
+      const storedEntries = JSON.parse(localStorage.getItem('triageEntries')) || [];
+      entries = storedEntries;
+      renderEntriesTable();
     }
 
     copyTableButton.addEventListener('click', function() {
@@ -2338,6 +2319,90 @@
       console.error('Failed to copy text: ', err);
       });
     });
+
+    function updateEntryScores() {
+      entries.forEach(entry => {
+        const category = entry.category.toLowerCase().replace(/[\s&]+/g, '');
+        let score = 0;
+        let criticalityValue = 0;
+        let timingValue = 0;
+        let businessScaleValue = parseFloat(entry.businessScale);
+        if (category === 'clientexperience') {
+          criticalityValue = findClosestValue(valueMappers.showstopper, entry.criticality);
+          const frequencyValue = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0]);
+          const timeSpentValue = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1]);
+          timingValue = (frequencyValue + timeSpentValue) / 2;
+          score = (criticalityValue * parseFloat(clientExperienceCriticalityFactor.value)) + 
+            (frequencyValue / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+            (timeSpentValue / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+            (businessScaleValue / 20 * parseFloat(clientExperienceBusinessScaleFactor.value));
+          entry.criticality = `${criticalityValue} - ${parameters.showstopper[valueMappers.showstopper.indexOf(criticalityValue)]}`;
+          entry.timing = `${frequencyValue} - ${parameters.frequency[valueMappers.frequency.indexOf(frequencyValue)]} | ${timeSpentValue} - ${parameters.timeSpent[valueMappers.timeSpent.indexOf(timeSpentValue)]}`;
+        } else if (category === 'productdelivery') {
+          criticalityValue = findClosestValue(valueMappers.dealbreaker, entry.criticality);
+          timingValue = findClosestValue(valueMappers.projectTime, entry.timing);
+          score = (criticalityValue * parseFloat(productDeliveryCriticalityFactor.value)) + 
+            (timingValue * parseFloat(productDeliveryTimingFactor.value)) + 
+            (businessScaleValue / 20 * parseFloat(productDeliveryBusinessScaleFactor.value));
+          entry.criticality = `${criticalityValue} - ${parameters.dealbreaker[valueMappers.dealbreaker.indexOf(criticalityValue)]}`;
+          entry.timing = `${timingValue} - ${parameters.projectTime[valueMappers.projectTime.indexOf(timingValue)]}`;
+        } else if (category === 'security') {
+          criticalityValue = findClosestValue(valueMappers.companyShutdown, entry.criticality);
+          timingValue = findClosestValue(valueMappers.likelihood, entry.timing);
+          score = (criticalityValue * parseFloat(securityCriticalityFactor.value)) + 
+            (timingValue * parseFloat(securityTimingFactor.value)) + 
+            (businessScaleValue / 20 * parseFloat(securityBusinessScaleFactor.value));
+          entry.criticality = `${criticalityValue} - ${parameters.companyShutdown[valueMappers.companyShutdown.indexOf(criticalityValue)]}`;
+          entry.timing = `${timingValue} - ${parameters.likelihood[valueMappers.likelihood.indexOf(timingValue)]}`;
+        } else if (category === 'costoptimization') {
+          timingValue = findClosestValue(valueMappers.implementationTime, entry.timing);
+          score = (timingValue * parseFloat(costOptimizationTimingFactor.value)) + 
+            (businessScaleValue / parseFloat(costOptimizationBusinessScaleLimit.value) * 5 * parseFloat(costOptimizationBusinessScaleFactor.value));
+          entry.timing = `${timingValue} - ${parameters.implementationTime[valueMappers.implementationTime.indexOf(timingValue)]}`;
+        } else if (category === 'performancereliability') {
+          criticalityValue = findClosestValue(valueMappers.severity, entry.criticality);
+          timingValue = findClosestValue(valueMappers.developmentTime, entry.timing);
+          score = (criticalityValue * parseFloat(performanceReliabilitySeverityFactor.value)) + 
+            (timingValue * parseFloat(performanceReliabilityTimingFactor.value)) + 
+            (businessScaleValue / 20 * parseFloat(performanceReliabilityBusinessScaleFactor.value));
+          entry.criticality = `${criticalityValue} - ${parameters.severity[valueMappers.severity.indexOf(criticalityValue)]}`;
+          entry.timing = `${timingValue} - ${parameters.developmentTime[valueMappers.developmentTime.indexOf(timingValue)]}`;
+        } else if (category === 'dataengineering') {
+          criticalityValue = findClosestValue(valueMappers.dataEngineeringSeverity, entry.criticality);
+          timingValue = findClosestValue(valueMappers.dataEngineeringDevelopmentTime, entry.timing);
+          score = (criticalityValue * parseFloat(dataEngineeringSeverityFactor.value)) + 
+            (timingValue * parseFloat(dataEngineeringTimingFactor.value)) + 
+            (businessScaleValue / 20 * parseFloat(dataEngineeringBusinessScaleFactor.value));
+          entry.criticality = `${criticalityValue} - ${parameters.dataEngineeringSeverity[valueMappers.dataEngineeringSeverity.indexOf(criticalityValue)]}`;
+          entry.timing = `${timingValue} - ${parameters.dataEngineeringDevelopmentTime[valueMappers.dataEngineeringDevelopmentTime.indexOf(timingValue)]}`;
+        }
+
+        // Scale scores to be between 1 and 5
+        const maxScore = permutations.length > 0 ? permutations[0].score : 1;
+        const scaleFactor = maxScore > 5 ? 5 / maxScore : 1;
+        score *= scaleFactor;
+        entry.score = score.toFixed(2);
+        entry.priorityLevel = calculatePriorityLevel(score);
+      });
+
+      renderEntriesTable();
+      saveEntriesToLocalStorage();
+    }
+
+    function findClosestValue(array, value) {
+      const index = array.findIndex(v => v === parseFloat(value.split(' - ')[0]));
+      if (index !== -1) return array[index];
+      let closest = array[0];
+      let closestDiff = Math.abs(array[0] - parseFloat(value.split(' - ')[0]));
+      for (let i = 1; i < array.length; i++) {
+        const diff = Math.abs(array[i] - parseFloat(value.split(' - ')[0]));
+        if (diff < closestDiff) {
+          closest = array[i];
+          closestDiff = diff;
+        }
+      }
+      return closest;
+    }
 
   </script>
 
