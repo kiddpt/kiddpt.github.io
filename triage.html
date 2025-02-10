@@ -2243,6 +2243,8 @@
       let timing;
       if (categorySelect.value === 'clientExperience') {
         timing = `${document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].selectedIndex].text} | ${document.querySelectorAll(`#${categorySelect.value}Fields select`)[2].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[2].selectedIndex].text}`;
+      } else if (categorySelect.value === 'costOptimization') {
+        timing = document.querySelectorAll(`#${categorySelect.value}Fields select`)[0].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[0].selectedIndex].text;
       } else {
         timing = document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].selectedIndex].text;
       }
