@@ -510,6 +510,12 @@
     .highlight-row {
       background-color: #fff9c4; /* light yellow */
     }
+    .positive-change {
+      color: green;
+    }
+    .negative-change {
+      color: red;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -1845,7 +1851,7 @@
       slider.addEventListener('input', debounce(() => {
         updateFactorValues();
         displayPermutationTable();
-        updateEntryScores();
+        renderEntriesTable();
         calculateScore();
       }, 300));
     });
@@ -1856,7 +1862,7 @@
       input.addEventListener('input', debounce(() => {
         syncFactorValues();
         displayPermutationTable();
-        updateEntryScores();
+        renderEntriesTable();
         calculateScore();
       }, 300));
     });
@@ -1879,7 +1885,7 @@
       });
       populateDropdowns();
       displayPermutationTable();
-      updateEntryScores();
+      renderEntriesTable();
       calculateScore();
       checkStateDifference();
     }
@@ -2060,7 +2066,17 @@
     function saveState() {
       const state = getCurrentState();
       localStorage.setItem('triageState', state);
+      entries.forEach(entry => {
+        entry.criticality = entry.updatedEntry.criticality;
+        entry.timing = entry.updatedEntry.timing;
+        entry.businessScale = entry.updatedEntry.businessScale;
+        entry.score = entry.updatedEntry.score;
+        entry.priorityLevel = entry.updatedEntry.priorityLevel;
+      });
+      updateEntryScores();
+      saveEntriesToLocalStorage();
       checkStateDifference();
+      renderEntriesTable();
     }
 
     function loadState() {
@@ -2210,6 +2226,7 @@
       if (confirm('Are you sure you want to reset to the saved state?')) {
         loadState();
         checkStateDifference();
+        renderEntriesTable();
       }
     });
 
@@ -2250,7 +2267,7 @@
       }
       const businessScale = document.querySelector(`#${categorySelect.value}Fields input[type="number"]`).value;
       const score = document.getElementById('calculatedScore').innerText.split(': ')[1];
-      const priorityLevel = document.getElementById('priorityLevel').innerText.split(': ')[1];
+      const priorityLevel = calculatePriorityLevel(parseFloat(score));
 
       if (editingRow !== null) {
         entries[editingRow] = {
@@ -2303,14 +2320,16 @@
       entries.forEach((entry, index) => {
         const row = document.createElement('tr');
         row.className = (editingRow !== null && entries[editingRow].id === entry.id) ? 'highlight-row' : '';
+        const updatedEntry = calculateUpdatedEntry(entry);
+        entry.updatedEntry = updatedEntry;
         row.innerHTML = `
           <td>${entry.description}</td>
           <td>${entry.category}</td>
-          <td>${entry.criticality}</td>
-          <td>${entry.timing}</td>
-          <td>${entry.businessScale}</td>
-          <td>${entry.score}</td>
-          <td>${entry.priorityLevel}</td>
+          <td>${formatParameterChange(entry.criticality, updatedEntry.criticality)}</td>
+          <td>${formatParameterChange(entry.timing, updatedEntry.timing)}</td>
+          <td>${formatParameterChange(entry.businessScale, updatedEntry.businessScale)}</td>
+          <td>${formatScoreChange(entry.score, updatedEntry.score)}</td>
+          <td>${updatedEntry.priorityLevel}</td>
           <td>
             <button class="edit-button" onclick="editEntry('${entry.id}')">Edit</button>
             <button class="delete-button" onclick="deleteEntry('${entry.id}')">Delete</button>
@@ -2318,6 +2337,98 @@
         `;
         entriesTableBody.appendChild(row);
       });
+    }
+
+    function formatParameterChange(original, updated) {
+      const originalValue = parseFloat(original.toString().split(' ')[0].replace(/[^0-9.-]+/g, ''));
+      const updatedValue = parseFloat(updated.toString().split(' ')[0].replace(/[^0-9.-]+/g, ''));
+      const difference = updatedValue - originalValue;
+      const differenceText = difference > 0 ? `(+${difference.toFixed(2)})` : `(${difference.toFixed(2)})`;
+      const differenceClass = difference > 0 ? 'positive-change' : 'negative-change';
+      return difference !== 0 ? `${original} <span class="${differenceClass}">${differenceText}</span>` : `${original}`;
+    }
+
+    function formatScoreChange(original, updated) {
+      const originalValue = parseFloat(original);
+      const updatedValue = parseFloat(updated);
+      const difference = updatedValue - originalValue;
+      const differenceText = difference > 0 ? `(+${difference.toFixed(2)})` : `(${difference.toFixed(2)})`;
+      const differenceClass = difference > 0 ? 'positive-change' : 'negative-change';
+      return difference !== 0 ? `${originalValue.toFixed(2)} <span class="${differenceClass}">${differenceText}</span>` : originalValue.toFixed(2);
+    }
+
+    function calculateUpdatedEntry(entry) {
+      const category = entry.category.toLowerCase().replace(/[\s&]+/g, '');
+      let score = 0;
+      let criticalityValue = 0;
+      let timingValue = 0;
+      let businessScaleValue = parseFloat(entry.businessScale);
+      let updatedCriticality = entry.criticality;
+      let updatedTiming = entry.timing;
+
+      if (category === 'clientexperience') {
+        criticalityValue = findClosestValue(valueMappers.showstopper, entry.criticality);
+        const frequencyValue = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0]);
+        const timeSpentValue = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1]);
+        timingValue = (frequencyValue + timeSpentValue) / 2;
+        score = (criticalityValue * parseFloat(clientExperienceCriticalityFactor.value)) + 
+          (frequencyValue / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+          (timeSpentValue / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+          (businessScaleValue / 20 * parseFloat(clientExperienceBusinessScaleFactor.value));
+        updatedCriticality = `${criticalityValue} - ${parameters.showstopper[valueMappers.showstopper.indexOf(criticalityValue)]}`;
+        updatedTiming = `${frequencyValue} - ${parameters.frequency[valueMappers.frequency.indexOf(frequencyValue)]} | ${timeSpentValue} - ${parameters.timeSpent[valueMappers.timeSpent.indexOf(timeSpentValue)]}`;
+      } else if (category === 'productdelivery') {
+        criticalityValue = findClosestValue(valueMappers.dealbreaker, entry.criticality);
+        timingValue = findClosestValue(valueMappers.projectTime, entry.timing);
+        score = (criticalityValue * parseFloat(productDeliveryCriticalityFactor.value)) + 
+          (timingValue * parseFloat(productDeliveryTimingFactor.value)) + 
+          (businessScaleValue / 20 * parseFloat(productDeliveryBusinessScaleFactor.value));
+        updatedCriticality = `${criticalityValue} - ${parameters.dealbreaker[valueMappers.dealbreaker.indexOf(criticalityValue)]}`;
+        updatedTiming = `${timingValue} - ${parameters.projectTime[valueMappers.projectTime.indexOf(timingValue)]}`;
+      } else if (category === 'security') {
+        criticalityValue = findClosestValue(valueMappers.companyShutdown, entry.criticality);
+        timingValue = findClosestValue(valueMappers.likelihood, entry.timing);
+        score = (criticalityValue * parseFloat(securityCriticalityFactor.value)) + 
+          (timingValue * parseFloat(securityTimingFactor.value)) + 
+          (businessScaleValue / 20 * parseFloat(securityBusinessScaleFactor.value));
+        updatedCriticality = `${criticalityValue} - ${parameters.companyShutdown[valueMappers.companyShutdown.indexOf(criticalityValue)]}`;
+        updatedTiming = `${timingValue} - ${parameters.likelihood[valueMappers.likelihood.indexOf(timingValue)]}`;
+      } else if (category === 'costoptimization') {
+        timingValue = findClosestValue(valueMappers.implementationTime, entry.timing);
+        score = (timingValue * parseFloat(costOptimizationTimingFactor.value)) + 
+          (businessScaleValue / parseFloat(costOptimizationBusinessScaleLimit.value) * 5 * parseFloat(costOptimizationBusinessScaleFactor.value));
+        updatedTiming = `${timingValue} - ${parameters.implementationTime[valueMappers.implementationTime.indexOf(timingValue)]}`;
+      } else if (category === 'performancereliability') {
+        criticalityValue = findClosestValue(valueMappers.severity, entry.criticality);
+        timingValue = findClosestValue(valueMappers.developmentTime, entry.timing);
+        score = (criticalityValue * parseFloat(performanceReliabilitySeverityFactor.value)) + 
+          (timingValue * parseFloat(performanceReliabilityTimingFactor.value)) + 
+          (businessScaleValue / 20 * parseFloat(performanceReliabilityBusinessScaleFactor.value));
+        updatedCriticality = `${criticalityValue} - ${parameters.severity[valueMappers.severity.indexOf(criticalityValue)]}`;
+        updatedTiming = `${timingValue} - ${parameters.developmentTime[valueMappers.developmentTime.indexOf(timingValue)]}`;
+      } else if (category === 'dataengineering') {
+        criticalityValue = findClosestValue(valueMappers.dataEngineeringSeverity, entry.criticality);
+        timingValue = findClosestValue(valueMappers.dataEngineeringDevelopmentTime, entry.timing);
+        score = (criticalityValue * parseFloat(dataEngineeringSeverityFactor.value)) + 
+          (timingValue * parseFloat(dataEngineeringTimingFactor.value)) + 
+          (businessScaleValue / 20 * parseFloat(dataEngineeringBusinessScaleFactor.value));
+        updatedCriticality = `${criticalityValue} - ${parameters.dataEngineeringSeverity[valueMappers.dataEngineeringSeverity.indexOf(criticalityValue)]}`;
+        updatedTiming = `${timingValue} - ${parameters.dataEngineeringDevelopmentTime[valueMappers.dataEngineeringDevelopmentTime.indexOf(timingValue)]}`;
+      }
+
+      // Scale scores to be between 1 and 5
+      const maxScore = permutations.length > 0 ? permutations[0].score : 1;
+      const scaleFactor = maxScore > 5 ? 5 / maxScore : 1;
+      score *= scaleFactor;
+      const priorityLevel = calculatePriorityLevel(score);
+
+      return {
+        criticality: updatedCriticality,
+        timing: updatedTiming,
+        businessScale: businessScaleValue,
+        score: score.toFixed(2),
+        priorityLevel: priorityLevel
+      };
     }
 
     function editEntry(id) {
