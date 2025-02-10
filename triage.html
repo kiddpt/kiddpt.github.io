@@ -462,14 +462,14 @@
     }
     .copy-button {
       margin-top: 10px;
-      background-color: #5cb85c;
+      background-color: #6c757d; /* gray */
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
     .copy-button:hover {
-      background-color: #4cae4c;
+      background-color: #5a6268;
     }
     .edit-button, .delete-button {
       padding: 5px;
@@ -488,6 +488,27 @@
     }
     .delete-button:hover {
       background-color: #c9302c;
+    }
+    .save-entry-button {
+      background-color: #007bff; /* blue */
+    }
+    .save-entry-button:hover {
+      background-color: #0056b3;
+    }
+    .update-entry-button {
+      background-color: #f0ad4e; /* orange */
+    }
+    .update-entry-button:hover {
+      background-color: #ec971f;
+    }
+    .cancel-update-button {
+      background-color: #d9534f; /* red */
+    }
+    .cancel-update-button:hover {
+      background-color: #c9302c;
+    }
+    .highlight-row {
+      background-color: #fff9c4; /* light yellow */
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -614,7 +635,8 @@
           <label for="projectDescription">Project Description:</label>
           <textarea id="projectDescription" rows="4"></textarea>
         </div>
-        <button id="saveEntryButton">Save Entry</button>
+        <button id="saveEntryButton" class="save-entry-button">Save Entry</button>
+        <button id="cancelUpdateButton" class="cancel-update-button" style="display: none;">Cancel Update</button>
         <table id="entriesTable">
           <thead>
             <tr>
@@ -999,6 +1021,7 @@
     const toggleDarkModeButton = document.getElementById('toggleDarkModeButton');
 
     const saveEntryButton = document.getElementById('saveEntryButton');
+    const cancelUpdateButton = document.getElementById('cancelUpdateButton');
     const entriesTableBody = document.getElementById('entriesTable').querySelector('tbody');
     const copyTableButton = document.getElementById('copyTableButton');
     let editingRow = null;
@@ -2209,6 +2232,10 @@
     // Initial call to check state difference
     checkStateDifference();
 
+    function generateUniqueId() {
+      return '_' + Math.random().toString(36).substr(2, 9);
+    }
+
     saveEntryButton.addEventListener('click', function() {
       const description = document.getElementById('projectDescription').value;
       const category = categorySelect.options[categorySelect.selectedIndex].text;
@@ -2225,6 +2252,7 @@
 
       if (editingRow !== null) {
         entries[editingRow] = {
+          ...entries[editingRow],
           description,
           category,
           criticality,
@@ -2234,8 +2262,13 @@
           priorityLevel
         };
         editingRow = null;
+        saveEntryButton.textContent = 'Save Entry';
+        saveEntryButton.classList.remove('update-entry-button');
+        saveEntryButton.classList.add('save-entry-button');
+        cancelUpdateButton.style.display = 'none';
       } else {
         entries.push({
+          id: generateUniqueId(),
           description,
           category,
           criticality,
@@ -2250,10 +2283,23 @@
       saveEntriesToLocalStorage();
     });
 
+    cancelUpdateButton.addEventListener('click', function() {
+      editingRow = null;
+      saveEntryButton.textContent = 'Save Entry';
+      saveEntryButton.classList.remove('update-entry-button');
+      saveEntryButton.classList.add('save-entry-button');
+      cancelUpdateButton.style.display = 'none';
+      document.getElementById('projectDescription').value = '';
+      categorySelect.value = 'clientExperience';
+      categorySelect.dispatchEvent(new Event('change'));
+      renderEntriesTable();
+    });
+
     function renderEntriesTable() {
       entriesTableBody.innerHTML = '';
       entries.forEach((entry, index) => {
         const row = document.createElement('tr');
+        row.className = (editingRow !== null && entries[editingRow].id === entry.id) ? 'highlight-row' : '';
         row.innerHTML = `
           <td>${entry.description}</td>
           <td>${entry.category}</td>
@@ -2263,25 +2309,30 @@
           <td>${entry.score}</td>
           <td>${entry.priorityLevel}</td>
           <td>
-            <button class="edit-button" onclick="editEntry(${index})">Edit</button>
-            <button class="delete-button" onclick="deleteEntry(${index})">Delete</button>
+            <button class="edit-button" onclick="editEntry('${entry.id}')">Edit</button>
+            <button class="delete-button" onclick="deleteEntry('${entry.id}')">Delete</button>
           </td>
         `;
         entriesTableBody.appendChild(row);
       });
     }
 
-    function editEntry(index) {
-      const entry = entries[index];
+    function editEntry(id) {
+      const entry = entries.find(entry => entry.id === id);
       document.getElementById('projectDescription').value = entry.description;
       categorySelect.value = entry.category.charAt(0).toLowerCase() + entry.category.slice(1).replace(/[\s&]+/g, '');
       categorySelect.dispatchEvent(new Event('change'));
-      editingRow = index;
+      editingRow = entries.findIndex(entry => entry.id === id);
+      saveEntryButton.textContent = 'Update Entry';
+      saveEntryButton.classList.remove('save-entry-button');
+      saveEntryButton.classList.add('update-entry-button');
+      cancelUpdateButton.style.display = 'inline-block';
+      renderEntriesTable();
     }
 
-    function deleteEntry(index) {
+    function deleteEntry(id) {
       if (confirm('Are you sure you want to delete this entry?')) {
-        entries.splice(index, 1);
+        entries = entries.filter(entry => entry.id !== id);
         renderEntriesTable();
         saveEntriesToLocalStorage();
       }
@@ -2384,6 +2435,9 @@
         entry.score = score.toFixed(2);
         entry.priorityLevel = calculatePriorityLevel(score);
       });
+
+      // Sort entries by score
+      entries.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
 
       renderEntriesTable();
       saveEntriesToLocalStorage();
