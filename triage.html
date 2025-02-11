@@ -2369,9 +2369,9 @@
       let updatedTiming = entry.timing;
 
       if (category === 'clientexperience') {
-        criticalityValue = findClosestValue(valueMappers.showstopper, entry.criticality);
-        const frequencyValue = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0]);
-        const timeSpentValue = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1]);
+        criticalityValue = findClosestValue(valueMappers.showstopper, entry.criticality, parameters.showstopper);
+        const frequencyValue = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0], parameters.frequency);
+        const timeSpentValue = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1], parameters.timeSpent);
         timingValue = (frequencyValue + timeSpentValue) / 2;
         score = (criticalityValue * parseFloat(clientExperienceCriticalityFactor.value)) + 
           (frequencyValue / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
@@ -2380,37 +2380,37 @@
         updatedCriticality = `${criticalityValue} - ${parameters.showstopper[valueMappers.showstopper.indexOf(criticalityValue)]}`;
         updatedTiming = `${frequencyValue} - ${parameters.frequency[valueMappers.frequency.indexOf(frequencyValue)]} | ${timeSpentValue} - ${parameters.timeSpent[valueMappers.timeSpent.indexOf(timeSpentValue)]}`;
       } else if (category === 'productdelivery') {
-        criticalityValue = findClosestValue(valueMappers.dealbreaker, entry.criticality);
-        timingValue = findClosestValue(valueMappers.projectTime, entry.timing);
+        criticalityValue = findClosestValue(valueMappers.dealbreaker, entry.criticality, parameters.dealbreaker);
+        timingValue = findClosestValue(valueMappers.projectTime, entry.timing, parameters.projectTime);
         score = (criticalityValue * parseFloat(productDeliveryCriticalityFactor.value)) + 
           (timingValue * parseFloat(productDeliveryTimingFactor.value)) + 
           (businessScaleValue / 20 * parseFloat(productDeliveryBusinessScaleFactor.value));
         updatedCriticality = `${criticalityValue} - ${parameters.dealbreaker[valueMappers.dealbreaker.indexOf(criticalityValue)]}`;
         updatedTiming = `${timingValue} - ${parameters.projectTime[valueMappers.projectTime.indexOf(timingValue)]}`;
       } else if (category === 'security') {
-        criticalityValue = findClosestValue(valueMappers.companyShutdown, entry.criticality);
-        timingValue = findClosestValue(valueMappers.likelihood, entry.timing);
+        criticalityValue = findClosestValue(valueMappers.companyShutdown, entry.criticality, parameters.companyShutdown);
+        timingValue = findClosestValue(valueMappers.likelihood, entry.timing, parameters.likelihood);
         score = (criticalityValue * parseFloat(securityCriticalityFactor.value)) + 
           (timingValue * parseFloat(securityTimingFactor.value)) + 
           (businessScaleValue / 20 * parseFloat(securityBusinessScaleFactor.value));
         updatedCriticality = `${criticalityValue} - ${parameters.companyShutdown[valueMappers.companyShutdown.indexOf(criticalityValue)]}`;
         updatedTiming = `${timingValue} - ${parameters.likelihood[valueMappers.likelihood.indexOf(timingValue)]}`;
       } else if (category === 'costoptimization') {
-        timingValue = findClosestValue(valueMappers.implementationTime, entry.timing);
+        timingValue = findClosestValue(valueMappers.implementationTime, entry.timing, parameters.implementationTime);
         score = (timingValue * parseFloat(costOptimizationTimingFactor.value)) + 
           (businessScaleValue / parseFloat(costOptimizationBusinessScaleLimit.value) * 5 * parseFloat(costOptimizationBusinessScaleFactor.value));
         updatedTiming = `${timingValue} - ${parameters.implementationTime[valueMappers.implementationTime.indexOf(timingValue)]}`;
       } else if (category === 'performancereliability') {
-        criticalityValue = findClosestValue(valueMappers.severity, entry.criticality);
-        timingValue = findClosestValue(valueMappers.developmentTime, entry.timing);
+        criticalityValue = findClosestValue(valueMappers.severity, entry.criticality, parameters.severity);
+        timingValue = findClosestValue(valueMappers.developmentTime, entry.timing, parameters.developmentTime);
         score = (criticalityValue * parseFloat(performanceReliabilitySeverityFactor.value)) + 
           (timingValue * parseFloat(performanceReliabilityTimingFactor.value)) + 
           (businessScaleValue / 20 * parseFloat(performanceReliabilityBusinessScaleFactor.value));
         updatedCriticality = `${criticalityValue} - ${parameters.severity[valueMappers.severity.indexOf(criticalityValue)]}`;
         updatedTiming = `${timingValue} - ${parameters.developmentTime[valueMappers.developmentTime.indexOf(timingValue)]}`;
       } else if (category === 'dataengineering') {
-        criticalityValue = findClosestValue(valueMappers.dataEngineeringSeverity, entry.criticality);
-        timingValue = findClosestValue(valueMappers.dataEngineeringDevelopmentTime, entry.timing);
+        criticalityValue = findClosestValue(valueMappers.dataEngineeringSeverity, entry.criticality, parameters.dataEngineeringSeverity);
+        timingValue = findClosestValue(valueMappers.dataEngineeringDevelopmentTime, entry.timing, parameters.dataEngineeringDevelopmentTime);
         score = (criticalityValue * parseFloat(dataEngineeringSeverityFactor.value)) + 
           (timingValue * parseFloat(dataEngineeringTimingFactor.value)) + 
           (businessScaleValue / 20 * parseFloat(dataEngineeringBusinessScaleFactor.value));
@@ -2502,9 +2502,9 @@
         let timingValue = 0;
         let businessScaleValue = parseFloat(entry.businessScale);
         if (category === 'clientexperience') {
-          criticalityValue = findClosestValue(valueMappers.showstopper, entry.criticality);
-          const frequencyValue = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0]);
-          const timeSpentValue = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1]);
+          criticalityValue = findClosestValue(valueMappers.showstopper, entry.criticality, parameters.showstopper);
+          const frequencyValue = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0], parameters.frequency);
+          const timeSpentValue = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1], parameters.timeSpent);
           timingValue = (frequencyValue + timeSpentValue) / 2;
           score = (criticalityValue * parseFloat(clientExperienceCriticalityFactor.value)) + 
             (frequencyValue / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
@@ -2513,37 +2513,37 @@
           entry.criticality = `${criticalityValue} - ${parameters.showstopper[valueMappers.showstopper.indexOf(criticalityValue)]}`;
           entry.timing = `${frequencyValue} - ${parameters.frequency[valueMappers.frequency.indexOf(frequencyValue)]} | ${timeSpentValue} - ${parameters.timeSpent[valueMappers.timeSpent.indexOf(timeSpentValue)]}`;
         } else if (category === 'productdelivery') {
-          criticalityValue = findClosestValue(valueMappers.dealbreaker, entry.criticality);
-          timingValue = findClosestValue(valueMappers.projectTime, entry.timing);
+          criticalityValue = findClosestValue(valueMappers.dealbreaker, entry.criticality, parameters.dealbreaker);
+          timingValue = findClosestValue(valueMappers.projectTime, entry.timing, parameters.projectTime);
           score = (criticalityValue * parseFloat(productDeliveryCriticalityFactor.value)) + 
             (timingValue * parseFloat(productDeliveryTimingFactor.value)) + 
             (businessScaleValue / 20 * parseFloat(productDeliveryBusinessScaleFactor.value));
           entry.criticality = `${criticalityValue} - ${parameters.dealbreaker[valueMappers.dealbreaker.indexOf(criticalityValue)]}`;
           entry.timing = `${timingValue} - ${parameters.projectTime[valueMappers.projectTime.indexOf(timingValue)]}`;
         } else if (category === 'security') {
-          criticalityValue = findClosestValue(valueMappers.companyShutdown, entry.criticality);
-          timingValue = findClosestValue(valueMappers.likelihood, entry.timing);
+          criticalityValue = findClosestValue(valueMappers.companyShutdown, entry.criticality, parameters.companyShutdown);
+          timingValue = findClosestValue(valueMappers.likelihood, entry.timing, parameters.likelihood);
           score = (criticalityValue * parseFloat(securityCriticalityFactor.value)) + 
             (timingValue * parseFloat(securityTimingFactor.value)) + 
             (businessScaleValue / 20 * parseFloat(securityBusinessScaleFactor.value));
           entry.criticality = `${criticalityValue} - ${parameters.companyShutdown[valueMappers.companyShutdown.indexOf(criticalityValue)]}`;
           entry.timing = `${timingValue} - ${parameters.likelihood[valueMappers.likelihood.indexOf(timingValue)]}`;
         } else if (category === 'costoptimization') {
-          timingValue = findClosestValue(valueMappers.implementationTime, entry.timing);
+          timingValue = findClosestValue(valueMappers.implementationTime, entry.timing, parameters.implementationTime);
           score = (timingValue * parseFloat(costOptimizationTimingFactor.value)) + 
             (businessScaleValue / parseFloat(costOptimizationBusinessScaleLimit.value) * 5 * parseFloat(costOptimizationBusinessScaleFactor.value));
           entry.timing = `${timingValue} - ${parameters.implementationTime[valueMappers.implementationTime.indexOf(timingValue)]}`;
         } else if (category === 'performancereliability') {
-          criticalityValue = findClosestValue(valueMappers.severity, entry.criticality);
-          timingValue = findClosestValue(valueMappers.developmentTime, entry.timing);
+          criticalityValue = findClosestValue(valueMappers.severity, entry.criticality, parameters.severity);
+          timingValue = findClosestValue(valueMappers.developmentTime, entry.timing, parameters.developmentTime);
           score = (criticalityValue * parseFloat(performanceReliabilitySeverityFactor.value)) + 
             (timingValue * parseFloat(performanceReliabilityTimingFactor.value)) + 
             (businessScaleValue / 20 * parseFloat(performanceReliabilityBusinessScaleFactor.value));
           entry.criticality = `${criticalityValue} - ${parameters.severity[valueMappers.severity.indexOf(criticalityValue)]}`;
           entry.timing = `${timingValue} - ${parameters.developmentTime[valueMappers.developmentTime.indexOf(timingValue)]}`;
         } else if (category === 'dataengineering') {
-          criticalityValue = findClosestValue(valueMappers.dataEngineeringSeverity, entry.criticality);
-          timingValue = findClosestValue(valueMappers.dataEngineeringDevelopmentTime, entry.timing);
+          criticalityValue = findClosestValue(valueMappers.dataEngineeringSeverity, entry.criticality, parameters.dataEngineeringSeverity);
+          timingValue = findClosestValue(valueMappers.dataEngineeringDevelopmentTime, entry.timing, parameters.dataEngineeringDevelopmentTime);
           score = (criticalityValue * parseFloat(dataEngineeringSeverityFactor.value)) + 
             (timingValue * parseFloat(dataEngineeringTimingFactor.value)) + 
             (businessScaleValue / 20 * parseFloat(dataEngineeringBusinessScaleFactor.value));
@@ -2566,9 +2566,15 @@
       saveEntriesToLocalStorage();
     }
 
-    function findClosestValue(array, value) {
+    function findClosestValue(array, value, descriptions) {
+      const exactMatchIndex = descriptions.findIndex(desc => desc === value.split(' - ')[1]);
+      if (exactMatchIndex !== -1) {
+        return array[exactMatchIndex];
+      }
+
       const index = array.findIndex(v => v === parseFloat(value.split(' - ')[0]));
       if (index !== -1) return array[index];
+
       let closest = array[0];
       let closestDiff = Math.abs(array[0] - parseFloat(value.split(' - ')[0]));
       for (let i = 1; i < array.length; i++) {
