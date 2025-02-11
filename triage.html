@@ -1870,6 +1870,7 @@
 
     // Save parameters
     function saveParameters() {
+      saveToHistory();
       Object.keys(parameters).forEach(type => {
         const container = document.getElementById(`${type}Parameters`);
         const pairs = container.querySelectorAll('.parameter-pair');
@@ -1892,52 +1893,20 @@
     }
 
     function sortEntriesTable() {
-      entries = entries.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+
+      entries.forEach(entry => {
+        entry.updatedEntry = calculateUpdatedEntry(entry);
+      });
+
+      entries = entries.sort((a, b) => {
+        const scoreA = parseFloat(a.updatedEntry?.score || a.score);
+        const scoreB = parseFloat(b.updatedEntry?.score || b.score);
+        return scoreB - scoreA;
+      });
       renderEntriesTable();
     }
 
-    resetParametersButton.addEventListener('click', function() {
-      if (confirm('Are you sure you want to reset parameters to default?')) {
-        parameters = {
-          showstopper: ['No Impact', 'Not Critical', 'Low Criticality', 'Moderate Criticality', 'High Criticality', 'Total Stop'],
-          frequency: ['Once in 5 Years', 'Once a Year or Less', 'Every 6 Months', 'Monthly', 'Weekly', 'Daily'],
-          timeSpent: ['No Time Spent', 'Less than 1 hour', 'Less than 2 hours', 'Half a day', 'Full day', 'Overtime'],
-          dealbreaker: ['No Impact', 'Not Critical', 'Low Priority', 'Medium Priority', 'High Priority', 'Must Have'],
-          projectTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
-          companyShutdown: ['No Impact', 'No Impact', 'Low Impact', 'Moderate Impact', 'High Impact', 'Total Shutdown'],
-          likelihood: ['Never', 'Very Unlikely', 'Unlikely', 'Possible', 'Likely', 'Very Likely'],
-          // costReduction: ['No Reduction', 'Minimal Reduction', 'Low Reduction', 'Moderate Reduction', 'High Reduction', 'Maximum Reduction'],
-          implementationTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
-          severity: ['No Degradation', 'Minimal Degradation', 'Low Degradation', 'Moderate Degradation', 'High Degradation', 'Total Downtime'],
-          developmentTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
-          dataEngineeringSeverity: ['Minor Change', 'Slow Query', 'Incorrect Calculation', 'Data Loss', 'Data Corruption', 'Total Data Loss'],
-          dataEngineeringDevelopmentTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day']
-        };
-
-        valueMappers = {
-          showstopper: [0, 1, 2, 3, 4, 5],
-          frequency: [0, 1, 2, 3, 4, 5],
-          timeSpent: [0, 1, 2, 3, 4, 5],
-          dealbreaker: [0, 1, 2, 3, 4, 5],
-          projectTime: [0, 1, 2, 3, 4, 5],
-          companyShutdown: [0, 1, 2, 3, 4, 5],
-          likelihood: [0, 1, 2, 3, 4, 5],
-          costReduction: [0, 1, 2, 3, 4, 5],
-          implementationTime: [0, 1, 2, 3, 4, 5],
-          severity: [0, 1, 2, 3, 4, 5],
-          developmentTime: [0, 1, 2, 3, 4, 5],
-          dataEngineeringSeverity: [0, 1, 2, 3, 4, 5],
-          dataEngineeringDevelopmentTime: [0, 1, 2, 3, 4, 5]
-        };
-
-        populateDescriptionFields();
-        populateDropdowns();
-        displayPermutationTable();
-        renderEntriesTable();
-        calculateScore();
-        checkStateDifference();
-      }
-    });
+    resetParametersButton.addEventListener('click', resetParameters);
 
     function addDescriptionPair(type) {
       const container = document.getElementById(`${type}Parameters`);
@@ -2255,7 +2224,8 @@
       return '_' + Math.random().toString(36).substr(2, 9);
     }
 
-    saveEntryButton.addEventListener('click', function() {
+    function saveEntry() {
+      saveToHistory();
       const description = document.getElementById('projectDescription').value;
       const category = categorySelect.options[categorySelect.selectedIndex].text;
       const criticality = document.querySelector(`#${categorySelect.value}Fields select`).options[document.querySelector(`#${categorySelect.value}Fields select`).selectedIndex].text;
@@ -2303,7 +2273,9 @@
       sortEntriesTable();
       renderEntriesTable();
       saveEntriesToLocalStorage();
-    });
+    }
+
+    saveEntryButton.addEventListener('click', saveEntry);
 
     cancelUpdateButton.addEventListener('click', function() {
       editingRow = null;
@@ -2322,16 +2294,14 @@
       entries.forEach((entry, index) => {
         const row = document.createElement('tr');
         row.className = (editingRow !== null && entries[editingRow].id === entry.id) ? 'highlight-row' : '';
-        const updatedEntry = calculateUpdatedEntry(entry);
-        entry.updatedEntry = updatedEntry;
         row.innerHTML = `
           <td>${entry.description}</td>
           <td>${entry.category}</td>
-          <td>${formatParameterChange(entry.criticality, updatedEntry.criticality)}</td>
-          <td>${formatParameterChange(entry.timing, updatedEntry.timing)}</td>
-          <td>${formatParameterChange(entry.businessScale, updatedEntry.businessScale)}</td>
-          <td>${formatScoreChange(entry.score, updatedEntry.score)}</td>
-          <td>${updatedEntry.priorityLevel}</td>
+          <td>${formatParameterChange(entry.criticality, entry.updatedEntry.criticality)}</td>
+          <td>${formatParameterChange(entry.timing, entry.updatedEntry.timing)}</td>
+          <td>${formatParameterChange(entry.businessScale, entry.updatedEntry.businessScale)}</td>
+          <td>${formatScoreChange(entry.score, entry.updatedEntry.score)}</td>
+          <td>${entry.updatedEntry.priorityLevel}</td>
           <td>
             <button class="edit-button" onclick="editEntry('${entry.id}')">Edit</button>
             <button class="delete-button" onclick="deleteEntry('${entry.id}')">Delete</button>
@@ -2447,6 +2417,7 @@
     }
 
     function deleteEntry(id) {
+      saveToHistory();
       if (confirm('Are you sure you want to delete this entry?')) {
         entries = entries.filter(entry => entry.id !== id);
         renderEntriesTable();
@@ -2560,9 +2531,7 @@
       });
 
       // Sort entries by score
-      entries.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
-
-      renderEntriesTable();
+      sortEntriesTable();
       saveEntriesToLocalStorage();
     }
 
@@ -2614,6 +2583,7 @@
 
           if (newEntries.length) {
             entries = newEntries;
+            sortEntriesTable();
             renderEntriesTable();
             saveEntriesToLocalStorage();
             copyTableButton.innerText = 'Pasted!';
@@ -2628,6 +2598,213 @@
         }
       }
     });
+
+    let historyStack = [];
+    let redoStack = [];
+
+    function saveToHistory() {
+      const currentState = {
+        entries: JSON.parse(JSON.stringify(entries)),
+        parameters: JSON.parse(JSON.stringify(parameters)),
+        valueMappers: JSON.parse(JSON.stringify(valueMappers)),
+        factors: {
+          clientExperienceCriticalityFactor: clientExperienceCriticalityFactor.value,
+          clientExperienceTimingFactor: clientExperienceTimingFactor.value,
+          clientExperienceBusinessScaleFactor: clientExperienceBusinessScaleFactor.value,
+          productDeliveryCriticalityFactor: productDeliveryCriticalityFactor.value,
+          productDeliveryTimingFactor: productDeliveryTimingFactor.value,
+          productDeliveryBusinessScaleFactor: productDeliveryBusinessScaleFactor.value,
+          productDeliveryBusinessScaleLimit: productDeliveryBusinessScaleLimit.value,
+          securityCriticalityFactor: securityCriticalityFactor.value,
+          securityTimingFactor: securityTimingFactor.value,
+          securityBusinessScaleFactor: securityBusinessScaleFactor.value,
+          costOptimizationTimingFactor: costOptimizationTimingFactor.value,
+          costOptimizationBusinessScaleFactor: costOptimizationBusinessScaleFactor.value,
+          costOptimizationBusinessScaleLimit: costOptimizationBusinessScaleLimit.value,
+          performanceReliabilitySeverityFactor: performanceReliabilitySeverityFactor.value,
+          performanceReliabilityTimingFactor: performanceReliabilityTimingFactor.value,
+          performanceReliabilityBusinessScaleFactor: performanceReliabilityBusinessScaleFactor.value,
+          dataEngineeringSeverityFactor: dataEngineeringSeverityFactor.value,
+          dataEngineeringTimingFactor: dataEngineeringTimingFactor.value,
+          dataEngineeringBusinessScaleFactor: dataEngineeringBusinessScaleFactor.value
+        }
+      };
+      historyStack.push(currentState);
+      redoStack = []; // Clear redo stack on new action
+      saveHistoryToLocalStorage();
+    }
+
+    function saveHistoryToLocalStorage() {
+      localStorage.setItem('historyStack', JSON.stringify(historyStack));
+      localStorage.setItem('redoStack', JSON.stringify(redoStack));
+    }
+
+    function loadHistoryFromLocalStorage() {
+      const storedHistoryStack = JSON.parse(localStorage.getItem('historyStack')) || [];
+      const storedRedoStack = JSON.parse(localStorage.getItem('redoStack')) || [];
+      historyStack = storedHistoryStack;
+      redoStack = storedRedoStack;
+    }
+
+    function undo() {
+      if (historyStack.length > 0) {
+        const lastState = historyStack.pop();
+        redoStack.push({
+          entries: JSON.parse(JSON.stringify(entries)),
+          parameters: JSON.parse(JSON.stringify(parameters)),
+          valueMappers: JSON.parse(JSON.stringify(valueMappers)),
+          factors: {
+            clientExperienceCriticalityFactor: clientExperienceCriticalityFactor.value,
+            clientExperienceTimingFactor: clientExperienceTimingFactor.value,
+            clientExperienceBusinessScaleFactor: clientExperienceBusinessScaleFactor.value,
+            productDeliveryCriticalityFactor: productDeliveryCriticalityFactor.value,
+            productDeliveryTimingFactor: productDeliveryTimingFactor.value,
+            productDeliveryBusinessScaleFactor: productDeliveryBusinessScaleFactor.value,
+            productDeliveryBusinessScaleLimit: productDeliveryBusinessScaleLimit.value,
+            securityCriticalityFactor: securityCriticalityFactor.value,
+            securityTimingFactor: securityTimingFactor.value,
+            securityBusinessScaleFactor: securityBusinessScaleFactor.value,
+            costOptimizationTimingFactor: costOptimizationTimingFactor.value,
+            costOptimizationBusinessScaleFactor: costOptimizationBusinessScaleFactor.value,
+            costOptimizationBusinessScaleLimit: costOptimizationBusinessScaleLimit.value,
+            performanceReliabilitySeverityFactor: performanceReliabilitySeverityFactor.value,
+            performanceReliabilityTimingFactor: performanceReliabilityTimingFactor.value,
+            performanceReliabilityBusinessScaleFactor: performanceReliabilityBusinessScaleFactor.value,
+            dataEngineeringSeverityFactor: dataEngineeringSeverityFactor.value,
+            dataEngineeringTimingFactor: dataEngineeringTimingFactor.value,
+            dataEngineeringBusinessScaleFactor: dataEngineeringBusinessScaleFactor.value
+          }
+        });
+        saveHistoryToLocalStorage();
+        restoreState(lastState);
+        saveState(); // Save state to local storage
+      }
+    }
+
+    function redo() {
+      if (redoStack.length > 0) {
+        const nextState = redoStack.pop();
+        historyStack.push({
+          entries: JSON.parse(JSON.stringify(entries)),
+          parameters: JSON.parse(JSON.stringify(parameters)),
+          valueMappers: JSON.parse(JSON.stringify(valueMappers)),
+          factors: {
+            clientExperienceCriticalityFactor: clientExperienceCriticalityFactor.value,
+            clientExperienceTimingFactor: clientExperienceTimingFactor.value,
+            clientExperienceBusinessScaleFactor: clientExperienceBusinessScaleFactor.value,
+            productDeliveryCriticalityFactor: productDeliveryCriticalityFactor.value,
+            productDeliveryTimingFactor: productDeliveryTimingFactor.value,
+            productDeliveryBusinessScaleFactor: productDeliveryBusinessScaleFactor.value,
+            productDeliveryBusinessScaleLimit: productDeliveryBusinessScaleLimit.value,
+            securityCriticalityFactor: securityCriticalityFactor.value,
+            securityTimingFactor: securityTimingFactor.value,
+            securityBusinessScaleFactor: securityBusinessScaleFactor.value,
+            costOptimizationTimingFactor: costOptimizationTimingFactor.value,
+            costOptimizationBusinessScaleFactor: costOptimizationBusinessScaleFactor.value,
+            costOptimizationBusinessScaleLimit: costOptimizationBusinessScaleLimit.value,
+            performanceReliabilitySeverityFactor: performanceReliabilitySeverityFactor.value,
+            performanceReliabilityTimingFactor: performanceReliabilityTimingFactor.value,
+            performanceReliabilityBusinessScaleFactor: performanceReliabilityBusinessScaleFactor.value,
+            dataEngineeringSeverityFactor: dataEngineeringSeverityFactor.value,
+            dataEngineeringTimingFactor: dataEngineeringTimingFactor.value,
+            dataEngineeringBusinessScaleFactor: dataEngineeringBusinessScaleFactor.value
+          }
+        });
+        saveHistoryToLocalStorage();
+        restoreState(nextState);
+        saveState(); // Save state to local storage
+      }
+    }
+
+    function restoreState(state) {
+      entries = state.entries;
+      parameters = state.parameters;
+      valueMappers = state.valueMappers;
+      clientExperienceCriticalityFactor.value = state.factors.clientExperienceCriticalityFactor;
+      clientExperienceTimingFactor.value = state.factors.clientExperienceTimingFactor;
+      clientExperienceBusinessScaleFactor.value = state.factors.clientExperienceBusinessScaleFactor;
+      productDeliveryCriticalityFactor.value = state.factors.productDeliveryCriticalityFactor;
+      productDeliveryTimingFactor.value = state.factors.productDeliveryTimingFactor;
+      productDeliveryBusinessScaleFactor.value = state.factors.productDeliveryBusinessScaleFactor;
+      productDeliveryBusinessScaleLimit.value = state.factors.productDeliveryBusinessScaleLimit;
+      securityCriticalityFactor.value = state.factors.securityCriticalityFactor;
+      securityTimingFactor.value = state.factors.securityTimingFactor;
+      securityBusinessScaleFactor.value = state.factors.securityBusinessScaleFactor;
+      costOptimizationTimingFactor.value = state.factors.costOptimizationTimingFactor;
+      costOptimizationBusinessScaleFactor.value = state.factors.costOptimizationBusinessScaleFactor;
+      costOptimizationBusinessScaleLimit.value = state.factors.costOptimizationBusinessScaleLimit;
+      performanceReliabilitySeverityFactor.value = state.factors.performanceReliabilitySeverityFactor;
+      performanceReliabilityTimingFactor.value = state.factors.performanceReliabilityTimingFactor;
+      performanceReliabilityBusinessScaleFactor.value = state.factors.performanceReliabilityBusinessScaleFactor;
+      dataEngineeringSeverityFactor.value = state.factors.dataEngineeringSeverityFactor;
+      dataEngineeringTimingFactor.value = state.factors.dataEngineeringTimingFactor;
+      dataEngineeringBusinessScaleFactor.value = state.factors.dataEngineeringBusinessScaleFactor;
+      populateDescriptionFields();
+      populateParameterFields();
+      updateFactorValues();
+      displayPermutationTable();
+      renderEntriesTable();
+      calculateScore();
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'z' && !document.activeElement.matches('input, select, textarea')) {
+        if (event.shiftKey) {
+          event.preventDefault();
+          redo();
+        } else {
+          event.preventDefault();
+          undo();
+        }
+      }
+    });
+
+    function resetParameters() {
+      saveToHistory();
+      if (confirm('Are you sure you want to reset parameters to default?')) {
+        parameters = {
+          showstopper: ['No Impact', 'Not Critical', 'Low Criticality', 'Moderate Criticality', 'High Criticality', 'Total Stop'],
+          frequency: ['Once in 5 Years', 'Once a Year or Less', 'Every 6 Months', 'Monthly', 'Weekly', 'Daily'],
+          timeSpent: ['No Time Spent', 'Less than 1 hour', 'Less than 2 hours', 'Half a day', 'Full day', 'Overtime'],
+          dealbreaker: ['No Impact', 'Not Critical', 'Low Priority', 'Medium Priority', 'High Priority', 'Must Have'],
+          projectTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
+          companyShutdown: ['No Impact', 'No Impact', 'Low Impact', 'Moderate Impact', 'High Impact', 'Total Shutdown'],
+          likelihood: ['Never', 'Very Unlikely', 'Unlikely', 'Possible', 'Likely', 'Very Likely'],
+          // costReduction: ['No Reduction', 'Minimal Reduction', 'Low Reduction', 'Moderate Reduction', 'High Reduction', 'Maximum Reduction'],
+          implementationTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
+          severity: ['No Degradation', 'Minimal Degradation', 'Low Degradation', 'Moderate Degradation', 'High Degradation', 'Total Downtime'],
+          developmentTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day'],
+          dataEngineeringSeverity: ['Minor Change', 'Slow Query', 'Incorrect Calculation', 'Data Loss', 'Data Corruption', 'Total Data Loss'],
+          dataEngineeringDevelopmentTime: ['2 Years', '1 Year', '6 Months', '1 Month', '1 Week', '1 Day']
+        };
+
+        valueMappers = {
+          showstopper: [0, 1, 2, 3, 4, 5],
+          frequency: [0, 1, 2, 3, 4, 5],
+          timeSpent: [0, 1, 2, 3, 4, 5],
+          dealbreaker: [0, 1, 2, 3, 4, 5],
+          projectTime: [0, 1, 2, 3, 4, 5],
+          companyShutdown: [0, 1, 2, 3, 4, 5],
+          likelihood: [0, 1, 2, 3, 4, 5],
+          costReduction: [0, 1, 2, 3, 4, 5],
+          implementationTime: [0, 1, 2, 3, 4, 5],
+          severity: [0, 1, 2, 3, 4, 5],
+          developmentTime: [0, 1, 2, 3, 4, 5],
+          dataEngineeringSeverity: [0, 1, 2, 3, 4, 5],
+          dataEngineeringDevelopmentTime: [0, 1, 2, 3, 4, 5]
+        };
+
+        populateDescriptionFields();
+        populateDropdowns();
+        displayPermutationTable();
+        renderEntriesTable();
+        calculateScore();
+        checkStateDifference();
+      }
+    }
+
+  // Load history from local storage on page load
+  loadHistoryFromLocalStorage();
 
   </script>
 
