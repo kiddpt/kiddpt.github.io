@@ -551,434 +551,435 @@
     <button id="googleSignInButton" class="btn btn-primary">Sign in with Google</button>
   </div>
 
-  <h1>Comprehensive Triage Framework</h1>
-
-  <div class="flex-container">
-    <div class="flex-item-1">
-      <button id="toggleViewButton">Show Permutation Table</button>
-      <button id="toggleDarkModeButton">Toggle Dark Mode</button>
-      
-      <div id="calculatorView">
-        <label for="categorySelect">Select Category:</label>
-        <select id="categorySelect">
-          <option value="clientExperience">Client Experience</option>
-          <option value="productDelivery">Product Delivery</option>
-          <option value="security">Security</option>
-          <option value="costOptimization">Cost Optimization</option>
-          <option value="performanceReliability">Performance & Reliability</option>
-          <option value="dataEngineering">Data Engineering</option>
-        </select>
-
-        <!-- Client Experience Fields -->
-        <div id="clientExperienceFields" class="categoryFields">
-          <label for="showstopper">Showstopper (0-5):</label>
-          <select id="showstopper">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-          
-          <label for="frequency">Frequency (0-5):</label>
-          <select id="frequency">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-          
-          <label for="timeSpent">Time Spent (0-5):</label>
-          <select id="timeSpent">
-            <!-- Options will be populated by JavaScript -->
+  <div id="mainContent" style="display: none;">
+    <h1>Comprehensive Triage Framework</h1>
+    <div class="flex-container">
+      <div class="flex-item-1">
+        <button id="toggleViewButton">Show Permutation Table</button>
+        <button id="toggleDarkModeButton">Toggle Dark Mode</button>
+        
+        <div id="calculatorView">
+          <label for="categorySelect">Select Category:</label>
+          <select id="categorySelect">
+            <option value="clientExperience">Client Experience</option>
+            <option value="productDelivery">Product Delivery</option>
+            <option value="security">Security</option>
+            <option value="costOptimization">Cost Optimization</option>
+            <option value="performanceReliability">Performance & Reliability</option>
+            <option value="dataEngineering">Data Engineering</option>
           </select>
 
-          <label for="clientExperienceBusinessScale">Business Scale (%):</label>
-          <input type="number" id="clientExperienceBusinessScale" min="0" value="10">
+          <!-- Client Experience Fields -->
+          <div id="clientExperienceFields" class="categoryFields">
+            <label for="showstopper">Showstopper (0-5):</label>
+            <select id="showstopper">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <label for="frequency">Frequency (0-5):</label>
+            <select id="frequency">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <label for="timeSpent">Time Spent (0-5):</label>
+            <select id="timeSpent">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <label for="clientExperienceBusinessScale">Business Scale (%):</label>
+            <input type="number" id="clientExperienceBusinessScale" min="0" value="10">
+          </div>
+
+          <!-- Product Delivery Fields -->
+          <div id="productDeliveryFields" class="categoryFields" style="display: none;">
+            <label for="dealbreaker">Dealbreaker (0-5):</label>
+            <select id="dealbreaker">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <label for="projectTime">Project Completion Time (0-5):</label>
+            <select id="projectTime">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <label for="clientTraffic">Expected Client Traffic Increase (%):</label>
+            <input type="number" id="clientTraffic" min="0" value="10">
+          </div>
+
+          <!-- Security Fields -->
+          <div id="securityFields" class="categoryFields" style="display: none;">
+            <label for="companyShutdown">Company Shutdown (0-5):</label>
+            <select id="companyShutdown">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <label for="likelihood">Likelihood of Occurrence (0-5):</label>
+            <select id="likelihood">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <label for="securityBusinessScale">Business Scale (%):</label>
+            <input type="number" id="securityBusinessScale" min="0" value="10">
+          </div>
+
+          <!-- Cost Optimization Fields -->
+          <div id="costOptimizationFields" class="categoryFields" style="display: none;">
+            <label for="implementationTime">Implementation Time (0-5):</label>
+            <select id="implementationTime">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <label for="costOptimizationBusinessScale">Business Scale ($):</label>
+            <input type="number" id="costOptimizationBusinessScale" min="0" value="2000">
+          </div>
+
+          <!-- Performance & Reliability Fields -->
+          <div id="performanceReliabilityFields" class="categoryFields" style="display: none;">
+            <label for="severity">Severity (0-5):</label>
+            <select id="severity">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <label for="developmentTime">Development Time (0-5):</label>
+            <select id="developmentTime">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <label for="performanceReliabilityBusinessScale">Business Scale (%):</label>
+            <input type="number" id="performanceReliabilityBusinessScale" min="0" value="10">
+          </div>
+
+          <!-- Data Engineering Fields -->
+          <div id="dataEngineeringFields" class="categoryFields" style="display: none;">
+            <label for="dataEngineeringSeverity">Severity (0-5):</label>
+            <select id="dataEngineeringSeverity">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+            
+            <label for="dataEngineeringDevelopmentTime">Development Time (0-5):</label>
+            <select id="dataEngineeringDevelopmentTime">
+              <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <label for="dataEngineeringBusinessScale">Business Scale (%):</label>
+            <input type="number" id="dataEngineeringBusinessScale" min="0" value="10">
+          </div>
+
+          <div id="calculatedScore"></div>
+          <div id="priorityLevel"></div>
+          <div class="description-container">
+            <label for="projectDescription">Project Description:</label>
+            <textarea id="projectDescription" rows="4"></textarea>
+          </div>
+          <button id="saveEntryButton" class="save-entry-button">Save Entry</button>
+          <button id="cancelUpdateButton" class="cancel-update-button" style="display: none;">Cancel Update</button>
+          <table id="entriesTable">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Criticality</th>
+                <th>Timing</th>
+                <th>Business Scale</th>
+                <th>Score</th>
+                <th width="130px">Priority Level</th>
+                <th width="90px">Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <button id="copyTableButton" class="copy-button">Copy Table</button>
         </div>
 
-        <!-- Product Delivery Fields -->
-        <div id="productDeliveryFields" class="categoryFields" style="display: none;">
-          <label for="dealbreaker">Dealbreaker (0-5):</label>
-          <select id="dealbreaker">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-          
-          <label for="projectTime">Project Completion Time (0-5):</label>
-          <select id="projectTime">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-          
-          <label for="clientTraffic">Expected Client Traffic Increase (%):</label>
-          <input type="number" id="clientTraffic" min="0" value="10">
+        <div id="permutationTableView" style="display: none;">
+          <h2>Permutation Table</h2>
+          <button id="resetFiltersButton">Reset Filters</button>
+          <div id="permutationCount"></div> <!-- New element to display the count -->
+          <div class="chart-container">
+            <div>
+              <canvas id="lowPriorityChart" width="400" height="200"></canvas>
+              <div class="chart-title">Low Priority</div>
+            </div>
+            <div>
+              <canvas id="mediumPriorityChart" width="400" height="200"></canvas>
+              <div class="chart-title">Medium Priority</div>
+            </div>
+            <div>
+              <canvas id="highPriorityChart" width="400" height="200"></canvas>
+              <div class="chart-title">High Priority</div>
+            </div>
+          </div>
+          <table id="permutationTable">
+            <thead>
+              <tr>
+                <th style="width: 50px;">Category</th>
+                <th style="width: 150px;">Criticality</th>
+                <th style="width: 150px;">Timing</th>
+                <th style="width: 30px;">Business Scale</th>
+                <th style="width: 30px;">Score</th>
+                <th style="width: 30px;">Priority Level</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
         </div>
-
-        <!-- Security Fields -->
-        <div id="securityFields" class="categoryFields" style="display: none;">
-          <label for="companyShutdown">Company Shutdown (0-5):</label>
-          <select id="companyShutdown">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-          
-          <label for="likelihood">Likelihood of Occurrence (0-5):</label>
-          <select id="likelihood">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-
-          <label for="securityBusinessScale">Business Scale (%):</label>
-          <input type="number" id="securityBusinessScale" min="0" value="10">
-        </div>
-
-        <!-- Cost Optimization Fields -->
-        <div id="costOptimizationFields" class="categoryFields" style="display: none;">
-          <label for="implementationTime">Implementation Time (0-5):</label>
-          <select id="implementationTime">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-
-          <label for="costOptimizationBusinessScale">Business Scale ($):</label>
-          <input type="number" id="costOptimizationBusinessScale" min="0" value="2000">
-        </div>
-
-        <!-- Performance & Reliability Fields -->
-        <div id="performanceReliabilityFields" class="categoryFields" style="display: none;">
-          <label for="severity">Severity (0-5):</label>
-          <select id="severity">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-          
-          <label for="developmentTime">Development Time (0-5):</label>
-          <select id="developmentTime">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-
-          <label for="performanceReliabilityBusinessScale">Business Scale (%):</label>
-          <input type="number" id="performanceReliabilityBusinessScale" min="0" value="10">
-        </div>
-
-        <!-- Data Engineering Fields -->
-        <div id="dataEngineeringFields" class="categoryFields" style="display: none;">
-          <label for="dataEngineeringSeverity">Severity (0-5):</label>
-          <select id="dataEngineeringSeverity">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-          
-          <label for="dataEngineeringDevelopmentTime">Development Time (0-5):</label>
-          <select id="dataEngineeringDevelopmentTime">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-
-          <label for="dataEngineeringBusinessScale">Business Scale (%):</label>
-          <input type="number" id="dataEngineeringBusinessScale" min="0" value="10">
-        </div>
-
-        <div id="calculatedScore"></div>
-        <div id="priorityLevel"></div>
-        <div class="description-container">
-          <label for="projectDescription">Project Description:</label>
-          <textarea id="projectDescription" rows="4"></textarea>
-        </div>
-        <button id="saveEntryButton" class="save-entry-button">Save Entry</button>
-        <button id="cancelUpdateButton" class="cancel-update-button" style="display: none;">Cancel Update</button>
-        <table id="entriesTable">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Criticality</th>
-              <th>Timing</th>
-              <th>Business Scale</th>
-              <th>Score</th>
-              <th width="130px">Priority Level</th>
-              <th width="90px">Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <button id="copyTableButton" class="copy-button">Copy Table</button>
       </div>
 
-      <div id="permutationTableView" style="display: none;">
-        <h2>Permutation Table</h2>
-        <button id="resetFiltersButton">Reset Filters</button>
-        <div id="permutationCount"></div> <!-- New element to display the count -->
-        <div class="chart-container">
-          <div>
-            <canvas id="lowPriorityChart" width="400" height="200"></canvas>
-            <div class="chart-title">Low Priority</div>
+      <div class="flex-item-2 sticky-sidebar">
+          <div class="export-import-buttons">
+              <button id="exportStateButton">Export State</button>
+              <input type="file" id="importStateInput" style="display: none;">
+              <button id="importStateButton">Import State</button>
           </div>
-          <div>
-            <canvas id="mediumPriorityChart" width="400" height="200"></canvas>
-            <div class="chart-title">Medium Priority</div>
-          </div>
-          <div>
-            <canvas id="highPriorityChart" width="400" height="200"></canvas>
-            <div class="chart-title">High Priority</div>
-          </div>
+          <button id="saveStateButton" class="save-state-button" disabled>Save State</button>
+          <button id="resetStateButton" class="reset-to-saved-state-button" disabled>Reset to Saved State</button>
+        <div class="tabs">
+          <div class="tab active" data-tab="factors">Factors</div>
+          <div class="tab" data-tab="parameters">Parameters</div>
         </div>
-        <table id="permutationTable">
-          <thead>
-            <tr>
-              <th style="width: 50px;">Category</th>
-              <th style="width: 150px;">Criticality</th>
-              <th style="width: 150px;">Timing</th>
-              <th style="width: 30px;">Business Scale</th>
-              <th style="width: 30px;">Score</th>
-              <th style="width: 30px;">Priority Level</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="flex-item-2 sticky-sidebar">
-        <div class="export-import-buttons">
-            <button id="exportStateButton">Export State</button>
-            <input type="file" id="importStateInput" style="display: none;">
-            <button id="importStateButton">Import State</button>
+        <div id="factors" class="tab-content active">
+          <div class="nested-tabs">
+            <div class="nested-tab active" data-tab="clientExperienceFactors">Client Experience</div>
+            <div class="nested-tab" data-tab="productDeliveryFactors">Product Delivery</div>
+            <div class="nested-tab" data-tab="securityFactors">Security</div>
+            <div class="nested-tab" data-tab="costOptimizationFactors">Cost Optimization</div>
+            <div class="nested-tab" data-tab="performanceReliabilityFactors">Performance & Reliability</div>
+            <div class="nested-tab" data-tab="dataEngineeringFactors">Data Engineering</div>
+          </div>
+          <div id="clientExperienceFactors" class="nested-tab-content active">
+            <h2>Client Experience Factors</h2>
+            <div class="factor-group">
+              <label for="clientExperienceCriticalityFactor">Criticality Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="clientExperienceCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
+                <input type="range" id="clientExperienceCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="clientExperienceTimingFactor">Timing Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="clientExperienceTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+                <input type="range" id="clientExperienceTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="clientExperienceBusinessScaleFactor">Business Scale Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="clientExperienceBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+                <input type="range" id="clientExperienceBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+            </div>
+          </div>
+          <div id="productDeliveryFactors" class="nested-tab-content">
+            <h2>Product Delivery Factors</h2>
+            <div class="factor-group">
+              <label for="productDeliveryCriticalityFactor">Criticality Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="productDeliveryCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
+                <input type="range" id="productDeliveryCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="productDeliveryTimingFactor">Timing Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="productDeliveryTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+                <input type="range" id="productDeliveryTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="productDeliveryBusinessScaleFactor">Business Scale Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="productDeliveryBusinessScaleFactorValue" min="0" max="10" value="1.25" step="0.01" style="width: 150px;">
+                <input type="range" id="productDeliveryBusinessScaleFactor" min="0" max="10" value="1.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="productDeliveryBusinessScaleLimit">Product Delivery Business Scale Limit (%):</label>
+              <input type="number" id="productDeliveryBusinessScaleLimit" min="0" max="100" value="20" style="width: 150px;">
+            </div>
+          </div>
+          <div id="securityFactors" class="nested-tab-content">
+            <h2>Security Factors</h2>
+            <div class="factor-group">
+              <label for="securityCriticalityFactor">Criticality Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="securityCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
+                <input type="range" id="securityCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="securityTimingFactor">Timing Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="securityTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+                <input type="range" id="securityTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="securityBusinessScaleFactor">Business Scale Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="securityBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+                <input type="range" id="securityBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+            </div>
+          </div>
+          <div id="costOptimizationFactors" class="nested-tab-content">
+            <h2>Cost Optimization Factors</h2>
+            <div class="factor-group">
+              <label for="costOptimizationTimingFactor">Timing Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="costOptimizationTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+                <input type="range" id="costOptimizationTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="costOptimizationBusinessScaleFactor">Business Scale Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="costOptimizationBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
+                <input type="range" id="costOptimizationBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="costOptimizationBusinessScaleLimit">Cost Optimization Business Scale Limit ($):</label>
+              <input type="number" id="costOptimizationBusinessScaleLimit" min="0" max="10000" value="2000" style="width: 150px;">
+            </div>
+          </div>
+          <div id="performanceReliabilityFactors" class="nested-tab-content">
+            <h2>Performance & Reliability Factors</h2>
+            <div class="factor-group">
+              <label for="performanceReliabilitySeverityFactor">Severity Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="performanceReliabilitySeverityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 60px;">
+                <input type="range" id="performanceReliabilitySeverityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="performanceReliabilityTimingFactor">Timing Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="performanceReliabilityTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+                <input type="range" id="performanceReliabilityTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="performanceReliabilityBusinessScaleFactor">Business Scale Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="performanceReliabilityBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+                <input type="range" id="performanceReliabilityBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+            </div>
+          </div>
+          <div id="dataEngineeringFactors" class="nested-tab-content">
+            <h2>Data Engineering Factors</h2>
+            <div class="factor-group">
+              <label for="dataEngineeringSeverityFactor">Severity Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="dataEngineeringSeverityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 60px;">
+                <input type="range" id="dataEngineeringSeverityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="dataEngineeringTimingFactor">Timing Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="dataEngineeringTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+                <input type="range" id="dataEngineeringTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+              <label for="dataEngineeringBusinessScaleFactor">Business Scale Factor:</label>
+              <div style="display: flex; align-items: center;">
+                <input type="number" id="dataEngineeringBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
+                <input type="range" id="dataEngineeringBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
+              </div>
+            </div>
+          </div>
+          <button id="resetFactorsButton">Reset Factors to Default</button>
         </div>
-        <button id="saveStateButton" class="save-state-button" disabled>Save State</button>
-        <button id="resetStateButton" class="reset-to-saved-state-button" disabled>Reset to Saved State</button>
-      <div class="tabs">
-        <div class="tab active" data-tab="factors">Factors</div>
-        <div class="tab" data-tab="parameters">Parameters</div>
-      </div>
-      <div id="factors" class="tab-content active">
-        <div class="nested-tabs">
-          <div class="nested-tab active" data-tab="clientExperienceFactors">Client Experience</div>
-          <div class="nested-tab" data-tab="productDeliveryFactors">Product Delivery</div>
-          <div class="nested-tab" data-tab="securityFactors">Security</div>
-          <div class="nested-tab" data-tab="costOptimizationFactors">Cost Optimization</div>
-          <div class="nested-tab" data-tab="performanceReliabilityFactors">Performance & Reliability</div>
-          <div class="nested-tab" data-tab="dataEngineeringFactors">Data Engineering</div>
+        <div id="parameters" class="tab-content">
+          <div class="nested-tabs">
+            <div class="nested-tab active" data-tab="clientExperienceParameters">Client Experience</div>
+            <div class="nested-tab" data-tab="productDeliveryParameters">Product Delivery</div>
+            <div class="nested-tab" data-tab="securityParameters">Security</div>
+            <div class="nested-tab" data-tab="costOptimizationParameters">Cost Optimization</div>
+            <div class="nested-tab" data-tab="performanceReliabilityParameters">Performance & Reliability</div>
+            <div class="nested-tab" data-tab="dataEngineeringParameters">Data Engineering</div>
+          </div>
+          <div id="clientExperienceParameters" class="nested-tab-content active">
+            <div class="third-tabs">
+              <div class="third-tab active" data-tab="showstopperParametersContainer">Showstopper</div>
+              <div class="third-tab" data-tab="frequencyParametersContainer">Frequency</div>
+              <div class="third-tab" data-tab="timeSpentParametersContainer">Time Spent</div>
+            </div>
+            <div id="showstopperParametersContainer" class="third-tab-content active">
+              <h3>Showstopper Parameters:</h3>
+              <div id="showstopperParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('showstopper')">Add</button>
+            </div>
+            <div id="frequencyParametersContainer" class="third-tab-content">
+              <h3>Frequency Parameters:</h3>
+              <div id="frequencyParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('frequency')">Add</button>
+            </div>
+            <div id="timeSpentParametersContainer" class="third-tab-content">
+              <h3>Time Spent Parameters:</h3>
+              <div id="timeSpentParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('timeSpent')">Add</button>
+            </div>
+          </div>
+          <div id="productDeliveryParameters" class="nested-tab-content">
+            <div class="third-tabs">
+              <div class="third-tab active" data-tab="dealbreakerParametersContainer">Dealbreaker</div>
+              <div class="third-tab" data-tab="projectTimeParametersContainer">Project Time</div>
+            </div>
+            <div id="dealbreakerParametersContainer" class="third-tab-content active">
+              <h3>Dealbreaker Parameters:</h3>
+              <div id="dealbreakerParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('dealbreaker')">Add</button>
+            </div>
+            <div id="projectTimeParametersContainer" class="third-tab-content">
+              <h3>Project Time Parameters:</h3>
+              <div id="projectTimeParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('projectTime')">Add</button>
+            </div>
+          </div>
+          <div id="securityParameters" class="nested-tab-content">
+            <div class="third-tabs">
+              <div class="third-tab active" data-tab="companyShutdownParametersContainer">Company Shutdown</div>
+              <div class="third-tab" data-tab="likelihoodParametersContainer">Likelihood</div>
+            </div>
+            <div id="companyShutdownParametersContainer" class="third-tab-content active">
+              <h3>Company Shutdown Parameters:</h3>
+              <div id="companyShutdownParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('companyShutdown')">Add</button>
+            </div>
+            <div id="likelihoodParametersContainer" class="third-tab-content">
+              <h3>Likelihood Parameters:</h3>
+              <div id="likelihoodParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('likelihood')">Add</button>
+            </div>
+          </div>
+          <div id="costOptimizationParameters" class="nested-tab-content">
+            <div class="third-tabs">
+              <div class="third-tab" data-tab="implementationTimeParametersContainer">Implementation Time</div>
+            </div>
+            <div id="costReductionParametersContainer" class="third-tab-content active">
+              <h3>Cost Reduction Parameters:</h3>
+              <div id="costReductionParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('costReduction')">Add</button>
+            </div>
+            <div id="implementationTimeParametersContainer" class="third-tab-content">
+              <h3>Implementation Time Parameters:</h3>
+              <div id="implementationTimeParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('implementationTime')">Add</button>
+            </div>
+          </div>
+          <div id="performanceReliabilityParameters" class="nested-tab-content">
+            <div class="third-tabs">
+              <div class="third-tab active" data-tab="severityParametersContainer">Severity</div>
+              <div class="third-tab" data-tab="developmentTimeParametersContainer">Development Time</div>
+            </div>
+            <div id="severityParametersContainer" class="third-tab-content active">
+              <h3>Severity Parameters:</h3>
+              <div id="severityParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('severity')">Add</button>
+            </div>
+            <div id="developmentTimeParametersContainer" class="third-tab-content">
+              <h3>Development Time Parameters:</h3>
+              <div id="developmentTimeParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('developmentTime')">Add</button>
+            </div>
+          </div>
+          <div id="dataEngineeringParameters" class="nested-tab-content">
+            <div class="third-tabs">
+              <div class="third-tab active" data-tab="dataEngineeringSeverityParametersContainer">Severity</div>
+              <div class="third-tab" data-tab="dataEngineeringDevelopmentTimeParametersContainer">Development Time</div>
+            </div>
+            <div id="dataEngineeringSeverityParametersContainer" class="third-tab-content active">
+              <h3>Severity Parameters:</h3>
+              <div id="dataEngineeringSeverityParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('dataEngineeringSeverity')">Add</button>
+            </div>
+            <div id="dataEngineeringDevelopmentTimeParametersContainer" class="third-tab-content">
+              <h3>Development Time Parameters:</h3>
+              <div id="dataEngineeringDevelopmentTimeParameters"></div>
+              <button class="add-parameter-button" onclick="addParameterPair('dataEngineeringDevelopmentTime')">Add</button>
+            </div>
+          </div>
+          <!-- <button id="saveParametersButton">Save Parameters</button> -->
+          <button id="resetParametersButton" class="reset-parameters-button">Reset Parameters to Default</button>
         </div>
-        <div id="clientExperienceFactors" class="nested-tab-content active">
-          <h2>Client Experience Factors</h2>
-          <div class="factor-group">
-            <label for="clientExperienceCriticalityFactor">Criticality Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="clientExperienceCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
-              <input type="range" id="clientExperienceCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="clientExperienceTimingFactor">Timing Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="clientExperienceTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
-              <input type="range" id="clientExperienceTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="clientExperienceBusinessScaleFactor">Business Scale Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="clientExperienceBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
-              <input type="range" id="clientExperienceBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-          </div>
-        </div>
-        <div id="productDeliveryFactors" class="nested-tab-content">
-          <h2>Product Delivery Factors</h2>
-          <div class="factor-group">
-            <label for="productDeliveryCriticalityFactor">Criticality Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="productDeliveryCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
-              <input type="range" id="productDeliveryCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="productDeliveryTimingFactor">Timing Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="productDeliveryTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
-              <input type="range" id="productDeliveryTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="productDeliveryBusinessScaleFactor">Business Scale Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="productDeliveryBusinessScaleFactorValue" min="0" max="10" value="1.25" step="0.01" style="width: 150px;">
-              <input type="range" id="productDeliveryBusinessScaleFactor" min="0" max="10" value="1.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="productDeliveryBusinessScaleLimit">Product Delivery Business Scale Limit (%):</label>
-            <input type="number" id="productDeliveryBusinessScaleLimit" min="0" max="100" value="20" style="width: 150px;">
-          </div>
-        </div>
-        <div id="securityFactors" class="nested-tab-content">
-          <h2>Security Factors</h2>
-          <div class="factor-group">
-            <label for="securityCriticalityFactor">Criticality Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="securityCriticalityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 150px;">
-              <input type="range" id="securityCriticalityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="securityTimingFactor">Timing Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="securityTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
-              <input type="range" id="securityTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="securityBusinessScaleFactor">Business Scale Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="securityBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
-              <input type="range" id="securityBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-          </div>
-        </div>
-        <div id="costOptimizationFactors" class="nested-tab-content">
-          <h2>Cost Optimization Factors</h2>
-          <div class="factor-group">
-            <label for="costOptimizationTimingFactor">Timing Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="costOptimizationTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
-              <input type="range" id="costOptimizationTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="costOptimizationBusinessScaleFactor">Business Scale Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="costOptimizationBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 150px;">
-              <input type="range" id="costOptimizationBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="costOptimizationBusinessScaleLimit">Cost Optimization Business Scale Limit ($):</label>
-            <input type="number" id="costOptimizationBusinessScaleLimit" min="0" max="10000" value="2000" style="width: 150px;">
-          </div>
-        </div>
-        <div id="performanceReliabilityFactors" class="nested-tab-content">
-          <h2>Performance & Reliability Factors</h2>
-          <div class="factor-group">
-            <label for="performanceReliabilitySeverityFactor">Severity Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="performanceReliabilitySeverityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 60px;">
-              <input type="range" id="performanceReliabilitySeverityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="performanceReliabilityTimingFactor">Timing Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="performanceReliabilityTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
-              <input type="range" id="performanceReliabilityTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="performanceReliabilityBusinessScaleFactor">Business Scale Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="performanceReliabilityBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
-              <input type="range" id="performanceReliabilityBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-          </div>
-        </div>
-        <div id="dataEngineeringFactors" class="nested-tab-content">
-          <h2>Data Engineering Factors</h2>
-          <div class="factor-group">
-            <label for="dataEngineeringSeverityFactor">Severity Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="dataEngineeringSeverityFactorValue" min="0" max="10" value="0.5" step="0.01" style="width: 60px;">
-              <input type="range" id="dataEngineeringSeverityFactor" min="0" max="10" value="0.5" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="dataEngineeringTimingFactor">Timing Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="dataEngineeringTimingFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
-              <input type="range" id="dataEngineeringTimingFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-            <label for="dataEngineeringBusinessScaleFactor">Business Scale Factor:</label>
-            <div style="display: flex; align-items: center;">
-              <input type="number" id="dataEngineeringBusinessScaleFactorValue" min="0" max="10" value="0.25" step="0.01" style="width: 60px;">
-              <input type="range" id="dataEngineeringBusinessScaleFactor" min="0" max="10" value="0.25" step="0.01" style="flex-grow: 1; margin-left: 10px;">
-            </div>
-          </div>
-        </div>
-        <button id="resetFactorsButton">Reset Factors to Default</button>
-      </div>
-      <div id="parameters" class="tab-content">
-        <div class="nested-tabs">
-          <div class="nested-tab active" data-tab="clientExperienceParameters">Client Experience</div>
-          <div class="nested-tab" data-tab="productDeliveryParameters">Product Delivery</div>
-          <div class="nested-tab" data-tab="securityParameters">Security</div>
-          <div class="nested-tab" data-tab="costOptimizationParameters">Cost Optimization</div>
-          <div class="nested-tab" data-tab="performanceReliabilityParameters">Performance & Reliability</div>
-          <div class="nested-tab" data-tab="dataEngineeringParameters">Data Engineering</div>
-        </div>
-        <div id="clientExperienceParameters" class="nested-tab-content active">
-          <div class="third-tabs">
-            <div class="third-tab active" data-tab="showstopperParametersContainer">Showstopper</div>
-            <div class="third-tab" data-tab="frequencyParametersContainer">Frequency</div>
-            <div class="third-tab" data-tab="timeSpentParametersContainer">Time Spent</div>
-          </div>
-          <div id="showstopperParametersContainer" class="third-tab-content active">
-            <h3>Showstopper Parameters:</h3>
-            <div id="showstopperParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('showstopper')">Add</button>
-          </div>
-          <div id="frequencyParametersContainer" class="third-tab-content">
-            <h3>Frequency Parameters:</h3>
-            <div id="frequencyParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('frequency')">Add</button>
-          </div>
-          <div id="timeSpentParametersContainer" class="third-tab-content">
-            <h3>Time Spent Parameters:</h3>
-            <div id="timeSpentParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('timeSpent')">Add</button>
-          </div>
-        </div>
-        <div id="productDeliveryParameters" class="nested-tab-content">
-          <div class="third-tabs">
-            <div class="third-tab active" data-tab="dealbreakerParametersContainer">Dealbreaker</div>
-            <div class="third-tab" data-tab="projectTimeParametersContainer">Project Time</div>
-          </div>
-          <div id="dealbreakerParametersContainer" class="third-tab-content active">
-            <h3>Dealbreaker Parameters:</h3>
-            <div id="dealbreakerParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('dealbreaker')">Add</button>
-          </div>
-          <div id="projectTimeParametersContainer" class="third-tab-content">
-            <h3>Project Time Parameters:</h3>
-            <div id="projectTimeParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('projectTime')">Add</button>
-          </div>
-        </div>
-        <div id="securityParameters" class="nested-tab-content">
-          <div class="third-tabs">
-            <div class="third-tab active" data-tab="companyShutdownParametersContainer">Company Shutdown</div>
-            <div class="third-tab" data-tab="likelihoodParametersContainer">Likelihood</div>
-          </div>
-          <div id="companyShutdownParametersContainer" class="third-tab-content active">
-            <h3>Company Shutdown Parameters:</h3>
-            <div id="companyShutdownParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('companyShutdown')">Add</button>
-          </div>
-          <div id="likelihoodParametersContainer" class="third-tab-content">
-            <h3>Likelihood Parameters:</h3>
-            <div id="likelihoodParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('likelihood')">Add</button>
-          </div>
-        </div>
-        <div id="costOptimizationParameters" class="nested-tab-content">
-          <div class="third-tabs">
-            <div class="third-tab" data-tab="implementationTimeParametersContainer">Implementation Time</div>
-          </div>
-          <div id="costReductionParametersContainer" class="third-tab-content active">
-            <h3>Cost Reduction Parameters:</h3>
-            <div id="costReductionParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('costReduction')">Add</button>
-          </div>
-          <div id="implementationTimeParametersContainer" class="third-tab-content">
-            <h3>Implementation Time Parameters:</h3>
-            <div id="implementationTimeParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('implementationTime')">Add</button>
-          </div>
-        </div>
-        <div id="performanceReliabilityParameters" class="nested-tab-content">
-          <div class="third-tabs">
-            <div class="third-tab active" data-tab="severityParametersContainer">Severity</div>
-            <div class="third-tab" data-tab="developmentTimeParametersContainer">Development Time</div>
-          </div>
-          <div id="severityParametersContainer" class="third-tab-content active">
-            <h3>Severity Parameters:</h3>
-            <div id="severityParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('severity')">Add</button>
-          </div>
-          <div id="developmentTimeParametersContainer" class="third-tab-content">
-            <h3>Development Time Parameters:</h3>
-            <div id="developmentTimeParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('developmentTime')">Add</button>
-          </div>
-        </div>
-        <div id="dataEngineeringParameters" class="nested-tab-content">
-          <div class="third-tabs">
-            <div class="third-tab active" data-tab="dataEngineeringSeverityParametersContainer">Severity</div>
-            <div class="third-tab" data-tab="dataEngineeringDevelopmentTimeParametersContainer">Development Time</div>
-          </div>
-          <div id="dataEngineeringSeverityParametersContainer" class="third-tab-content active">
-            <h3>Severity Parameters:</h3>
-            <div id="dataEngineeringSeverityParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('dataEngineeringSeverity')">Add</button>
-          </div>
-          <div id="dataEngineeringDevelopmentTimeParametersContainer" class="third-tab-content">
-            <h3>Development Time Parameters:</h3>
-            <div id="dataEngineeringDevelopmentTimeParameters"></div>
-            <button class="add-parameter-button" onclick="addParameterPair('dataEngineeringDevelopmentTime')">Add</button>
-          </div>
-        </div>
-        <!-- <button id="saveParametersButton">Save Parameters</button> -->
-        <button id="resetParametersButton" class="reset-parameters-button">Reset Parameters to Default</button>
       </div>
     </div>
   </div>
@@ -1014,13 +1015,34 @@
 
     // Google Sign-In
     const googleSignInButton = document.getElementById('googleSignInButton');
+    const mainContent = document.getElementById('mainContent');
+
     googleSignInButton.addEventListener('click', () => {
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
         .then((result) => {
           console.log('User signed in:', result.user);
-            googleSignInButton.innerText = `Signed in as ${result.user.displayName}`;
+          googleSignInButton.innerText = `Signed in as ${result.user.displayName}`;
           addSignOutButton();
+          // Save user email to Firestore
+          const userEmail = result.user.email;
+          const emailDomain = userEmail.split('@')[1];
+
+          if (emailDomain !== 'promotexter.com') {
+            console.error('Unauthorized email domain');
+            auth.signOut().then(() => {
+              console.log('User signed out');
+              googleSignInButton.innerText = 'Sign in with Google';
+              googleSignInButton.parentNode.querySelector('.logout-button')?.remove();
+              mainContent.style.display = 'none';
+            }).catch((error) => {
+              console.error('Error during sign-out:', error);
+            });
+            alert('Unauthorized email domain. Please use a valid promotexter.com email.');
+          } else {
+            mainContent.style.display = 'block';
+          }
+          
         })
         .catch((error) => {
           console.error('Error during sign-in:', error);
@@ -1029,12 +1051,13 @@
     });
 
     auth.onAuthStateChanged((user) => {
-
       if (auth.currentUser) {
         googleSignInButton.innerText = `Signed in as ${auth.currentUser.displayName}`;
         addSignOutButton();
+        mainContent.style.display = 'block';
       } else {
         googleSignInButton.innerText = 'Sign in with Google';
+        mainContent.style.display = 'none';
       }
     });
 
@@ -1051,6 +1074,7 @@
           console.log('User signed out');
           googleSignInButton.innerText = 'Sign in with Google';
           signOutButton.remove();
+          mainContent.style.display = 'none';
         }).catch((error) => {
           console.error('Error during sign-out:', error);
         });
@@ -3039,20 +3063,34 @@
   async function saveEntriesToFirestore() {
     if (!auth.currentUser) {
       console.log("User not logged in");
+      entries = [];
+      sortEntriesTable();
       return;
     }
     const entriesCollection = collection(db, "entries");
-    for (const entry of entries) {
-      const entryRef = doc(entriesCollection, entry.id);
-      await setDoc(entryRef, entry);
+    try {
+      for (const entry of entries) {
+        const entryRef = doc(entriesCollection, entry.id);
+        await setDoc(entryRef, entry);
+      }
+      console.log("Entries saved to Firestore");
+    } catch (error) {
+      if (error.code === 'permission-denied') {
+        alert('You do not have permission to perform this action.');
+        // Retract the action by reloading the entries from Firestore
+        await loadEntriesFromFirestore();
+      } else {
+        console.error('Error saving entries to Firestore:', error);
+      }
     }
-    console.log("Entries saved to Firestore");
   }
 
   // Function to load entries from Firestore
   async function loadEntriesFromFirestore() {
     if (!auth.currentUser) {
       console.log("User not logged in");
+      entries = [];
+      sortEntriesTable();
       return;
     }
     try {
