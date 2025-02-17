@@ -1109,6 +1109,7 @@
       const docRef = doc(db, "state", "current");
       await setDoc(docRef, { state: currentState });
       console.log("State saved to Firestore");
+      updateEntryScores();
     }
 
     // Function to load state from Firestore
@@ -2695,6 +2696,34 @@
       document.getElementById('projectDescription').value = entry.description;
       categorySelect.value = entry.category.charAt(0).toLowerCase() + entry.category.slice(1).replace(/[\s&]+/g, '');
       categorySelect.dispatchEvent(new Event('change'));
+
+      const categoryFields = document.getElementById(`${categorySelect.value}Fields`);
+      const selects = categoryFields.querySelectorAll('select');
+      const inputs = categoryFields.querySelectorAll('input[type="number"]');
+
+      if (categorySelect.value === 'clientExperience') {
+        selects[0].value = findClosestValue(valueMappers.showstopper, entry.criticality, parameters.showstopper);
+        selects[1].value = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0], parameters.frequency);
+        selects[2].value = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1], parameters.timeSpent);
+      } else if (categorySelect.value === 'productDelivery') {
+        selects[0].value = findClosestValue(valueMappers.dealbreaker, entry.criticality, parameters.dealbreaker);
+        selects[1].value = findClosestValue(valueMappers.projectTime, entry.timing, parameters.projectTime);
+      } else if (categorySelect.value === 'security') {
+        selects[0].value = findClosestValue(valueMappers.companyShutdown, entry.criticality, parameters.companyShutdown);
+        selects[1].value = findClosestValue(valueMappers.likelihood, entry.timing, parameters.likelihood);
+      } else if (categorySelect.value === 'costOptimization') {
+        selects[0].value = findClosestValue(valueMappers.implementationTime, entry.timing, parameters.implementationTime);
+      } else if (categorySelect.value === 'performanceReliability') {
+        selects[0].value = findClosestValue(valueMappers.severity, entry.criticality, parameters.severity);
+        selects[1].value = findClosestValue(valueMappers.developmentTime, entry.timing, parameters.developmentTime);
+      } else if (categorySelect.value === 'dataEngineering') {
+        selects[0].value = findClosestValue(valueMappers.dataEngineeringSeverity, entry.criticality, parameters.dataEngineeringSeverity);
+        selects[1].value = findClosestValue(valueMappers.dataEngineeringDevelopmentTime, entry.timing, parameters.dataEngineeringDevelopmentTime);
+      }
+
+      inputs[0].value = entry.businessScale;
+      calculateScore();
+
       editingRow = entries.findIndex(entry => entry.id === id);
       saveEntryButton.textContent = 'Update Entry';
       saveEntryButton.classList.remove('save-entry-button');
