@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device=width, initial-scale=1.0">
   <title>Comprehensive Triage Framework</title>
   <style>
     body {
@@ -690,6 +690,60 @@
           </div>
           <button id="saveEntryButton" class="save-entry-button">Save Entry</button>
           <button id="cancelUpdateButton" class="cancel-update-button" style="display: none;">Cancel Update</button>
+          
+          <!-- Add filter inputs -->
+          <button id="toggleFiltersButton">Show Filters</button>
+          <div id="filtersRow" class="filters-row" style="display: none;">
+            <div class="description-container">
+              <label for="filterInput">Filter Entries:</label>
+              <input type="text" id="filterInput" placeholder="Type to filter entries...">
+            </div>
+            <div class="description-container">
+              <label for="categoryFilter">Filter by Category:</label>
+              <select id="categoryFilter" multiple>
+                <option value="Client Experience">Client Experience</option>
+                <option value="Product Delivery">Product Delivery</option>
+                <option value="Security">Security</option>
+                <option value="Cost Optimization">Cost Optimization</option>
+                <option value="Performance & Reliability">Performance & Reliability</option>
+                <option value="Data Engineering">Data Engineering</option>
+              </select>
+            </div>
+            <div class="description-container">
+              <label for="criticalityFilter">Filter by Criticality:</label>
+              <select id="criticalityFilter" multiple>
+                <option value="0">0 - No Impact</option>
+                <option value="1">1 - Not Critical</option>
+                <option value="2">2 - Low Criticality</option>
+                <option value="3">3 - Moderate Criticality</option>
+                <option value="4">4 - High Criticality</option>
+                <option value="5">5 - Total Stop</option>
+              </select>
+            </div>
+            <div class="description-container">
+              <label for="timingFilter">Filter by Timing:</label>
+              <select id="timingFilter" multiple>
+                <option value="0">0 - Never</option>
+                <option value="1">1 - Very Unlikely</option>
+                <option value="2">2 - Unlikely</option>
+                <option value="3">3 - Possible</option>
+                <option value="4">4 - Likely</option>
+                <option value="5">5 - Very Likely</option>
+              </select>
+            </div>
+            <div class="description-container">
+              <label for="businessScaleFilter">Filter by Business Scale:</label>
+              <select id="businessScaleFilter" multiple>
+                <option value="0">0</option>
+                <option value="20">20</option>
+                <option value="40">40</option>
+                <option value="60">60</option>
+                <option value="80">80</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+          </div>
+          
           <table id="entriesTable">
             <thead>
               <tr>
@@ -2553,9 +2607,9 @@
       sortEntriesTable();
     });
 
-    function renderEntriesTable() {
+    function renderEntriesTable(filteredEntries = entries) {
       entriesTableBody.innerHTML = '';
-      entries.forEach((entry, index) => {
+      filteredEntries.forEach((entry, index) => {
         const row = document.createElement('tr');
         row.className = (editingRow !== null && entries[editingRow].id === entry.id) ? 'highlight-row' : '';
         const priorityChangeIcon = getPriorityChangeIcon(entry.priorityLevel, entry.updatedEntry.priorityLevel);
@@ -3181,6 +3235,71 @@
         console.error('Error loading entries from Firestore:', error);
       }
     }
+  }
+
+  const filterInput = document.getElementById('filterInput');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const criticalityFilter = document.getElementById('criticalityFilter');
+  const timingFilter = document.getElementById('timingFilter');
+  const businessScaleFilter = document.getElementById('businessScaleFilter');
+  const toggleFiltersButton = document.getElementById('toggleFiltersButton');
+  const filtersRow = document.getElementById('filtersRow');
+
+  filterInput.addEventListener('input', filterEntries);
+  categoryFilter.addEventListener('change', filterEntries);
+  criticalityFilter.addEventListener('change', filterEntries);
+  timingFilter.addEventListener('change', filterEntries);
+  businessScaleFilter.addEventListener('change', filterEntries);
+
+  toggleFiltersButton.addEventListener('click', () => {
+    const isVisible = filtersRow.style.display !== 'none';
+    filtersRow.style.display = isVisible ? 'none' : 'flex';
+    toggleFiltersButton.innerText = isVisible ? 'Show Filters' : 'Hide Filters';
+  });
+
+  function filterEntries() {
+    const filterValue = filterInput.value.toLowerCase();
+    const selectedCategories = Array.from(categoryFilter.selectedOptions).map(option => option.value);
+    const selectedCriticalities = Array.from(criticalityFilter.selectedOptions).map(option => parseInt(option.value));
+    const selectedTimings = Array.from(timingFilter.selectedOptions).map(option => parseInt(option.value));
+    const selectedBusinessScales = Array.from(businessScaleFilter.selectedOptions).map(option => parseInt(option.value));
+
+    const filteredEntries = entries.filter(entry => {
+      const entryTimingValue = calculateTimingValue(entry);
+      return (filterValue === '' || entry.description.toLowerCase().includes(filterValue) ||
+              entry.category.toLowerCase().includes(filterValue) ||
+              entry.criticality.toLowerCase().includes(filterValue) ||
+              entry.timing.toLowerCase().includes(filterValue) ||
+              entry.businessScale.toString().toLowerCase().includes(filterValue) ||
+              entry.score.toString().toLowerCase().includes(filterValue) ||
+              entry.priorityLevel.toLowerCase().includes(filterValue)) &&
+             (selectedCategories.length === 0 || selectedCategories.includes(entry.category)) &&
+             (selectedCriticalities.length === 0 || selectedCriticalities.includes(Math.floor(parseInt(entry.criticality.split(' ')[0])))) &&
+             (selectedTimings.length === 0 || selectedTimings.includes(Math.floor(entryTimingValue))) &&
+             (selectedBusinessScales.length === 0 || selectedBusinessScales.includes(Math.floor(parseInt(entry.businessScale))));
+    });
+
+    renderEntriesTable(filteredEntries);
+  }
+
+  function calculateTimingValue(entry) {
+    const category = entry.category.toLowerCase().replace(/[\s&]+/g, '');
+    if (category === 'clientexperience') {
+      const frequencyValue = findClosestValue(valueMappers.frequency, entry.timing.split(' | ')[0], parameters.frequency);
+      const timeSpentValue = findClosestValue(valueMappers.timeSpent, entry.timing.split(' | ')[1], parameters.timeSpent);
+      return Math.round((frequencyValue + timeSpentValue) / 2);
+    } else if (category === 'costoptimization') {
+      return findClosestValue(valueMappers.implementationTime, entry.timing, parameters.implementationTime);
+    } else {
+      return findClosestValue(valueMappers.projectTime, entry.timing, parameters.projectTime);
+    }
+  }
+
+  function isValueInRange(value, range) {
+    if (range.length === 0) return true;
+    const min = Math.min(...range);
+    const max = Math.max(...range);
+    return value >= min && value <= max;
   }
 
   </script>
