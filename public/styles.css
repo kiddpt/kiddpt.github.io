@@ -1,0 +1,22 @@
+.active-users {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.user-badge {
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: rgba(0, 123, 255, 0.5);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: default;
+  opacity: 0.7;
+}
+
+.user-badge:hover {
+  opacity: 1;
+}
