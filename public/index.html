@@ -1061,6 +1061,32 @@
     // Function to save state to Firestore
     async function saveStateToFirestore() {
       if (!auth.currentUser) {
+        console.log("User not logged in");
+        return;
+      }
+      const currentState = getCurrentState();
+      const docRef = doc(db, "state", "current");
+      await setDoc(docRef, { state: currentState });
+      console.log("State saved to Firestore");
+    }
+
+    // Function to load state from Firestore
+    async function loadStateFromFirestore() {
+      if (!auth.currentUser) {
+        console.log("User not logged in");
+        return;
+      }
+      const docRef = doc(db, "state", "current");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const state = docSnap.data().state;
+        localStorage.setItem('triageState', state); // Temporarily store in local storage for compatibility
+        const parsedState = JSON.parse(state);
+        categorySelect.value = parsedState.category;
+        clientExperienceCriticalityFactor.value = parsedState.clientExperienceCriticalityFactor;
+        clientExperienceTimingFactor.value = parsedState.clientExperienceTimingFactor;
+        clientExperienceBusinessScaleFactor.value = parsedState.clientExperienceBusinessScaleFactor;
+        productDeliveryCriticalityFactor.value = parsedState.productDeliveryCriticalityFactor;
         productDeliveryTimingFactor.value = parsedState.productDeliveryTimingFactor;
         productDeliveryBusinessScaleFactor.value = parsedState.productDeliveryBusinessScaleFactor;
         productDeliveryBusinessScaleLimit.value = parsedState.productDeliveryBusinessScaleLimit;
@@ -3041,52 +3067,6 @@
       } else {
         console.error('Error loading entries from Firestore:', error);
       }
-    }
-  }
-
-  // Function to load state from Firestore
-  async function loadStateFromFirestore() {
-    if (!auth.currentUser) {
-      console.log("User not logged in");
-      return;
-    }
-    const docRef = doc(db, "state", "current");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const state = docSnap.data().state;
-      localStorage.setItem('triageState', state); // Temporarily store in local storage for compatibility
-      const parsedState = JSON.parse(state);
-      categorySelect.value = parsedState.category;
-      clientExperienceCriticalityFactor.value = parsedState.clientExperienceCriticalityFactor;
-      clientExperienceTimingFactor.value = parsedState.clientExperienceTimingFactor;
-      clientExperienceBusinessScaleFactor.value = parsedState.clientExperienceBusinessScaleFactor;
-      productDeliveryCriticalityFactor.value = parsedState.productDeliveryCriticalityFactor;
-      productDeliveryTimingFactor.value = parsedState.productDeliveryTimingFactor;
-      productDeliveryBusinessScaleFactor.value = parsedState.productDeliveryBusinessScaleFactor;
-      productDeliveryBusinessScaleLimit.value = parsedState.productDeliveryBusinessScaleLimit;
-      securityCriticalityFactor.value = parsedState.securityCriticalityFactor;
-      securityTimingFactor.value = parsedState.securityTimingFactor;
-      securityBusinessScaleFactor.value = parsedState.securityBusinessScaleFactor;
-      costOptimizationTimingFactor.value = parsedState.costOptimizationTimingFactor;
-      costOptimizationBusinessScaleFactor.value = parsedState.costOptimizationBusinessScaleFactor;
-      costOptimizationBusinessScaleLimit.value = parsedState.costOptimizationBusinessScaleLimit;
-      performanceReliabilitySeverityFactor.value = parsedState.performanceReliabilitySeverityFactor;
-      performanceReliabilityTimingFactor.value = parsedState.performanceReliabilityTimingFactor;
-      performanceReliabilityBusinessScaleFactor.value = parsedState.performanceReliabilityBusinessScaleFactor;
-      dataEngineeringSeverityFactor.value = parsedState.dataEngineeringSeverityFactor;
-      dataEngineeringTimingFactor.value = parsedState.dataEngineeringTimingFactor;
-      dataEngineeringBusinessScaleFactor.value = parsedState.dataEngineeringBusinessScaleFactor;
-      parameters = parsedState.parameters;
-      valueMappers = parsedState.valueMappers;
-      populateDropdowns();
-      populateParameterFields();
-      updateFactorValues();
-      displayPermutationTable();
-      sortEntriesTable();
-      calculateScore();
-      console.log("State loaded from Firestore");
-    } else {
-      console.log("No state found in Firestore");
     }
   }
 
