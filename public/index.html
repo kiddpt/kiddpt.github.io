@@ -695,8 +695,8 @@
           <button id="toggleFiltersButton">Show Filters</button>
           <div id="filtersRow" class="filters-row" style="display: none;">
             <div class="description-container">
-              <label for="filterInput">Filter Entries:</label>
-              <input type="text" id="filterInput" placeholder="Type to filter entries...">
+              <label for="filterInput">Search Entries:</label>
+              <input type="text" id="filterInput" placeholder="Type to filter entries..." style="width: 300px;">
             </div>
             <div class="description-container">
               <label for="categoryFilter">Filter by Category:</label>
@@ -708,6 +708,7 @@
                 <option value="Performance & Reliability">Performance & Reliability</option>
                 <option value="Data Engineering">Data Engineering</option>
               </select>
+              <button id="clearCategoryFilter" class="clear-filter-button">Clear</button>
             </div>
             <div class="description-container">
               <label for="criticalityFilter">Filter by Criticality:</label>
@@ -719,6 +720,7 @@
                 <option value="4">4 - High Criticality</option>
                 <option value="5">5 - Total Stop</option>
               </select>
+              <button id="clearCriticalityFilter" class="clear-filter-button">Clear</button>
             </div>
             <div class="description-container">
               <label for="timingFilter">Filter by Timing:</label>
@@ -730,6 +732,7 @@
                 <option value="4">4 - Likely</option>
                 <option value="5">5 - Very Likely</option>
               </select>
+              <button id="clearTimingFilter" class="clear-filter-button">Clear</button>
             </div>
             <div class="description-container">
               <label for="businessScaleFilter">Filter by Business Scale:</label>
@@ -741,6 +744,10 @@
                 <option value="80">80</option>
                 <option value="100">100</option>
               </select>
+              <button id="clearBusinessScaleFilter" class="clear-filter-button">Clear</button>
+            </div>
+            <div class="description-container">
+              <button id="clearAllFiltersButton" class="clear-filter-button">Clear All Filters</button>
             </div>
           </div>
           
@@ -3244,6 +3251,11 @@
   const businessScaleFilter = document.getElementById('businessScaleFilter');
   const toggleFiltersButton = document.getElementById('toggleFiltersButton');
   const filtersRow = document.getElementById('filtersRow');
+  const clearCategoryFilter = document.getElementById('clearCategoryFilter');
+  const clearCriticalityFilter = document.getElementById('clearCriticalityFilter');
+  const clearTimingFilter = document.getElementById('clearTimingFilter');
+  const clearBusinessScaleFilter = document.getElementById('clearBusinessScaleFilter');
+  const clearAllFiltersButton = document.getElementById('clearAllFiltersButton');
 
   filterInput.addEventListener('input', filterEntries);
   categoryFilter.addEventListener('change', filterEntries);
@@ -3255,6 +3267,35 @@
     const isVisible = filtersRow.style.display !== 'none';
     filtersRow.style.display = isVisible ? 'none' : 'flex';
     toggleFiltersButton.innerText = isVisible ? 'Show Filters' : 'Hide Filters';
+  });
+
+  clearCategoryFilter.addEventListener('click', () => {
+    categoryFilter.selectedIndex = -1;
+    filterEntries();
+  });
+
+  clearCriticalityFilter.addEventListener('click', () => {
+    criticalityFilter.selectedIndex = -1;
+    filterEntries();
+  });
+
+  clearTimingFilter.addEventListener('click', () => {
+    timingFilter.selectedIndex = -1;
+    filterEntries();
+  });
+
+  clearBusinessScaleFilter.addEventListener('click', () => {
+    businessScaleFilter.selectedIndex = -1;
+    filterEntries();
+  });
+
+  clearAllFiltersButton.addEventListener('click', () => {
+    filterInput.value = '';
+    categoryFilter.selectedIndex = -1;
+    criticalityFilter.selectedIndex = -1;
+    timingFilter.selectedIndex = -1;
+    businessScaleFilter.selectedIndex = -1;
+    filterEntries();
   });
 
   function filterEntries() {
