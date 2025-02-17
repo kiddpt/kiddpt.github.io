@@ -558,6 +558,10 @@
       border: none;
       border-radius: 4px;
     }
+    #loadNamespaceButton:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -1255,7 +1259,12 @@
                entry.timing !== savedEntry.timing ||
                entry.businessScale !== savedEntry.businessScale ||
                entry.score !== savedEntry.score ||
-               entry.priorityLevel !== savedEntry.priorityLevel;
+               entry.priorityLevel !== savedEntry.priorityLevel ||
+               entry.criticality != entry.updatedEntry.criticality ||
+               entry.timing != entry.updatedEntry.timing ||
+               entry.businessScale != entry.updatedEntry.businessScale ||
+               entry.score != entry.updatedEntry.score ||
+               entry.priorityLevel != entry.updatedEntry.priorityLevel;
       });
 
       saveStateButton.disabled = (currentState === savedState && !entriesDiffer);
@@ -3275,6 +3284,7 @@
       const querySnapshot = await getDocs(entriesCollection);
       entries = querySnapshot.docs.map(doc => doc.data());
       sortEntriesTable();
+      checkStateDifference();
       console.log("Entries loaded from Firestore");
     } catch (error) {
       if (error.code === 'permission-denied') {
@@ -3334,6 +3344,24 @@
       sortEntriesTable();
     }
   });
+
+  namespaceInput.addEventListener('input', () => {
+    const namespace = new URLSearchParams(window.location.search).get('namespace');
+    loadNamespaceButton.disabled = namespaceInput.value.trim() === namespace;
+  });
+  namespaceInput.addEventListener('keypress', async (event) => {
+    if (event.key === 'Enter') {
+      const namespace = namespaceInput.value.trim();
+      const namespaceFromURL = new URLSearchParams(window.location.search).get('namespace');
+      if (namespace && namespace !== namespaceFromURL) {
+        await loadEntriesFromFirestore(namespace);
+        listenForEntriesChanges(namespace);
+      }
+    }
+  });
+
+  // Initial state of the loadNamespaceButton
+  loadNamespaceButton.disabled = true;
 
   function filterEntries() {
     const filterValue = filterInput.value.toLowerCase();
