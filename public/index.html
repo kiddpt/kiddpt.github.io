@@ -751,6 +751,12 @@
             </div>
           </div>
           
+          <div class="description-container">
+            <label for="namespaceInput">Namespace:</label>
+            <input type="text" id="namespaceInput" placeholder="Enter namespace..." style="width: 300px;">
+            <button id="loadNamespaceButton">Load Namespace</button>
+          </div>
+          
           <table id="entriesTable">
             <thead>
               <tr>
@@ -1221,7 +1227,8 @@
 
     async function loadState() {
       await loadStateFromFirestore();
-      await loadEntriesFromFirestore();
+      const namespace = new URLSearchParams(window.location.search).get('namespace') || namespaceInput.value.trim() || 'default';
+      await loadEntriesFromFirestore(namespace);
     }
 
     // Function to check state difference using Firestore
@@ -1295,8 +1302,8 @@
     }
 
     // Function to listen for entries changes in Firestore
-    function listenForEntriesChanges() {
-      const entriesCollection = collection(db, "entries");
+    function listenForEntriesChanges(namespace = "default") {
+      const entriesCollection = collection(db, "entries", namespace, "data");
       onSnapshot(entriesCollection, (querySnapshot) => {
         entries = querySnapshot.docs.map(doc => doc.data());
         sortEntriesTable();
@@ -1331,7 +1338,8 @@
       if (user) {
         await loadState();
         listenForStateChanges();
-        listenForEntriesChanges();
+        const namespace = new URLSearchParams(window.location.search).get('namespace') || namespaceInput.value.trim() || 'default';
+        listenForEntriesChanges(namespace);
         listenForActiveUsers();
         await setDoc(doc(db, "activeUsers", user.uid), {
           displayName: user.displayName,
@@ -1418,6 +1426,22 @@
     const cancelUpdateButton = document.getElementById('cancelUpdateButton');
     const entriesTableBody = document.getElementById('entriesTable').querySelector('tbody');
     const copyTableButton = document.getElementById('copyTableButton');
+
+    const filterInput = document.getElementById('filterInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const criticalityFilter = document.getElementById('criticalityFilter');
+    const timingFilter = document.getElementById('timingFilter');
+    const businessScaleFilter = document.getElementById('businessScaleFilter');
+    const toggleFiltersButton = document.getElementById('toggleFiltersButton');
+    const filtersRow = document.getElementById('filtersRow');
+    const clearCategoryFilter = document.getElementById('clearCategoryFilter');
+    const clearCriticalityFilter = document.getElementById('clearCriticalityFilter');
+    const clearTimingFilter = document.getElementById('clearTimingFilter');
+    const clearBusinessScaleFilter = document.getElementById('clearBusinessScaleFilter');
+    const clearAllFiltersButton = document.getElementById('clearAllFiltersButton');
+    const namespaceInput = document.getElementById('namespaceInput');
+    const loadNamespaceButton = document.getElementById('loadNamespaceButton');
+
     let editingRow = null;
 
     toggleDarkModeButton.addEventListener('click', function() {
@@ -1504,6 +1528,7 @@
         businessScale: []
       }
     };
+    let entries = [];
 
     function updateFactorValues() {
       clientExperienceCriticalityFactorValue.value = clientExperienceCriticalityFactor.value;
@@ -1647,7 +1672,7 @@
       updateURL(isCalculatorVisible ? 'permutations' : 'calculator');
     });
 
-    function updateURL(view, tab, nestedTab, thirdTab) {
+    function updateURL(view, tab, nestedTab, thirdTab, namespace) {
       const url = new URL(window.location);
       if (view) {
         url.searchParams.set('view', view);
@@ -1661,6 +1686,9 @@
       if (thirdTab) {
         url.searchParams.set('thirdTab', thirdTab);
       }
+      if (namespace) {
+        url.searchParams.set('namespace', namespace);
+      }
       window.history.pushState({}, '', url);
     }
 
@@ -1670,6 +1698,7 @@
       const tab = urlParams.get('tab');
       const nestedTab = urlParams.get('nestedTab');
       const thirdTab = urlParams.get('thirdTab');
+      const namespace = urlParams.get('namespace') || 'default';
 
       if (view === 'permutations') {
         calculatorView.style.display = 'none';
@@ -1700,6 +1729,11 @@
         document.querySelectorAll('.third-tab-content').forEach(ttc => ttc.classList.remove('active'));
         document.querySelector(`.third-tabs .third-tab[data-tab="${thirdTab}"]`).classList.add('active');
         document.getElementById(thirdTab).classList.add('active');
+      }
+
+      if (namespace) {
+        namespaceInput.value = namespace;
+        loadEntriesFromFirestore(namespace);
       }
     }
 
@@ -1771,7 +1805,6 @@
     });
 
     const permutations = [];
-    let entries = [];
 
     let lowPriorityChart, mediumPriorityChart, highPriorityChart;
 
@@ -2379,8 +2412,6 @@
     displayPermutationTable();
     calculateScore();
     updateFactorValues();
-    // Initial call to load entries from local storage
-    loadEntriesFromLocalStorage();
 
     function debounce(func, wait) {
       let timeout;
@@ -2817,7 +2848,8 @@
     }
 
     async function saveEntriesToLocalStorage() {
-      await saveEntriesToFirestore();
+      const namespace = namespaceInput.value.trim() || new URLSearchParams(window.location.search).get('namespace') || "default";
+      await saveEntriesToFirestore(namespace);
     }
 
     async function loadEntriesFromLocalStorage() {
@@ -3196,14 +3228,14 @@
   loadHistoryFromLocalStorage();
 
   // Function to save entries to Firestore
-  async function saveEntriesToFirestore() {
+  async function saveEntriesToFirestore(namespace = "default") {
     if (!auth.currentUser) {
       console.log("User not logged in");
       entries = [];
       sortEntriesTable();
       return;
     }
-    const entriesCollection = collection(db, "entries");
+    const entriesCollection = collection(db, "entries", namespace, "data");
     try {
       for (const entry of entries) {
         const entryRef = doc(entriesCollection, entry.id);
@@ -3214,7 +3246,7 @@
       if (error.code === 'permission-denied') {
         alert('You do not have permission to perform this action.');
         // Retract the action by reloading the entries from Firestore
-        await loadEntriesFromFirestore();
+        await loadEntriesFromFirestore(namespace);
       } else {
         console.error('Error saving entries to Firestore:', error);
       }
@@ -3222,7 +3254,9 @@
   }
 
   // Function to load entries from Firestore
-  async function loadEntriesFromFirestore() {
+  async function loadEntriesFromFirestore(namespace = "default") {
+    namespaceInput.value = namespace;
+    updateURL(null, null, null, null, namespace);
     if (!auth.currentUser) {
       console.log("User not logged in");
       entries = [];
@@ -3230,7 +3264,7 @@
       return;
     }
     try {
-      const entriesCollection = collection(db, "entries");
+      const entriesCollection = collection(db, "entries", namespace, "data");
       const querySnapshot = await getDocs(entriesCollection);
       entries = querySnapshot.docs.map(doc => doc.data());
       sortEntriesTable();
@@ -3243,19 +3277,6 @@
       }
     }
   }
-
-  const filterInput = document.getElementById('filterInput');
-  const categoryFilter = document.getElementById('categoryFilter');
-  const criticalityFilter = document.getElementById('criticalityFilter');
-  const timingFilter = document.getElementById('timingFilter');
-  const businessScaleFilter = document.getElementById('businessScaleFilter');
-  const toggleFiltersButton = document.getElementById('toggleFiltersButton');
-  const filtersRow = document.getElementById('filtersRow');
-  const clearCategoryFilter = document.getElementById('clearCategoryFilter');
-  const clearCriticalityFilter = document.getElementById('clearCriticalityFilter');
-  const clearTimingFilter = document.getElementById('clearTimingFilter');
-  const clearBusinessScaleFilter = document.getElementById('clearBusinessScaleFilter');
-  const clearAllFiltersButton = document.getElementById('clearAllFiltersButton');
 
   filterInput.addEventListener('input', filterEntries);
   categoryFilter.addEventListener('change', filterEntries);
@@ -3296,6 +3317,14 @@
     timingFilter.selectedIndex = -1;
     businessScaleFilter.selectedIndex = -1;
     filterEntries();
+  });
+
+  loadNamespaceButton.addEventListener('click', async () => {
+    const namespace = namespaceInput.value.trim();
+    if (namespace) {
+      await loadEntriesFromFirestore(namespace);
+      sortEntriesTable();
+    }
   });
 
   function filterEntries() {
