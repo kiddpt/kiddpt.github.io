@@ -545,7 +545,7 @@
     }
     .active-users {
       position: absolute;
-      top: 50px;
+      top: 54px;
       right: 10px;
       display: flex;
       gap: 10px;
@@ -557,6 +557,12 @@
       color: white;
       border: none;
       border-radius: 4px;
+    }
+    .user-badge.hidden {
+      background-color: rgba(40, 167, 69, 0.1); /* transparent green */
+    }
+    .user-badge.inactive {
+      background-color: rgba(40, 167, 69, 0.5); /* transparent green */
     }
     #loadNamespaceButton:disabled {
       background-color: #ccc;
@@ -1366,14 +1372,45 @@
     function displayActiveUsers(users) {
       const activeUsersContainer = document.getElementById('activeUsers');
       activeUsersContainer.innerHTML = '';
+      const now = new Date();
       users.forEach(user => {
+        const lastActivity = new Date(user.lastActivity);
+        const timeDiff = now - lastActivity;
+        const oneHour = 60 * 60 * 1000;
+        const oneDay = 24 * 60 * 60 * 1000;
+        let badgeClass = '';
+
+        if (timeDiff <= oneHour) {
+          badgeClass = '';
+        } else if (timeDiff <= oneDay) {
+          badgeClass = 'inactive';
+        } else {
+          badgeClass = 'hidden';
+        }
+
         const userBadge = document.createElement('div');
-        userBadge.className = 'user-badge';
+        userBadge.className = `user-badge ${badgeClass}`;
         userBadge.innerText = user.displayName;
         userBadge.title = user.email;
         activeUsersContainer.appendChild(userBadge);
       });
     }
+
+    // Function to update user activity
+    async function updateUserActivity() {
+      if (auth.currentUser) {
+        const userRef = doc(db, "activeUsers", auth.currentUser.uid);
+        await setDoc(userRef, {
+          displayName: auth.currentUser.displayName,
+          email: auth.currentUser.email,
+          lastActivity: new Date().toISOString()
+        });
+      }
+    }
+
+    // Add event listeners for user activity
+    document.addEventListener('click', debounce(updateUserActivity, 1000));
+    document.addEventListener('keydown', debounce(updateUserActivity, 1000));
 
     // Initial call to load state and entries from Firestore
     auth.onAuthStateChanged(async (user) => {
@@ -1383,10 +1420,7 @@
         const namespace = new URLSearchParams(window.location.search).get('namespace') || namespaceInput.value.trim() || 'default';
         listenForEntriesChanges(namespace);
         listenForActiveUsers();
-        await setDoc(doc(db, "activeUsers", user.uid), {
-          displayName: user.displayName,
-          email: user.email
-        });
+        await updateUserActivity();
       } else {
         await deleteDoc(doc(db, "activeUsers", auth.currentUser.uid));
       }
