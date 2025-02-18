@@ -1390,7 +1390,22 @@
 
         const userBadge = document.createElement('div');
         userBadge.className = `user-badge ${badgeClass}`;
-        userBadge.innerText = user.displayName;
+        userBadge.innerText = user.displayName.split(' ').map(name => name[0]).join('');
+        const colors = [
+          '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A133FF', '#33FFF5', '#FF8C33', '#8CFF33', '#338CFF', '#FF338C'
+        ];
+
+        function getColorForInitials(initials) {
+          const charCodeSum = initials.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+          return colors[charCodeSum % colors.length];
+        }
+
+        userBadge.style.backgroundColor = getColorForInitials(user.displayName.split(' ').map(name => name[0]).join(''));
+        if (badgeClass === 'inactive') {
+          userBadge.style.opacity = '0.6';
+        } else if (badgeClass === 'hidden') {
+          userBadge.style.opacity = '0.3';
+        }
         userBadge.title = user.email;
         activeUsersContainer.appendChild(userBadge);
       });
