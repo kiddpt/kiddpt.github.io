@@ -797,7 +797,7 @@
                 <th>Business Scale</th>
                 <th>Score</th>
                 <th width="130px">Priority Level</th>
-                <th>Status</th>
+                <th width="120px">Status</th>
                 <th width="90px">Actions</th>
               </tr>
             </thead>
@@ -2703,12 +2703,12 @@
           <td>${formatScoreChange(entry.score, entry.updatedEntry.score)}</td>
           <td>${entry.updatedEntry.priorityLevel}${priorityChangeIcon}</td>
           <td>
-            <select class="status-dropdown" onchange="updateEntryStatus('${entry.id}', this.value)">
-              <option value="Not Started" ${entry.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
-              <option value="WIP" ${entry.status === 'WIP' ? 'selected' : ''}>WIP</option>
-              <option value="Deployed" ${entry.status === 'Deployed' ? 'selected' : ''}>Deployed</option>
-              <option value="On Hold" ${entry.status === 'On Hold' ? 'selected' : ''}>On Hold</option>
-              <option value="Cancelled" ${entry.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            <select class="status-dropdown ${getStatusClass(entry.status)}" onchange="updateEntryStatus('${entry.id}', this.value)">
+              <option value="Not Started" ${entry.status === 'Not Started' ? 'selected' : ''} class="status-not-started">Not Started</option>
+              <option value="WIP" ${entry.status === 'WIP' ? 'selected' : ''} class="status-wip">WIP</option>
+              <option value="Deployed" ${entry.status === 'Deployed' ? 'selected' : ''} class="status-deployed">Deployed</option>
+              <option value="On Hold" ${entry.status === 'On Hold' ? 'selected' : ''} class="status-on-hold">On Hold</option>
+              <option value="Cancelled" ${entry.status === 'Cancelled' ? 'selected' : ''} class="status-cancelled">Cancelled</option>
             </select>
           </td>
           <td>
@@ -2718,6 +2718,23 @@
         `;
         entriesTableBody.appendChild(row);
       });
+    }
+
+    function getStatusClass(status) {
+      switch (status) {
+        case 'Not Started':
+          return 'status-not-started';
+        case 'WIP':
+          return 'status-wip';
+        case 'Deployed':
+          return 'status-deployed';
+        case 'On Hold':
+          return 'status-on-hold';
+        case 'Cancelled':
+          return 'status-cancelled';
+        default:
+          return 'status-not-started';
+      }
     }
 
     function getPriorityChangeIcon(originalPriority, updatedPriority) {
