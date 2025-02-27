@@ -594,6 +594,12 @@
       background-color: #6c757d; /* gray */
       color: white;
     }
+    .icon {
+      width: 16px;
+      height: 16px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -724,6 +730,10 @@
             <label for="projectDescription">Project Description:</label>
             <textarea id="projectDescription" rows="4"></textarea>
           </div>
+          <label for="googleDocLink">Google Doc Link:</label>
+          <input type="text" id="googleDocLink" placeholder="Enter Google Doc link">
+          <label for="jiraTicketLink">Jira Ticket Link:</label>
+          <input type="text" id="jiraTicketLink" placeholder="Enter Jira Ticket link">
           <button id="saveEntryButton" class="save-entry-button">Save Entry</button>
           <button id="cancelUpdateButton" class="cancel-update-button" style="display: none;">Cancel Update</button>
           
@@ -2684,6 +2694,8 @@
         timing = document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].options[document.querySelectorAll(`#${categorySelect.value}Fields select`)[1].selectedIndex].text;
       }
       const businessScale = document.querySelector(`#${categorySelect.value}Fields input[type="number"]`).value;
+      const googleDocLink = document.getElementById('googleDocLink').value;
+      const jiraTicketLink = document.getElementById('jiraTicketLink').value;
       const score = document.getElementById('calculatedScore').innerText.split(': ')[1];
       const priorityLevel = calculatePriorityLevel(parseFloat(score));
 
@@ -2695,6 +2707,8 @@
           criticality,
           timing,
           businessScale,
+          googleDocLink,
+          jiraTicketLink,
           score,
           priorityLevel
         };
@@ -2711,6 +2725,8 @@
           criticality,
           timing,
           businessScale,
+          googleDocLink,
+          jiraTicketLink,
           score,
           priorityLevel,
           status: 'Not Started' // Default status
@@ -2743,8 +2759,10 @@
         const row = document.createElement('tr');
         row.className = (editingRow !== null && entries[editingRow].id === entry.id) ? 'highlight-row' : '';
         const priorityChangeIcon = getPriorityChangeIcon(entry.priorityLevel, entry.updatedEntry.priorityLevel);
+        const googleDocIcon = entry.googleDocLink ? `<a href="${entry.googleDocLink}" target="_blank"><img src="google-docs.png" class="icon" alt="Google Doc"></a>` : '';
+        const jiraTicketIcon = entry.jiraTicketLink ? `<a href="${entry.jiraTicketLink}" target="_blank"><img src="jira.png" class="icon" alt="Jira Ticket"></a>` : '';
         row.innerHTML = `
-          <td>${entry.description}</td>
+          <td>${entry.description} ${googleDocIcon} ${jiraTicketIcon}</td>
           <td>${entry.category}</td>
           <td>${formatParameterChange(entry.criticality, entry.updatedEntry.criticality)}</td>
           <td>${formatParameterChange(entry.timing, entry.updatedEntry.timing)}</td>
@@ -2932,6 +2950,8 @@
       }
 
       inputs[0].value = entry.businessScale;
+      document.getElementById('googleDocLink').value = entry.googleDocLink || '';
+      document.getElementById('jiraTicketLink').value = entry.jiraTicketLink || '';
       calculateScore();
 
       editingRow = entries.findIndex(entry => entry.id === id);
@@ -3442,10 +3462,12 @@
 
   loadNamespaceButton.addEventListener('click', async () => {
     const namespace = namespaceInput.value.trim();
+    const namespaceFromURL = new URLSearchParams(window.location.search).get('namespace');
     if (namespace) {
       await loadEntriesFromFirestore(namespace);
       listenForEntriesChanges(namespace);
       sortEntriesTable();
+      loadNamespaceButton.disabled = namespace === namespaceFromURL;
     }
   });
 
@@ -3460,6 +3482,7 @@
       if (namespace && namespace !== namespaceFromURL) {
         await loadEntriesFromFirestore(namespace);
         listenForEntriesChanges(namespace);
+        loadNamespaceButton.disabled = namespace === namespaceFromURL;
       }
     }
   });
