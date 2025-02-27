@@ -2301,9 +2301,9 @@
         const frequency = parseInt(document.getElementById('frequency').value) || 0;
         const timeSpent = parseInt(document.getElementById('timeSpent').value) || 0;
         const businessScale = parseInt(document.getElementById('clientExperienceBusinessScale').value) || 0;
-        score = (valueMappers.showstopper[showstopper] * parseFloat(clientExperienceCriticalityFactor.value)) + 
-                (valueMappers.frequency[frequency] / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
-                (valueMappers.timeSpent[timeSpent] / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+        score = (showstopper * parseFloat(clientExperienceCriticalityFactor.value)) + 
+                (frequency / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
+                (timeSpent / 2 * parseFloat(clientExperienceTimingFactor.value)) + 
                 (businessScale / 20 * parseFloat(clientExperienceBusinessScaleFactor.value));
       } else if (selectedCategory === 'productDelivery') {
         const dealbreaker = parseInt(document.getElementById('dealbreaker').value) || 0;
@@ -2311,36 +2311,36 @@
         const clientTraffic = parseInt(document.getElementById('clientTraffic').value) || 0;
         const productDeliveryBusinessScaleLimitValue = parseInt(productDeliveryBusinessScaleLimit.value) || 0;
         const cappedClientTraffic = Math.min(clientTraffic, productDeliveryBusinessScaleLimitValue);
-        score = (valueMappers.dealbreaker[dealbreaker] * parseFloat(productDeliveryCriticalityFactor.value)) + 
-                (valueMappers.projectTime[projectTime] * parseFloat(productDeliveryTimingFactor.value)) + 
+        score = (dealbreaker * parseFloat(productDeliveryCriticalityFactor.value)) + 
+                (projectTime * parseFloat(productDeliveryTimingFactor.value)) + 
                 (cappedClientTraffic / 20 * parseFloat(productDeliveryBusinessScaleFactor.value));
       } else if (selectedCategory === 'security') {
         const companyShutdown = parseInt(document.getElementById('companyShutdown').value) || 0;
         const likelihood = parseInt(document.getElementById('likelihood').value) || 0;
         const businessScale = parseInt(document.getElementById('securityBusinessScale').value) || 0;
-        score = (valueMappers.companyShutdown[companyShutdown] * parseFloat(securityCriticalityFactor.value)) + 
-                (valueMappers.likelihood[likelihood] * parseFloat(securityTimingFactor.value)) + 
+        score = (companyShutdown * parseFloat(securityCriticalityFactor.value)) + 
+                (likelihood * parseFloat(securityTimingFactor.value)) + 
                 (businessScale / 20 * parseFloat(securityBusinessScaleFactor.value));
       } else if (selectedCategory === 'costOptimization') {
         const implementationTime = parseInt(document.getElementById('implementationTime').value) || 0;
         const businessScale = parseInt(document.getElementById('costOptimizationBusinessScale').value) || 0;
         const costOptimizationBusinessScaleLimitValue = parseInt(costOptimizationBusinessScaleLimit.value) || 0;
         const cappedBusinessScale = Math.min(businessScale, costOptimizationBusinessScaleLimitValue);
-        score = (valueMappers.implementationTime[implementationTime] * parseFloat(costOptimizationTimingFactor.value)) + 
+        score = (implementationTime * parseFloat(costOptimizationTimingFactor.value)) + 
                 (cappedBusinessScale / costOptimizationBusinessScaleLimitValue * 5 * parseFloat(costOptimizationBusinessScaleFactor.value));
       } else if (selectedCategory === 'performanceReliability') {
         const severity = parseInt(document.getElementById('severity').value) || 0;
         const developmentTime = parseInt(document.getElementById('developmentTime').value) || 0;
         const businessScale = parseInt(document.getElementById('performanceReliabilityBusinessScale').value) || 0;
-        score = (valueMappers.severity[severity] * parseFloat(performanceReliabilitySeverityFactor.value)) + 
-                (valueMappers.developmentTime[developmentTime] * parseFloat(performanceReliabilityTimingFactor.value)) + 
+        score = (severity * parseFloat(performanceReliabilitySeverityFactor.value)) + 
+                (developmentTime * parseFloat(performanceReliabilityTimingFactor.value)) + 
                 (businessScale / 20 * parseFloat(performanceReliabilityBusinessScaleFactor.value));
       } else if (selectedCategory === 'dataEngineering') {
         const severity = parseInt(document.getElementById('dataEngineeringSeverity').value) || 0;
         const developmentTime = parseInt(document.getElementById('dataEngineeringDevelopmentTime').value) || 0;
         const businessScale = parseInt(document.getElementById('dataEngineeringBusinessScale').value) || 0;
-        score = (valueMappers.dataEngineeringSeverity[severity] * parseFloat(dataEngineeringSeverityFactor.value)) + 
-                (valueMappers.dataEngineeringDevelopmentTime[developmentTime] * parseFloat(dataEngineeringTimingFactor.value)) + 
+        score = (severity * parseFloat(dataEngineeringSeverityFactor.value)) + 
+                (developmentTime * parseFloat(dataEngineeringTimingFactor.value)) + 
                 (businessScale / 20 * parseFloat(dataEngineeringBusinessScaleFactor.value));
       }
 
