@@ -600,6 +600,9 @@
       margin-left: 5px;
       cursor: pointer;
     }
+    .namespace-select {
+      margin-top: 10px;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -734,6 +737,10 @@
           <input type="text" id="googleDocLink" placeholder="Enter Google Doc link">
           <label for="jiraTicketLink">Jira Ticket Link:</label>
           <input type="text" id="jiraTicketLink" placeholder="Enter Jira Ticket link">
+          <div id="namespaceSelectContainer" class="namespace-select" style="display: none;">
+            <label for="namespaceSelect">Select Namespace:</label>
+            <select id="namespaceSelect"></select>
+          </div>
           <button id="saveEntryButton" class="save-entry-button">Save Entry</button>
           <button id="cancelUpdateButton" class="cancel-update-button" style="display: none;">Cancel Update</button>
           
@@ -1126,7 +1133,6 @@
     // https://firebase.google.com/docs/web/setup#available-libraries
   
     // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
       apiKey: "AIzaSyCPkl50_ACfN2waVMcukftwo8V_peWRXxU",
       authDomain: "comprehensive-triage-db.firebaseapp.com",
@@ -1274,9 +1280,10 @@
 
     async function loadState() {
       await loadStateFromFirestore();
-      const namespace = new URLSearchParams(window.location.search).get('namespace') || namespaceInput.value.trim() || 'default';
-      await loadEntriesFromFirestore(namespace);
-      listenForEntriesChanges(namespace);
+      const namespaceParam = new URLSearchParams(window.location.search).get('namespace');
+      const namespaces = namespaceParam ? namespaceParam.split(',').map(ns => ns.trim()) : ['default'];
+      await loadEntriesFromFirestore(namespaces);
+      listenForEntriesChanges(namespaces);
     }
 
     // Function to check state difference using Firestore
@@ -1357,15 +1364,18 @@
 
     let unsubscribeEntriesListener = null;
 
-    function listenForEntriesChanges(namespace = "default") {
+    function listenForEntriesChanges(namespaces = ["default"]) {
       if (unsubscribeEntriesListener) {
         unsubscribeEntriesListener();
       }
-      const entriesCollection = collection(db, "entries", namespace, "data");
-      unsubscribeEntriesListener = onSnapshot(entriesCollection, (querySnapshot) => {
-        entries = querySnapshot.docs.map(doc => doc.data());
+      const entriesCollections = namespaces.map(namespace => collection(db, "entries", namespace, "data"));
+      const queries = entriesCollections.map(entriesCollection => getDocs(entriesCollection));
+      Promise.all(queries).then(querySnapshots => {
+        entries = querySnapshots.flatMap(querySnapshot => querySnapshot.docs.map(doc => ({ ...doc.data(), namespace: doc.ref.parent.parent.id })));
         sortEntriesTable();
         console.log("Entries updated from Firestore");
+      }).catch(error => {
+        console.error("Error listening for entries changes:", error);
       });
     }
 
@@ -1443,7 +1453,8 @@
         await loadState();
         listenForStateChanges();
         const namespace = new URLSearchParams(window.location.search).get('namespace') || namespaceInput.value.trim() || 'default';
-        listenForEntriesChanges(namespace);
+        const namespaces = namespace.split(',').map(ns => ns.trim());
+        listenForEntriesChanges(namespaces);
         listenForActiveUsers();
         await updateUserActivity();
       } else {
@@ -2698,6 +2709,7 @@
       const jiraTicketLink = document.getElementById('jiraTicketLink').value;
       const score = document.getElementById('calculatedScore').innerText.split(': ')[1];
       const priorityLevel = calculatePriorityLevel(parseFloat(score));
+      const namespace = namespaces.length > 1 ? document.getElementById('namespaceSelect').value : namespaces[0];
 
       if (editingRow !== null) {
         entries[editingRow] = {
@@ -2710,7 +2722,8 @@
           googleDocLink,
           jiraTicketLink,
           score,
-          priorityLevel
+          priorityLevel,
+          namespace
         };
         editingRow = null;
         saveEntryButton.textContent = 'Save Entry';
@@ -2729,6 +2742,7 @@
           jiraTicketLink,
           score,
           priorityLevel,
+          namespace,
           status: 'Not Started' // Default status
         };
         newEntry.updatedEntry = calculateUpdatedEntry(newEntry);
@@ -2754,13 +2768,15 @@
     });
 
     function renderEntriesTable(filteredEntries = entries) {
+      const namespaceParam = new URLSearchParams(window.location.search).get('namespace');
+      const namespaces = namespaceParam ? namespaceParam.split(',').map(ns => ns.trim()) : ['default'];
       entriesTableBody.innerHTML = '';
       filteredEntries.forEach((entry, index) => {
         const row = document.createElement('tr');
         row.className = (editingRow !== null && entries[editingRow].id === entry.id) ? 'highlight-row' : '';
         const priorityChangeIcon = getPriorityChangeIcon(entry.priorityLevel, entry.updatedEntry.priorityLevel);
         const googleDocIcon = entry.googleDocLink ? `<a href="${entry.googleDocLink}" target="_blank"><img src="google-docs.png" class="icon" alt="Google Doc"></a>` : '';
-        const jiraTicketIcon = entry.jiraTicketLink ? `<a href="${entry.jiraTicketLink}" target="_blank"><img src="jira.png" class="icon" alt="Jira Ticket"></a>` : '';
+        const jiraTicketIcon = entry.jiraTicketLink ? `<a href="${entry.jiraTicketLink}" target="_blank"><img src="jira.png" class="icon" alt="Jira Ticket"></a>`: '';
         row.innerHTML = `
           <td>${entry.description} ${googleDocIcon} ${jiraTicketIcon}</td>
           <td>${entry.category}</td>
@@ -2778,6 +2794,7 @@
               <option value="Cancelled" ${entry.status === 'Cancelled' ? 'selected' : ''} class="status-cancelled">Cancelled</option>
             </select>
           </td>
+          ${namespaces.length > 1 ? `<td>${entry.namespace}</td>` : ''}
           <td>
             <button class="edit-button" onclick="editEntry('${entry.id}')">Edit</button>
             <button class="delete-button" onclick="deleteEntry('${entry.id}')">Delete</button>
@@ -3375,9 +3392,9 @@
       sortEntriesTable();
       return;
     }
-    const entriesCollection = collection(db, "entries", namespace, "data");
     try {
       for (const entry of entries) {
+        const entriesCollection = collection(db, "entries", entry.namespace, "data");
         const entryRef = doc(entriesCollection, entry.id);
         await setDoc(entryRef, entry);
       }
@@ -3394,29 +3411,30 @@
   }
 
   // Function to load entries from Firestore
-  async function loadEntriesFromFirestore(namespace = "default") {
-    namespaceInput.value = namespace;
-    updateURL(null, null, null, null, namespace);
+  async function loadEntriesFromFirestore(namespaces = ["default"]) {
     if (!auth.currentUser) {
       console.log("User not logged in");
       entries = [];
       sortEntriesTable();
       return;
     }
+    entries = [];
     try {
-      const entriesCollection = collection(db, "entries", namespace, "data");
-      const querySnapshot = await getDocs(entriesCollection);
-      entries = querySnapshot.docs.map(doc => doc.data());
-      sortEntriesTable();
-      checkStateDifference();
-      console.log("Entries loaded from Firestore");
+      for (const namespace of namespaces) {
+        const entriesCollection = collection(db, "entries", namespace, "data");
+        const querySnapshot = await getDocs(entriesCollection);
+        entries.push(...querySnapshot.docs.map(doc => ({ ...doc.data(), namespace })));
+      }
     } catch (error) {
       if (error.code === 'permission-denied') {
-        alert('You do not have permission to access this data.');
+        alert('You do not have permission to access data for one or more namespaces.');
       } else {
         console.error('Error loading entries from Firestore:', error);
       }
     }
+    sortEntriesTable();
+    checkStateDifference();
+    console.log("Entries loaded from Firestore");
   }
 
   filterInput.addEventListener('input', filterEntries);
@@ -3464,24 +3482,27 @@
     const namespace = namespaceInput.value.trim();
     const namespaceFromURL = new URLSearchParams(window.location.search).get('namespace');
     if (namespace) {
-      await loadEntriesFromFirestore(namespace);
-      listenForEntriesChanges(namespace);
+      const namespaces = namespace.split(',').map(ns => ns.trim());
+      await loadEntriesFromFirestore(namespaces);
+      listenForEntriesChanges(namespaces);
       sortEntriesTable();
       loadNamespaceButton.disabled = namespace === namespaceFromURL;
     }
   });
 
   namespaceInput.addEventListener('input', () => {
-    const namespace = new URLSearchParams(window.location.search).get('namespace');
+    const namespace = new URL(window.location).searchParams.get('namespace');
     loadNamespaceButton.disabled = namespaceInput.value.trim() === namespace;
   });
+
   namespaceInput.addEventListener('keypress', async (event) => {
     if (event.key === 'Enter') {
       const namespace = namespaceInput.value.trim();
       const namespaceFromURL = new URLSearchParams(window.location.search).get('namespace');
       if (namespace && namespace !== namespaceFromURL) {
-        await loadEntriesFromFirestore(namespace);
-        listenForEntriesChanges(namespace);
+        const namespaces = namespace.split(',').map(ns => ns.trim());
+        await loadEntriesFromFirestore(namespaces);
+        listenForEntriesChanges(namespaces);
         loadNamespaceButton.disabled = namespace === namespaceFromURL;
       }
     }
@@ -3543,6 +3564,23 @@
       renderEntriesTable();
     }
   }
+
+  function updateNamespaceSelect() {
+    const namespaceParam = new URLSearchParams(window.location.search).get('namespace');
+    const namespaces = namespaceParam ? namespaceParam.split(',').map(ns => ns.trim()) : ['default'];
+    const namespaceSelectContainer = document.getElementById('namespaceSelectContainer');
+    const namespaceSelect = document.getElementById('namespaceSelect');
+
+    if (namespaces.length > 1) {
+      namespaceSelectContainer.style.display = 'block';
+      namespaceSelect.innerHTML = namespaces.map(ns => `<option value="${ns}">${ns}</option>`).join('');
+    } else {
+      namespaceSelectContainer.style.display = 'none';
+    }
+  }
+
+  // Initial call to update namespace select
+  updateNamespaceSelect();
 
   </script>
 
