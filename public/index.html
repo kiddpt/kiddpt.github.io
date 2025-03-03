@@ -821,6 +821,7 @@
                 <th>Score</th>
                 <th width="130px">Priority Level</th>
                 <th width="120px">Status</th>
+                <th id="namespace-header" width="120px">Namespace</th>
                 <th width="90px">Actions</th>
               </tr>
             </thead>
@@ -2709,6 +2710,8 @@
       const jiraTicketLink = document.getElementById('jiraTicketLink').value;
       const score = document.getElementById('calculatedScore').innerText.split(': ')[1];
       const priorityLevel = calculatePriorityLevel(parseFloat(score));
+      const namespaceParam = new URLSearchParams(window.location.search).get('namespace');
+      const namespaces = namespaceParam ? namespaceParam.split(',').map(ns => ns.trim()) : ['default'];
       const namespace = namespaces.length > 1 ? document.getElementById('namespaceSelect').value : namespaces[0];
 
       if (editingRow !== null) {
@@ -2802,6 +2805,14 @@
         `;
         entriesTableBody.appendChild(row);
       });
+
+      // Show/hide namespace header
+      const namespaceHeader = document.getElementById('namespace-header');
+      if (namespaces.length > 1) {
+        namespaceHeader.style.display = 'table-cell';
+      } else {
+        namespaceHeader.style.display = 'none';
+      }
     }
 
     function getStatusClass(status) {
@@ -3487,6 +3498,7 @@
       listenForEntriesChanges(namespaces);
       sortEntriesTable();
       loadNamespaceButton.disabled = namespace === namespaceFromURL;
+      updateURL(null, null, null, null, namespace);
     }
   });
 
@@ -3504,6 +3516,7 @@
         await loadEntriesFromFirestore(namespaces);
         listenForEntriesChanges(namespaces);
         loadNamespaceButton.disabled = namespace === namespaceFromURL;
+        updateURL(null, null, null, null, namespace);
       }
     }
   });
@@ -3576,6 +3589,14 @@
       namespaceSelect.innerHTML = namespaces.map(ns => `<option value="${ns}">${ns}</option>`).join('');
     } else {
       namespaceSelectContainer.style.display = 'none';
+    }
+
+    // Show/hide namespace header
+    const namespaceHeader = document.getElementById('namespace-header');
+    if (namespaces.length > 1) {
+      namespaceHeader.style.display = 'table-cell';
+    } else {
+      namespaceHeader.style.display = 'none';
     }
   }
 
