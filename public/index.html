@@ -800,6 +800,16 @@
               <button id="clearBusinessScaleFilter" class="clear-filter-button">Clear</button>
             </div>
             <div class="description-container">
+              <label for="businessScaleFilter">Filter by Status:</label>
+              <select id="statusFilter" class="status-dropdown" multiple>
+                <option value="Not Started">Not Started</option>
+                <option value="WIP">WIP</option>
+                <option value="Deployed">Deployed</option>
+                <option value="On Hold">On Hold</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="description-container">
               <button id="clearAllFiltersButton" class="clear-filter-button">Clear All Filters</button>
             </div>
           </div>
@@ -1554,6 +1564,7 @@
     const clearAllFiltersButton = document.getElementById('clearAllFiltersButton');
     const namespaceInput = document.getElementById('namespaceInput');
     const loadNamespaceButton = document.getElementById('loadNamespaceButton');
+    const statusFilter = document.getElementById('statusFilter');
 
     let editingRow = null;
 
@@ -1785,7 +1796,7 @@
       updateURL(isCalculatorVisible ? 'permutations' : 'calculator');
     });
 
-    function updateURL(view, tab, nestedTab, thirdTab, namespace) {
+    function updateURL(view, tab, nestedTab, thirdTab, namespace, filters) {
       const url = new URL(window.location);
       if (view) {
         url.searchParams.set('view', view);
@@ -1802,6 +1813,11 @@
       if (namespace) {
         url.searchParams.set('namespace', namespace);
       }
+      if (filters) {
+        Object.keys(filters).forEach(key => {
+          url.searchParams.set(key, filters[key]);
+        });
+      }
       window.history.pushState({}, '', url);
     }
 
@@ -1812,6 +1828,14 @@
       const nestedTab = urlParams.get('nestedTab');
       const thirdTab = urlParams.get('thirdTab');
       const namespace = urlParams.get('namespace') || 'default';
+      const filters = {
+        filter: urlParams.get('filter') || '',
+        category: urlParams.get('category') || '',
+        criticality: urlParams.get('criticality') || '',
+        timing: urlParams.get('timing') || '',
+        businessScale: urlParams.get('businessScale') || '',
+        status: urlParams.get('status') ? urlParams.get('status').split(',') : []
+      };
 
       if (view === 'permutations') {
         calculatorView.style.display = 'none';
@@ -1848,6 +1872,15 @@
         namespaceInput.value = namespace;
         loadEntriesFromFirestore(namespace);
       }
+
+      // Apply filters from URL
+      filterInput.value = filters.filter;
+      categoryFilter.value = filters.category;
+      criticalityFilter.value = filters.criticality;
+      timingFilter.value = filters.timing;
+      businessScaleFilter.value = filters.businessScale;
+      statusFilter.value = filters.status;
+      filterEntries();
     }
 
     // Initial call to load view from URL
@@ -3553,6 +3586,7 @@
     const selectedCriticalities = Array.from(criticalityFilter.selectedOptions).map(option => parseInt(option.value));
     const selectedTimings = Array.from(timingFilter.selectedOptions).map(option => parseInt(option.value));
     const selectedBusinessScales = Array.from(businessScaleFilter.selectedOptions).map(option => parseInt(option.value));
+    const selectedStatuses = Array.from(statusFilter.selectedOptions).map(option => option.value);
 
     const filteredEntries = entries.filter(entry => {
       const entryTimingValue = calculateTimingValue(entry);
@@ -3566,11 +3600,34 @@
              (selectedCategories.length === 0 || selectedCategories.includes(entry.category)) &&
              (selectedCriticalities.length === 0 || selectedCriticalities.includes(Math.floor(parseInt(entry.criticality.split(' ')[0])))) &&
              (selectedTimings.length === 0 || selectedTimings.includes(Math.floor(entryTimingValue))) &&
-             (selectedBusinessScales.length === 0 || selectedBusinessScales.includes(Math.floor(parseInt(entry.businessScale))));
+             (selectedBusinessScales.length === 0 || selectedBusinessScales.includes(Math.floor(parseInt(entry.businessScale)))) &&
+             (selectedStatuses.length === 0 || selectedStatuses.includes(entry.status));
     });
 
     renderEntriesTable(filteredEntries);
+
+    // Update URL with filters
+    const filters = {
+      filter: filterInput.value,
+      category: categoryFilter.value,
+      criticality: criticalityFilter.value,
+      timing: timingFilter.value,
+      businessScale: businessScaleFilter.value,
+      status: selectedStatuses.join(',')
+    };
+    updateURL(null, null, null, null, null, filters);
   }
+
+  // Add event listeners for filters
+  filterInput.addEventListener('input', filterEntries);
+  categoryFilter.addEventListener('change', filterEntries);
+  criticalityFilter.addEventListener('change', filterEntries);
+  timingFilter.addEventListener('change', filterEntries);
+  businessScaleFilter.addEventListener('change', filterEntries);
+  statusFilter.addEventListener('change', filterEntries);
+
+  // Initial call to filter entries
+  filterEntries();
 
   function calculateTimingValue(entry) {
     const category = entry.category.toLowerCase().replace(/[\s&]+/g, '');
