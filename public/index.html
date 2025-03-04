@@ -1870,17 +1870,26 @@
 
       if (namespace) {
         namespaceInput.value = namespace;
-        loadEntriesFromFirestore(namespace);
+        loadEntriesFromFirestore(namespace).then(() => {
+          // Apply filters after loading entries
+          filterInput.value = filters.filter;
+          categoryFilter.value = filters.category;
+          criticalityFilter.value = filters.criticality;
+          timingFilter.value = filters.timing;
+          businessScaleFilter.value = filters.businessScale;
+          statusFilter.value = filters.status;
+          filterEntries();
+        });
+      } else {
+        // Apply filters from URL
+        filterInput.value = filters.filter;
+        categoryFilter.value = filters.category;
+        criticalityFilter.value = filters.criticality;
+        timingFilter.value = filters.timing;
+        businessScaleFilter.value = filters.businessScale;
+        statusFilter.value = filters.status;
+        filterEntries();
       }
-
-      // Apply filters from URL
-      filterInput.value = filters.filter;
-      categoryFilter.value = filters.category;
-      criticalityFilter.value = filters.criticality;
-      timingFilter.value = filters.timing;
-      businessScaleFilter.value = filters.businessScale;
-      statusFilter.value = filters.status;
-      filterEntries();
     }
 
     // Initial call to load view from URL
@@ -2470,7 +2479,7 @@
         const scoreB = parseFloat(b.updatedEntry?.score || b.score);
         return scoreB - scoreA;
       });
-      renderEntriesTable();
+      filterEntries();
     }
 
     resetParametersButton.addEventListener('click', resetParameters);
@@ -3654,7 +3663,7 @@
     if (entry) {
       entry.status = status;
       saveEntriesToLocalStorage();
-      renderEntriesTable();
+      filterEntries();
     }
   }
 
